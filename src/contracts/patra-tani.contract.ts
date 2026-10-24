@@ -49,6 +49,8 @@ export const ORDER_STATUSES = [
   "COMPLETED",
   "DISPUTED",
   "CANCELED_H1",
+  /** Terminal: admin resolved a dispute with REFUND_TO_BUYER. */
+  "REFUNDED",
 ] as const;
 export const OrderStatusSchema = z.enum(ORDER_STATUSES);
 export type OrderStatus = z.infer<typeof OrderStatusSchema>;
@@ -78,11 +80,12 @@ export const ORDER_STATUS_TRANSITIONS: Readonly<
   OPEN: ["BIDDING", "AWARDED"],
   BIDDING: ["AWARDED"],
   AWARDED: ["PAID_HELD"],
-  PAID_HELD: ["HANDOVER", "CANCELED_H1"],
+  PAID_HELD: ["HANDOVER", "CANCELED_H1", "DISPUTED"],
   HANDOVER: ["COMPLETED", "DISPUTED"],
-  DISPUTED: ["COMPLETED", "CANCELED_H1"],
+  DISPUTED: ["COMPLETED", "REFUNDED"],
   COMPLETED: [],
   CANCELED_H1: [],
+  REFUNDED: [],
 };
 
 export function canTransitionOrderStatus(
