@@ -107,6 +107,9 @@ export const MIN_SAFE_QUOTA_KG = 10;
 export const MIN_ORDER_KG = 10;
 export const MAX_POST_IMAGES = 5;
 export const HANDOVER_EVIDENCE_BUCKET = "handover-evidence";
+/** A handover photo must be uploaded within this many minutes of capture. */
+export const HANDOVER_PHOTO_MAX_AGE_MINUTES = 10;
+export const MAX_HANDOVER_PHOTOS_PER_ORDER = 10;
 
 /**
  * Settlement on COMPLETED. Delivery fee goes 100% uncut to the farmer.
@@ -421,6 +424,56 @@ export const SubmitBidOrPreOrderInputSchema = z
     }
   });
 export type SubmitBidOrPreOrderInput = z.infer<typeof SubmitBidOrPreOrderInputSchema>;
+
+/* -------------------------------------------------------------------------- */
+/*                              ORDER LIFECYCLE                               */
+/* -------------------------------------------------------------------------- */
+
+export const ConfirmH1ReadinessInputSchema = z
+  .object({
+    orderId: idSchema,
+    isReady: z.boolean(),
+    notes: z.preprocess(emptyToUndefined, z.string().trim().max(1000).optional()),
+  })
+  .superRefine((input, ctx) => {
+    if (!input.isReady && (input.notes?.length ?? 0) < 10) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["notes"],
+        message: "Jelaskan alasan pembatalan (minimal 10 karakter).",
+      });
+    }
+  });
+export type ConfirmH1ReadinessInput = z.infer<typeof ConfirmH1ReadinessInputSchema>;
+
+/**
+ * Fields of the handover FormData. `photo` is the JPEG/WebP blob from the
+ * in-app webcam canvas with timestamp + GPS already burned in.
+ */
+export const UploadHandoverEvidenceInputSchema = z
+  .object({
+    orderId: idSchema,
+    photo: z.instanceof(Blob, { message: "Foto serah terima wajib diambil dari kamera." }),
+    capturedLatitude: latitudeSchema,
+    capturedLongitude: longitudeSchema,
+    capturedAt: z.coerce.date(),
+  })
+  .superRefine((input, ctx) => {
+    if (input.capturedLatitude === 0 && input.capturedLongitude === 0) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["capturedLatitude"],
+        message: "Koordinat GPS tidak valid.",
+      });
+    }
+  });
+export type UploadHandoverEvidenceInput = z.infer<typeof UploadHandoverEvidenceInputSchema>;
+
+export const RaiseDisputeInputSchema = z.object({
+  orderId: idSchema,
+  reason: z.string().trim().min(20, "Jelaskan masalah minimal 20 karakter.").max(2000),
+});
+export type RaiseDisputeInput = z.infer<typeof RaiseDisputeInputSchema>;
 
 /* -------------------------------------------------------------------------- */
 /*                               DISPUTE / REVIEW                             */
