@@ -549,8 +549,9 @@ export const OrderDetailDTOSchema = z.object({
   platformCommissionIdr: z.number().int(),
   netFarmerPayoutIdr: z.number().int(),
 
-  pickupAddress: z.string(),
-  pickupPoint: GeoPointSchema,
+  /** Where goods leave the farmer. null when a tender farmer has no profile location. */
+  pickupAddress: z.string().nullable(),
+  pickupPoint: GeoPointSchema.nullable(),
   deliveryAddress: z.string().nullable(),
   deliveryPoint: GeoPointSchema.nullable(),
   distanceKm: z.number().nullable(),
