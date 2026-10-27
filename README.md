@@ -6,20 +6,22 @@ Dokumen ini merupakan panduan handoff resmi bagi Tim Backend untuk memahami arsi
 
 ## 1. Informasi Proyek & Stack Teknologi
 
-**PatraTani** adalah platform *reverse marketplace* dan *pre-order* hasil pertanian langsung dari kebun ke dapur usaha lokal (UMKM & kuliner) tanpa perantara gudang sentral, dilengkapi sistem pengamanan rekening bersama (*smart escrow*), verifikasi serah-terima foto geotag realtime, serta pengantaran mandiri oleh petani.
+**PatraTani** adalah platform _reverse marketplace_ dan _pre-order_ hasil pertanian langsung dari kebun ke dapur usaha lokal (UMKM & kuliner) tanpa perantara gudang sentral, dilengkapi sistem pengamanan rekening bersama (_smart escrow_), verifikasi serah-terima foto geotag realtime, serta pengantaran mandiri oleh petani.
 
 ### Stack Teknologi:
+
 - **Framework & Runtime:** [React 19](https://react.dev/) + [Vite](https://vite.dev/)
 - **Styling:** [Tailwind CSS v3](https://tailwindcss.com/)
 - **Routing:** [React Router v7](https://reactrouter.com/)
 - **Ikonografi:** [Lucide React](https://lucide.dev/)
-- **Web Browser APIs Terintegrasi:** 
+- **Web Browser APIs Terintegrasi:**
   - MediaDevices API (`getUserMedia`) untuk kamera in-app
   - HTML5 Canvas API untuk penangkapan frame foto serah-terima
   - Geolocation API (`getCurrentPosition`) untuk stempel koordinat GPS otomatis
   - File API & Object URL untuk pratinjau berkas gambar lokal
 
 ### Cara Menjalankan Proyek Lokal:
+
 ```bash
 # 1. Masuk ke direktori frontEnd
 cd frontEnd
@@ -33,6 +35,7 @@ npm run dev
 # 4. Bangun berkas produksi (Production Build)
 npm run build
 ```
+
 Aplikasi akan berjalan di `http://localhost:5173/`.
 
 ---
@@ -88,16 +91,19 @@ frontEnd/
 
 ## 3. Panduan Integrasi API (Tim Backend)
 
-Saat ini seluruh antarmuka berjalan mulus menggunakan data simulasi di sisi klien (*client-side state*). Berikut langkah-langkah transisi ke API HTTP riil:
+Saat ini seluruh antarmuka berjalan mulus menggunakan data simulasi di sisi klien (_client-side state_). Berikut langkah-langkah transisi ke API HTTP riil:
 
 ### A. Migrasi `src/data/mockData.js`
+
 1. Seluruh dataset dummy (komoditas panen, daftar tender, profil pengguna, riwayat pesanan, dan daftar sengketa) berpusat di `src/data/mockData.js`.
 2. **Tindakan Tim Backend:**
    - Siapkan endpoint RESTful API / GraphQL yang mengembalikan struktur JSON identik dengan objek di `mockData.js`.
    - Hapus berkas `src/data/mockData.js` secara bertahap dan gantikan dengan modul pemanggil HTTP (misal: Axios client atau fungsi Fetch di folder `src/services/api.js`).
 
 ### B. State Manajemen Global (`src/context/AppContext.jsx`)
+
 `AppContext.jsx` bertanggung jawab atas dua domain data penting:
+
 1. **Otentikasi Pengguna (`currentUser`):**
    - Fungsi `login()`, `logout()`, dan `register()` saat ini memodifikasi state lokal.
    - **Tindakan Tim Backend:** Hubungkan fungsi-fungsi ini ke endpoint autentikasi autentik (`POST /api/auth/login`, `POST /api/auth/register`, `POST /api/auth/logout`) menggunakan token JWT (Bearer Token) atau HTTP-only Cookies.
@@ -111,16 +117,19 @@ Saat ini seluruh antarmuka berjalan mulus menggunakan data simulasi di sisi klie
    - **Tindakan Tim Backend:** Gantikan fungsi lokal `payEscrow()`, `completeHandover()`, dan `fileDispute()` dengan pemanggilan endpoint mutasi (`PATCH /api/transactions/:id/status`).
 
 ### C. Penanganan Payload Hardware & Berkas (Kamera & GPS)
+
 - **Unggah Foto Panen & Serah-Terima:**
   Antarmuka di `CreateEtalasePage.jsx` dan `HandoverPage.jsx` menghasilkan berkas foto riil (objek `File` dan `Data URL base64`). Backend diharapkan menyediakan endpoint `multipart/form-data` (misal via Amazon S3 / Google Cloud Storage / Cloudinary) untuk menyimpan gambar hasil panen dan bukti serah-terima.
 - **Validasi Geotag:**
   Antarmuka mengirimkan koordinat latitude dan longitude presisi dari GPS peramban (misal: `"-6.860451, 107.589923"`). Backend dapat memvalidasi apakah titik koordinat pembeli dan kebun petani berada dalam radius yang disepakati (< 15-20 km).
 
 ### D. Logika Finansial & Komisi Platform
+
 Sistem keuangan di frontend mengacu pada formula:
+
 - **Setoran Pembeli:** `Subtotal Panen + Ongkos Kirim Tetap` (Biaya penanganan escrow: Rp 0).
 - **Pencairan Petani:** `(Subtotal Panen - Komisi Platform 3-5%) + (100% Ongkos Kirim)`.
-- *Catatan:* Komisi platform hanya dipotong dari harga hasil panen, sedangkan ongkos kirim diberikan utuh 100% ke petani.
+- _Catatan:_ Komisi platform hanya dipotong dari harga hasil panen, sedangkan ongkos kirim diberikan utuh 100% ke petani.
 
 ---
 
@@ -128,24 +137,24 @@ Sistem keuangan di frontend mengacu pada formula:
 
 Seluruh rute telah didaftarkan pada [src/App.jsx](src/App.jsx). Halaman penting dilindungi menggunakan guard [ProtectedRoute.jsx](src/components/ProtectedRoute.jsx) yang otomatis mengarahkan pengguna ke `/login` jika sesi autentikasi belum tersedia:
 
-| Path URL | Komponen Halaman | Tipe Akses | Deskripsi & Hak Akses |
-|---|---|---|---|
-| `/` | `HomePage` | Publik | Halaman Beranda (Landing page), pencarian hasil panen terdekat, dan ringkasan platform. |
-| `/explore` | `ExplorePage` | Publik | Pasar 2 Mode (Etalase Panen & Tender Bidding) dilengkapi filter Kategori, Jarak, Harga, dan Opsi Kirim. |
-| `/etalase/:id` | `DetailEtalasePage` | Publik | Rincian komoditas panen, profil kebun petani, jadwal panen, dan kalkulator kuota pasti (10–20+ kg). |
-| `/tender/:id` | `TenderDetailPage` | Publik | Rincian spesifikasi kebutuhan bahan baku UMKM untuk diajukan bidding harga oleh petani. |
-| `/login` | `LoginPage` | Publik | Form masuk akun untuk peran Petani Mitra maupun Pembeli UMKM. |
-| `/register` | `RegisterPage` | Publik | Pendaftaran akun baru dengan pemilihan peran (Petani / Pembeli). |
-| `/etalase/create` | `CreateEtalasePage` | **Terlindungi** | Formulir bagi Petani untuk membuka jadwal panen pre-order (unggah foto & deteksi GPS kebun). |
-| `/tender/create` | `CreateTenderPage` | **Terlindungi** | Formulir bagi Pembeli UMKM untuk mempublikasikan tender pengadaan bahan baku dapur. |
-| `/tender/pembeli/:id` | `DetailTenderPembeliPage` | **Terlindungi** | Panel pembeli untuk meninjau penawaran harga masuk dari petani dan memilih pemenang. |
-| `/escrow` | `CheckoutEscrowPage` | **Terlindungi** | Formulir kesepakatan fixed, simulasi pembayaran sandbox QRIS/VA, dan kartu kesiapan H-1. |
-| `/handover` | `HandoverPage` | **Terlindungi** | Antarmuka serah-terima kamera in-app, stempel waktu & geotag GPS, timbangan aktual, serta konfirmasi dua pihak. |
-| `/completed` | `CompletedPage` | **Terlindungi** | Rincian pencairan dana escrow bersih ke petani, pemotongan komisi platform, dan ulasan pembeli. |
-| `/dashboard/farmer` | `FarmerDashboardPage` | **Terlindungi** | Dasbor operasional petani, ringkasan saldo, pesanan aktif, dan form pengaturan delivery mandiri. |
-| `/dashboard/buyer` | `BuyerDashboardPage` | **Terlindungi** | Dasbor pengadaan bahan baku pembeli UMKM dan pelacakan status tender berjalan. |
-| `/admin/disputes` | `AdminDisputeDashboardPage`| **Terlindungi** | Panel mediasi sengketa transaksi escrow bagi admin jika barang cacat atau timbangan kurang. |
-| `/profile` | `ProfilePage` | **Terlindungi** | Pengaturan profil pengguna, penarikan saldo kas aktif (`activeBalance`), dan riwayat seluruh transaksi. |
+| Path URL              | Komponen Halaman            | Tipe Akses      | Deskripsi & Hak Akses                                                                                           |
+| --------------------- | --------------------------- | --------------- | --------------------------------------------------------------------------------------------------------------- |
+| `/`                   | `HomePage`                  | Publik          | Halaman Beranda (Landing page), pencarian hasil panen terdekat, dan ringkasan platform.                         |
+| `/explore`            | `ExplorePage`               | Publik          | Pasar 2 Mode (Etalase Panen & Tender Bidding) dilengkapi filter Kategori, Jarak, Harga, dan Opsi Kirim.         |
+| `/etalase/:id`        | `DetailEtalasePage`         | Publik          | Rincian komoditas panen, profil kebun petani, jadwal panen, dan kalkulator kuota pasti (10–20+ kg).             |
+| `/tender/:id`         | `TenderDetailPage`          | Publik          | Rincian spesifikasi kebutuhan bahan baku UMKM untuk diajukan bidding harga oleh petani.                         |
+| `/login`              | `LoginPage`                 | Publik          | Form masuk akun untuk peran Petani Mitra maupun Pembeli UMKM.                                                   |
+| `/register`           | `RegisterPage`              | Publik          | Pendaftaran akun baru dengan pemilihan peran (Petani / Pembeli).                                                |
+| `/etalase/create`     | `CreateEtalasePage`         | **Terlindungi** | Formulir bagi Petani untuk membuka jadwal panen pre-order (unggah foto & deteksi GPS kebun).                    |
+| `/tender/create`      | `CreateTenderPage`          | **Terlindungi** | Formulir bagi Pembeli UMKM untuk mempublikasikan tender pengadaan bahan baku dapur.                             |
+| `/tender/pembeli/:id` | `DetailTenderPembeliPage`   | **Terlindungi** | Panel pembeli untuk meninjau penawaran harga masuk dari petani dan memilih pemenang.                            |
+| `/escrow`             | `CheckoutEscrowPage`        | **Terlindungi** | Formulir kesepakatan fixed, simulasi pembayaran sandbox QRIS/VA, dan kartu kesiapan H-1.                        |
+| `/handover`           | `HandoverPage`              | **Terlindungi** | Antarmuka serah-terima kamera in-app, stempel waktu & geotag GPS, timbangan aktual, serta konfirmasi dua pihak. |
+| `/completed`          | `CompletedPage`             | **Terlindungi** | Rincian pencairan dana escrow bersih ke petani, pemotongan komisi platform, dan ulasan pembeli.                 |
+| `/dashboard/farmer`   | `FarmerDashboardPage`       | **Terlindungi** | Dasbor operasional petani, ringkasan saldo, pesanan aktif, dan form pengaturan delivery mandiri.                |
+| `/dashboard/buyer`    | `BuyerDashboardPage`        | **Terlindungi** | Dasbor pengadaan bahan baku pembeli UMKM dan pelacakan status tender berjalan.                                  |
+| `/admin/disputes`     | `AdminDisputeDashboardPage` | **Terlindungi** | Panel mediasi sengketa transaksi escrow bagi admin jika barang cacat atau timbangan kurang.                     |
+| `/profile`            | `ProfilePage`               | **Terlindungi** | Pengaturan profil pengguna, penarikan saldo kas aktif (`activeBalance`), dan riwayat seluruh transaksi.         |
 
 ---
 
