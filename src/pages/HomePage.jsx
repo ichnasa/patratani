@@ -5,8 +5,13 @@ import Footer from "../components/Footer";
 import Button from "../components/Button";
 import StatusBadge from "../components/StatusBadge";
 import Chip from "../components/Chip";
-import { mockCommodities } from "../data/mockCommodities";
-import { mockTenders } from "../data/mockTenders";
+import EtalaseCard from "../components/EtalaseCard";
+import TenderCard from "../components/TenderCard";
+import {
+  mockCommodities,
+  mockTenders,
+  mockUserProfile,
+} from "../data/mockData";
 import {
   Sprout,
   ShoppingBag,
@@ -15,8 +20,6 @@ import {
   Camera,
   Truck,
   ArrowRight,
-  MapPin,
-  Calendar,
   Clock,
   CheckCircle2,
   TrendingUp,
@@ -75,7 +78,7 @@ export default function HomePage() {
               </div>
 
               <h1 className="text-3xl lg:text-[32px] font-bold text-ink leading-tight">
-                Halo, Rizal! 🌾
+                Halo, {mockUserProfile.name.split(" ")[0]}! 🌾
               </h1>
 
               <p className="text-base text-ink-secondary leading-relaxed">
@@ -443,172 +446,13 @@ export default function HomePage() {
               {feedTab === "KOMODITAS" ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                   {filteredCommodities.map((item) => (
-                    <article
-                      key={item.id}
-                      className="bg-surface rounded-2xl border border-border overflow-hidden hover:border-primary/50 transition-all flex flex-col justify-between group shadow-xs hover:shadow-md"
-                    >
-                      <div>
-                        <div className="relative h-44 w-full bg-[#E6E4DA] overflow-hidden">
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                          <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                            <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#1A1A1A]/80 backdrop-blur-md text-[#E6E4DA]">
-                              {item.grade}
-                            </span>
-                            <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-surface-green text-primary border border-primary/20">
-                              {item.category}
-                            </span>
-                          </div>
-                          <div className="absolute bottom-3 right-3">
-                            <span className="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-primary text-[#E6E4DA] shadow-xs">
-                              Rp {item.pricePerKg.toLocaleString("id-ID")}/kg
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="p-5 space-y-3">
-                          <div>
-                            <h4 className="text-base font-bold text-ink leading-tight group-hover:text-primary transition-colors">
-                              {item.name}
-                            </h4>
-                            <p className="text-xs text-ink-secondary line-clamp-2 mt-1">
-                              {item.description}
-                            </p>
-                          </div>
-
-                          <div className="p-3 rounded-xl bg-[#E6E4DA] border border-border/80 flex items-center justify-between text-xs">
-                            <div className="flex items-center gap-2">
-                              <img
-                                src={item.farmer.avatar}
-                                alt={item.farmer.name}
-                                className="w-7 h-7 rounded-full object-cover border border-border"
-                              />
-                              <div>
-                                <p className="font-semibold text-ink leading-tight">
-                                  {item.farmer.name}
-                                </p>
-                                <p className="text-[10px] text-ink-muted">
-                                  {item.farmer.farmName}
-                                </p>
-                              </div>
-                            </div>
-
-                            <span className="text-[11px] font-medium text-ink flex items-center gap-1">
-                              <MapPin className="w-3 h-3 text-primary" />
-                              {item.farmer.distanceKm} km
-                            </span>
-                          </div>
-
-                          <div className="space-y-1 text-xs text-ink-secondary pt-1">
-                            <div className="flex items-center justify-between">
-                              <span>Sisa Kuota:</span>
-                              <strong className="text-ink font-semibold">
-                                {item.quotaKg} Kg
-                              </strong>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span>Pengiriman:</span>
-                              <span className="text-ink font-medium">
-                                Ambil Rp0 • Kurir Rp {item.logistics.farmerDelivery.fixedFee.toLocaleString("id-ID")}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="p-5 pt-0">
-                        <Button
-                          variant="primary"
-                          fullWidth
-                          size="md"
-                          onClick={() => navigate("/escrow")}
-                        >
-                          Pesan Langsung
-                        </Button>
-                      </div>
-                    </article>
+                    <EtalaseCard key={item.id} commodity={item} />
                   ))}
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {filteredTenders.map((tender) => (
-                    <article
-                      key={tender.id}
-                      onClick={() => navigate(`/tender/${tender.id}`)}
-                      className="bg-surface rounded-2xl p-6 border border-border hover:border-primary/50 transition-all flex flex-col justify-between cursor-pointer group shadow-xs hover:shadow-md"
-                    >
-                      <div className="space-y-4">
-                        <div className="flex items-start justify-between gap-3">
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs font-bold text-primary">
-                                {tender.category}
-                              </span>
-                              <span className="text-xs text-ink-muted">•</span>
-                              <span className="text-xs text-ink-muted">
-                                Target {tender.requiredQuantityKg} Kg
-                              </span>
-                            </div>
-                            <h4 className="text-base font-bold text-ink leading-tight group-hover:text-primary transition-colors">
-                              {tender.title}
-                            </h4>
-                          </div>
-
-                          <StatusBadge status={tender.status} size="sm" showIcon />
-                        </div>
-
-                        <p className="text-xs text-ink-secondary leading-relaxed bg-[#E6E4DA] p-3 rounded-xl border border-border/80">
-                          "{tender.specifications}"
-                        </p>
-
-                        <div className="grid grid-cols-2 gap-3 text-xs pt-1">
-                          <div className="p-3 rounded-xl bg-surface border border-border/60">
-                            <span className="text-[10px] text-ink-muted block uppercase font-medium">
-                              Target Harga
-                            </span>
-                            <strong className="text-sm font-bold text-primary mt-0.5 block">
-                              Rp {tender.targetPricePerKg.toLocaleString("id-ID")}/kg
-                            </strong>
-                            <span className="text-[10px] text-ink-muted">
-                              Total Rp {tender.totalBudget.toLocaleString("id-ID")}
-                            </span>
-                          </div>
-
-                          <div className="p-3 rounded-xl bg-surface border border-border/60">
-                            <span className="text-[10px] text-ink-muted block uppercase font-medium">
-                              Pemohon UMKM
-                            </span>
-                            <strong className="text-xs font-semibold text-ink mt-0.5 block truncate">
-                              {tender.buyer.businessName}
-                            </strong>
-                            <span className="text-[10px] text-ink-muted flex items-center gap-1">
-                              <MapPin className="w-3 h-3 text-primary shrink-0" />
-                              {tender.buyer.distanceKm} km
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="pt-5 mt-4 border-t border-border/80 flex items-center justify-between gap-3">
-                        <div className="text-xs text-ink-muted">
-                          Batas: <strong className="text-ink">{tender.deadlineDate}</strong>
-                        </div>
-
-                        <Button
-                          variant="primary"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/tender/${tender.id}`);
-                          }}
-                        >
-                          Ajukan Penawaran
-                        </Button>
-                      </div>
-                    </article>
+                    <TenderCard key={tender.id} tender={tender} />
                   ))}
                 </div>
               )}
