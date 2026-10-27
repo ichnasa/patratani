@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ChevronRight,
@@ -6,6 +6,7 @@ import {
   MapPin,
   ShieldCheck,
   CheckCircle2,
+  RefreshCw,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import Navbar from "../components/Navbar";
@@ -15,7 +16,9 @@ import Button from "../components/Button";
 export default function CreateEtalasePage() {
   const navigate = useNavigate();
   const { showToast, currentUser } = useApp();
+  const fileInputRef = useRef(null);
 
+  const [isLocating, setIsLocating] = useState(false);
   const [formData, setFormData] = useState({
     name: "Tomat Mawar Segar",
     category: "Sayur Buah",
@@ -60,6 +63,54 @@ export default function CreateEtalasePage() {
           ? Number(value)
           : value,
     }));
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setFormData((prev) => ({
+        ...prev,
+        image: previewUrl,
+        fileName: file.name,
+      }));
+      if (showToast) {
+        showToast(`Foto ${file.name} berhasil dimuat.`, "info");
+      }
+    }
+  };
+
+  const handleDetectLocation = () => {
+    if (navigator.geolocation && navigator.geolocation.getCurrentPosition) {
+      setIsLocating(true);
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude.toFixed(6);
+          const lng = position.coords.longitude.toFixed(6);
+          const acc = `${Math.round(position.coords.accuracy)}m`;
+          setFormData((prev) => ({
+            ...prev,
+            geotag: `${lat}, ${lng}`,
+            gpsAccuracy: acc,
+          }));
+          setIsLocating(false);
+          if (showToast) {
+            showToast("Koordinat GPS kebun berhasil diperbarui secara akurat.", "success");
+          }
+        },
+        () => {
+          setIsLocating(false);
+          if (showToast) {
+            showToast("Akses lokasi ditolak atau tidak tersedia. Menggunakan koordinat tersimpan.", "warning");
+          }
+        },
+        { enableHighAccuracy: true, timeout: 8000 }
+      );
+    } else {
+      if (showToast) {
+        showToast("Geolocation tidak didukung oleh peramban ini.", "warning");
+      }
+    }
   };
 
   const handlePublish = (e) => {
@@ -176,10 +227,20 @@ export default function CreateEtalasePage() {
                   </div>
 
                   <div>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
                     <label className="block text-xs font-semibold text-ink mb-1.5">
                       Foto Hasil Panen
                     </label>
-                    <div className="border-2 border-dashed border-border hover:border-primary rounded-2xl p-6 flex flex-col items-center justify-center text-center bg-[#E6E4DA]/20 transition-colors cursor-pointer group">
+                    <div
+                      onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                      className="border-2 border-dashed border-border hover:border-primary rounded-2xl p-6 flex flex-col items-center justify-center text-center bg-[#E6E4DA]/20 transition-colors cursor-pointer group"
+                    >
                       <div className="w-12 h-12 rounded-full bg-surface-green flex items-center justify-center text-primary mb-2 group-hover:scale-105 transition-transform">
                         <Upload className="w-5 h-5" />
                       </div>
@@ -187,7 +248,7 @@ export default function CreateEtalasePage() {
                         Unggah Foto Hasil Panen (JPG/PNG, maks. 5MB)
                       </p>
                       <p className="text-[11px] text-ink-muted mt-0.5">
-                        1 foto terpilih: {formData.fileName}
+                        {formData.fileName ? `1 berkas aktif: ${formData.fileName}` : "Klik untuk memilih berkas foto dari penyimpanan"}
                       </p>
                     </div>
                   </div>
@@ -305,18 +366,30 @@ export default function CreateEtalasePage() {
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-[#E6E4DA]/30 border border-border flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary text-[#E6E4DA] flex items-center justify-center shrink-0">
-                      <MapPin className="w-4 h-4" />
+                  <div className="p-3.5 rounded-xl bg-[#E6E4DA]/30 border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-primary text-[#E6E4DA] flex items-center justify-center shrink-0">
+                        <MapPin className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-xs font-bold text-ink block">
+                          Titik Geotag Kebun: {formData.geotag}
+                        </span>
+                        <span className="text-[11px] text-ink-secondary">
+                          Akurasi GPS {formData.gpsAccuracy} • Terverifikasi Otomatis
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-xs font-bold text-ink block">
-                        Titik Geotag Kebun: {formData.geotag}
-                      </span>
-                      <span className="text-[11px] text-ink-secondary">
-                        Akurasi GPS {formData.gpsAccuracy} • Terverifikasi Otomatis
-                      </span>
-                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleDetectLocation}
+                      disabled={isLocating}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-surface border border-border text-ink hover:text-primary hover:border-primary transition-colors disabled:opacity-60 cursor-pointer self-start sm:self-auto shrink-0"
+                    >
+                      <RefreshCw className={`w-3.5 h-3.5 ${isLocating ? "animate-spin text-primary" : ""}`} />
+                      <span>{isLocating ? "Mencari GPS..." : "Deteksi Lokasi GPS"}</span>
+                    </button>
                   </div>
 
                   <div className="space-y-3 pt-2">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { mockDefaultHandover } from "../data/mockData";
@@ -20,12 +20,19 @@ import {
   X,
   FileCheck2,
   ChevronRight,
+  RefreshCw,
 } from "lucide-react";
 
 export default function HandoverPage({ onBack, onComplete }) {
   const navigate = useNavigate();
   const { activeTransaction, completeHandover, fileDispute } = useApp();
 
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const streamRef = useRef(null);
+
+  const [cameraStatus, setCameraStatus] = useState("INITIALIZING");
+  const [capturedPhotoUrl, setCapturedPhotoUrl] = useState(null);
   const [isPhotoCaptured, setIsPhotoCaptured] = useState(false);
   const [actualWeight, setActualWeight] = useState(
     activeTransaction?.actualWeightKg
@@ -50,6 +57,66 @@ export default function HandoverPage({ onBack, onComplete }) {
 
   const handoverData = activeTransaction || mockDefaultHandover;
 
+  const [gpsData, setGpsData] = useState({
+    latitude: handoverData.geotag?.latitude || "-6.860451° S",
+    longitude: handoverData.geotag?.longitude || "107.589923° E",
+    accuracy: handoverData.geotag?.accuracy || "4 meter",
+    isLive: false,
+  });
+
+  useEffect(() => {
+    let activeStream = null;
+
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices
+        .getUserMedia({
+          video: { facingMode: "environment" },
+          audio: false,
+        })
+        .then((stream) => {
+          activeStream = stream;
+          streamRef.current = stream;
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+            videoRef.current.play().catch(() => {});
+          }
+          setCameraStatus("STREAMING");
+        })
+        .catch(() => {
+          setCameraStatus("DENIED");
+        });
+    } else {
+      setCameraStatus("UNAVAILABLE");
+    }
+
+    if (navigator.geolocation && navigator.geolocation.getCurrentPosition) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude.toFixed(6);
+          const lng = position.coords.longitude.toFixed(6);
+          const acc = `${Math.round(position.coords.accuracy)} meter`;
+          setGpsData({
+            latitude: `${lat}°`,
+            longitude: `${lng}°`,
+            accuracy: acc,
+            isLive: true,
+          });
+        },
+        () => {},
+        { enableHighAccuracy: true, timeout: 8000 }
+      );
+    }
+
+    return () => {
+      if (activeStream) {
+        activeStream.getTracks().forEach((track) => track.stop());
+      }
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+      }
+    };
+  }, []);
+
   const targetQty = handoverData.targetQuantityKg || handoverData.quantityKg || 25;
   const parsedActualWeight = parseFloat(actualWeight) || targetQty;
   const weightDiff = (parsedActualWeight - targetQty).toFixed(1);
@@ -67,7 +134,34 @@ export default function HandoverPage({ onBack, onComplete }) {
   };
 
   const handleCapturePhoto = () => {
-    setIsPhotoCaptured((prev) => !prev);
+    if (isPhotoCaptured) {
+      setCapturedPhotoUrl(null);
+      setIsPhotoCaptured(false);
+      if (cameraStatus === "STREAMING" && videoRef.current && streamRef.current) {
+        videoRef.current.srcObject = streamRef.current;
+        videoRef.current.play().catch(() => {});
+      }
+      return;
+    }
+
+    if (cameraStatus === "STREAMING" && videoRef.current && canvasRef.current) {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      canvas.width = video.videoWidth || 640;
+      canvas.height = video.videoHeight || 480;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+      setCapturedPhotoUrl(dataUrl);
+      setIsPhotoCaptured(true);
+    } else {
+      setCapturedPhotoUrl(
+        handoverData.samplePhoto ||
+          handoverData.image ||
+          "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=800&auto=format&fit=crop&q=80"
+      );
+      setIsPhotoCaptured(true);
+    }
   };
 
   const handleReleaseFunds = () => {
@@ -272,33 +366,56 @@ export default function HandoverPage({ onBack, onComplete }) {
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
               <div className="lg:col-span-7 space-y-6">
-                <section className="bg-[#1A1A1A] rounded-2xl overflow-hidden border border-border/40 shadow-lg text-[#E6E4DA] relative">
+                <section className="bg-[#1A1A1A] rounded-2xl border border-border/40 shadow-lg text-[#E6E4DA] relative overflow-hidden">
+                  <canvas ref={canvasRef} className="hidden" />
+
                   <div className="p-4 bg-black/40 backdrop-blur-md flex items-center justify-between border-b border-white/10 z-10 relative">
                     <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#DC2626] animate-pulse" />
+                      <span className={`w-2.5 h-2.5 rounded-full ${cameraStatus === "STREAMING" ? "bg-[#22C55E] animate-pulse" : "bg-[#DC2626]"}`} />
                       <span className="text-xs font-bold tracking-wider uppercase text-white">
-                        Live Camera Viewfinder
+                        {cameraStatus === "STREAMING" ? "Live Camera Viewfinder" : "Simulasi Kamera Viewfinder"}
                       </span>
                     </div>
 
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-[#D5D8CC]">
-                        1080p • 60 FPS
+                        {cameraStatus === "STREAMING" ? "LIVE STREAM" : "1080p • 60 FPS"}
                       </span>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#16A34A]/80 text-white font-bold">
-                        GPS LOCKED
+                      <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold ${gpsData.isLive ? "bg-[#16A34A] text-white" : "bg-[#F59E0B] text-black"}`}>
+                        {gpsData.isLive ? "GPS REALTIME" : "GPS LOCKED"}
                       </span>
                     </div>
                   </div>
 
+                  {cameraStatus === "DENIED" && (
+                    <div className="px-4 py-2 bg-[#F59E0B]/20 border-b border-[#F59E0B]/30 flex items-center gap-2 text-xs text-[#FDE68A]">
+                      <AlertTriangle className="w-4 h-4 shrink-0" />
+                      <span>Akses kamera dibatasi perangkat. Mode simulasi foto inspeksi otomatis aktif.</span>
+                    </div>
+                  )}
+
                   <div className="relative aspect-[4/3] w-full bg-[#262626] flex items-center justify-center overflow-hidden">
-                    <img
-                      src={handoverData.samplePhoto || handoverData.image || "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=800&auto=format&fit=crop&q=80"}
-                      alt="Pratinjau Serah Terima Kamera"
-                      className={`w-full h-full object-cover transition-all duration-300 ${
-                        isPhotoCaptured ? "brightness-95 contrast-105" : "brightness-75 blur-[0.5px]"
-                      }`}
-                    />
+                    {isPhotoCaptured && capturedPhotoUrl ? (
+                      <img
+                        src={capturedPhotoUrl}
+                        alt="Hasil Jepretan Bukti Serah Terima"
+                        className="w-full h-full object-cover brightness-95 contrast-105"
+                      />
+                    ) : cameraStatus === "STREAMING" ? (
+                      <video
+                        ref={videoRef}
+                        autoPlay
+                        playsInline
+                        muted
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <img
+                        src={handoverData.samplePhoto || handoverData.image || "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=800&auto=format&fit=crop&q=80"}
+                        alt="Pratinjau Serah Terima Kamera"
+                        className="w-full h-full object-cover brightness-75 blur-[0.5px]"
+                      />
+                    )}
 
                     <div className="absolute inset-0 pointer-events-none p-6 flex flex-col justify-between">
                       <div className="flex justify-between items-start">
@@ -329,7 +446,7 @@ export default function HandoverPage({ onBack, onComplete }) {
                       <div className="flex items-center gap-1.5 text-white">
                         <MapPin className="w-3.5 h-3.5 text-[#60A5FA] shrink-0" />
                         <span className="truncate">
-                          {handoverData.geotag?.latitude || "-6.860451° S"}, {handoverData.geotag?.longitude || "107.589923° E"} ({handoverData.geotag?.accuracy || "4 meter"})
+                          {gpsData.latitude}, {gpsData.longitude} ({gpsData.accuracy})
                         </span>
                       </div>
 

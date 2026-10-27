@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Sprout,
-  ShieldCheck,
-  CheckCircle2,
-  Camera,
-  Truck,
-} from "lucide-react";
+import { Sprout, ShieldCheck, CheckCircle2, Camera, Truck } from "lucide-react";
 
 export default function Footer() {
   const linksNavigasi = [
@@ -42,7 +36,9 @@ export default function Footer() {
               </p>
 
               <p className="text-xs text-white/60 leading-relaxed">
-                Platform demand-tender dan pre-order agritech yang menghubungkan kelompok tani kecil secara langsung dengan pelaku UMKM kuliner dan jaringan HoReCa lokal.
+                Platform demand-tender dan pre-order agritech yang menghubungkan
+                kelompok tani kecil secara langsung dengan pelaku UMKM kuliner
+                dan jaringan HoReCa lokal.
               </p>
             </div>
 
@@ -115,17 +111,22 @@ export default function Footer() {
               </div>
 
               <p className="text-xs text-white/70 leading-relaxed mb-4">
-                Dana pembeli UMKM tertahan aman di sistem escrow simulasi hingga komoditas diterima dan lolos verifikasi kamera geotag di lokasi.
+                Dana pembeli UMKM tertahan aman di sistem escrow simulasi hingga
+                komoditas diterima dan lolos verifikasi kamera geotag di lokasi.
               </p>
 
               <div className="space-y-2 pt-2 border-t border-white/10">
                 <div className="flex items-center gap-2 text-xs text-white/80">
                   <CheckCircle2 className="w-3.5 h-3.5 text-status-completed shrink-0" />
-                  <span>Self-pickup Rp 0 &amp; 100% ongkir masuk ke petani</span>
+                  <span>
+                    Self-pickup Rp 0 &amp; 100% ongkir masuk ke petani
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-white/80">
                   <Camera className="w-3.5 h-3.5 text-status-handover shrink-0" />
-                  <span>Verifikasi serah terima kamera + geotag + timestamp</span>
+                  <span>
+                    Verifikasi serah terima kamera + geotag + timestamp
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-white/80">
                   <Truck className="w-3.5 h-3.5 text-status-bidding shrink-0" />

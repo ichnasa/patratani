@@ -6,6 +6,7 @@ import {
   MapPin,
   ShieldCheck,
   Clock,
+  RefreshCw,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import Navbar from "../components/Navbar";
@@ -16,6 +17,7 @@ export default function CreateTenderPage() {
   const navigate = useNavigate();
   const { showToast, currentUser } = useApp();
 
+  const [isLocating, setIsLocating] = useState(false);
   const [formData, setFormData] = useState({
     title: "Cabai Rawit Merah Segar",
     category: "Bumbu & Rempah",
@@ -56,6 +58,37 @@ export default function CreateTenderPage() {
           ? Number(value)
           : value,
     }));
+  };
+
+  const handleDetectLocation = () => {
+    if (navigator.geolocation && navigator.geolocation.getCurrentPosition) {
+      setIsLocating(true);
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude.toFixed(6);
+          const lng = position.coords.longitude.toFixed(6);
+          setFormData((prev) => ({
+            ...prev,
+            geotag: `${lat}, ${lng}`,
+          }));
+          setIsLocating(false);
+          if (showToast) {
+            showToast("Titik GPS dapur usaha berhasil diperbarui secara akurat.", "success");
+          }
+        },
+        () => {
+          setIsLocating(false);
+          if (showToast) {
+            showToast("Izin lokasi dibatasi atau tidak tersedia. Menggunakan koordinat dapur tersimpan.", "warning");
+          }
+        },
+        { enableHighAccuracy: true, timeout: 8000 }
+      );
+    } else {
+      if (showToast) {
+        showToast("Geolocation tidak didukung oleh peramban ini.", "warning");
+      }
+    }
   };
 
   const handlePublish = (e) => {
@@ -264,18 +297,30 @@ export default function CreateTenderPage() {
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-[#E6E4DA]/30 border border-border flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-primary text-[#E6E4DA] flex items-center justify-center shrink-0">
-                      <MapPin className="w-4 h-4" />
+                  <div className="p-3.5 rounded-xl bg-[#E6E4DA]/30 border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-primary text-[#E6E4DA] flex items-center justify-center shrink-0">
+                        <MapPin className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-xs font-bold text-ink block">
+                          Titik Geotag Lokasi: {formData.geotag}
+                        </span>
+                        <span className="text-[11px] text-ink-secondary">
+                          Dapur Usaha Pembeli • Akurasi GPS Presisi Tinggi
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-xs font-bold text-ink block">
-                        Titik Geotag Lokasi: {formData.geotag}
-                      </span>
-                      <span className="text-[11px] text-ink-secondary">
-                        Dapur Usaha Pembeli • Akurasi GPS Presisi Tinggi
-                      </span>
-                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleDetectLocation}
+                      disabled={isLocating}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-surface border border-border text-ink hover:text-primary hover:border-primary transition-colors disabled:opacity-60 cursor-pointer self-start sm:self-auto shrink-0"
+                    >
+                      <RefreshCw className={`w-3.5 h-3.5 ${isLocating ? "animate-spin text-primary" : ""}`} />
+                      <span>{isLocating ? "Mencari GPS..." : "Deteksi Lokasi GPS"}</span>
+                    </button>
                   </div>
 
                   <div className="pt-2">
