@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import {
@@ -12,11 +13,8 @@ import {
   ArrowLeft,
 } from "lucide-react";
 
-export default function LoginPage({
-  onLogin,
-  onNavigateRegister,
-  onBackHome,
-}) {
+export default function LoginPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -34,23 +32,28 @@ export default function LoginPage({
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      if (onLogin) {
-        onLogin({ email });
-      }
-    }, 800);
+      navigate("/");
+    }, 700);
+  };
+
+  const handleGoogleLogin = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      navigate("/");
+    }, 500);
   };
 
   return (
     <div className="min-h-screen bg-surface-light text-ink flex flex-col justify-between items-center px-4 py-8 sm:py-12 selection:bg-primary-50 selection:text-primary">
       <div className="w-full max-w-md flex items-center justify-between mb-4">
-        <button
-          type="button"
-          onClick={onBackHome}
+        <Link
+          to="/"
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-muted hover:text-primary transition-colors cursor-pointer select-none"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Kembali ke Beranda</span>
-        </button>
+        </Link>
 
         <span className="text-[11px] font-medium text-ink-muted">
           Platform Agritech Bebas Gudang
@@ -59,20 +62,17 @@ export default function LoginPage({
 
       <div className="w-full max-w-md bg-surface rounded-3xl p-6 sm:p-8 border border-border shadow-sm space-y-6">
         <div className="text-center space-y-2">
-          <div
-            role="button"
-            tabIndex={0}
-            onClick={onBackHome}
-            onKeyDown={(e) => e.key === "Enter" && onBackHome && onBackHome()}
-            className="inline-flex items-center gap-2 cursor-pointer select-none mb-1"
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 select-none mb-1 group"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-[#E6E4DA] shadow-xs">
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-[#E6E4DA] shadow-xs group-hover:bg-primary-hover transition-colors">
               <Sprout className="w-6 h-6" />
             </div>
-            <span className="text-2xl font-bold tracking-tight text-primary">
+            <span className="text-2xl font-bold tracking-tight text-primary group-hover:text-primary-hover transition-colors">
               PatraTani
             </span>
-          </div>
+          </Link>
 
           <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
             Selamat Datang Kembali
@@ -139,7 +139,7 @@ export default function LoginPage({
             <button
               type="button"
               onClick={() => alert("Tautan pemulihan kata sandi telah dikirimkan ke email simulasi Anda.")}
-              className="font-semibold text-primary hover:underline cursor-pointer"
+              className="font-semibold text-primary hover:text-primary-hover hover:underline cursor-pointer transition-colors"
             >
               Lupa Kata Sandi?
             </button>
@@ -154,6 +154,7 @@ export default function LoginPage({
               isLoading={isLoading}
               icon={ArrowRight}
               iconPosition="right"
+              className="hover:bg-primary-hover transition-colors"
             >
               Masuk ke Akun
             </Button>
@@ -171,13 +172,7 @@ export default function LoginPage({
 
         <button
           type="button"
-          onClick={() => {
-            setIsLoading(true);
-            setTimeout(() => {
-              setIsLoading(false);
-              if (onLogin) onLogin({ email: "user.google@patratani.id" });
-            }, 600);
-          }}
+          onClick={handleGoogleLogin}
           className="w-full py-2.5 px-4 rounded-xl border border-border bg-surface hover:bg-surface-green/40 active:bg-surface-green transition-colors flex items-center justify-center gap-2.5 text-xs font-semibold text-ink cursor-pointer"
         >
           <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
@@ -203,13 +198,12 @@ export default function LoginPage({
 
         <div className="pt-2 text-center text-xs text-ink-secondary border-t border-border/80">
           Belum memiliki akun Patra Tani?{" "}
-          <button
-            type="button"
-            onClick={onNavigateRegister}
-            className="font-bold text-primary hover:underline cursor-pointer"
+          <Link
+            to="/register"
+            className="font-bold text-primary hover:text-primary-hover hover:underline cursor-pointer transition-colors"
           >
             Daftar Sekarang
-          </button>
+          </Link>
         </div>
       </div>
 

@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -21,6 +22,7 @@ import {
 } from "lucide-react";
 
 export default function ExplorePage() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("ETALASE");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
@@ -199,13 +201,39 @@ export default function ExplorePage() {
         </div>
       </div>
 
-      <div className="p-3.5 rounded-2xl bg-surface-green/40 border border-primary/20 text-xs space-y-1.5">
-        <div className="flex items-center gap-1.5 text-primary font-bold">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Tanpa Biaya Gudang</span>
+      <div className="space-y-2.5">
+        <label className="text-xs font-bold text-ink uppercase tracking-wider block">
+          Urutkan Berdasarkan
+        </label>
+        <div className="space-y-1.5">
+          {[
+            { id: "TERDEKAT", label: "Jarak Terdekat (Radius Kebun)" },
+            { id: "HARGA_TERENDAH", label: "Harga Termurah per Kg" },
+            { id: "KUOTA_TERBANYAK", label: "Ketersediaan Kuota Terbesar" },
+          ].map((sort) => (
+            <label
+              key={sort.id}
+              onClick={() => setSortBy(sort.id)}
+              className={`flex items-center justify-between p-2.5 rounded-xl border text-xs cursor-pointer transition-all ${
+                sortBy === sort.id
+                  ? "bg-surface-green border-primary text-primary font-semibold"
+                  : "bg-surface border-border text-ink-secondary hover:bg-surface/80"
+              }`}
+            >
+              <span>{sort.label}</span>
+              {sortBy === sort.id && <Check className="w-3.5 h-3.5 text-primary" />}
+            </label>
+          ))}
         </div>
-        <p className="text-[11px] text-ink-secondary leading-relaxed">
-          Harga di etalase adalah harga langsung dari petani. Komisi platform hanya 3–5% dan 100% ongkir diterima petani.
+      </div>
+
+      <div className="p-3.5 rounded-xl bg-[#E6E4DA] border border-border/80 space-y-1.5 text-xs text-ink-secondary">
+        <div className="flex items-center gap-1.5 font-bold text-primary">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Tanpa Gudang Sentral</span>
+        </div>
+        <p className="text-[11px] leading-relaxed">
+          Semua produk dipetik segar sesuai jadwal pre-order &amp; dikirim langsung dari kebun terdekat tanpa transit berhari-hari.
         </p>
       </div>
     </div>
@@ -213,107 +241,91 @@ export default function ExplorePage() {
 
   return (
     <div className="min-h-screen bg-background text-ink flex flex-col justify-between selection:bg-primary-50 selection:text-primary">
-      <Navbar activeNav="jelajahi" />
+      <Navbar activeNav="pasar" />
 
       <main className="w-full flex-1">
         <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-8 md:py-10 space-y-8 pb-28 md:pb-14">
-          <header className="space-y-4">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <div>
-                <span className="text-xs font-bold text-primary uppercase tracking-wider block mb-1">
-                  Pasar Komoditas Langsung
-                </span>
-                <h1 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight">
-                  Jelajahi Pasar Pertanian Lokal
-                </h1>
-                <p className="text-sm text-ink-secondary mt-1">
-                  Pesan langsung dari kebun petani sekitar atau ikuti tender pengadaan usaha UMKM
-                </p>
-              </div>
-
-              <div className="bg-surface p-1 rounded-xl border border-border flex items-center shrink-0">
-                <button
-                  type="button"
-                  onClick={() => setActiveTab("ETALASE")}
-                  className={`py-2 px-4 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-                    activeTab === "ETALASE"
-                      ? "bg-primary text-[#E6E4DA] shadow-xs"
-                      : "text-ink-secondary hover:text-ink"
-                  }`}
-                >
-                  <Sprout className="w-4 h-4" />
-                  <span>Etalase Panen ({filteredCommodities.length})</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setActiveTab("TENDER")}
-                  className={`py-2 px-4 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
-                    activeTab === "TENDER"
-                      ? "bg-primary text-[#E6E4DA] shadow-xs"
-                      : "text-ink-secondary hover:text-ink"
-                  }`}
-                >
-                  <Store className="w-4 h-4" />
-                  <span>Tender Permintaan ({filteredTenders.length})</span>
-                </button>
-              </div>
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+              <span className="text-xs font-semibold text-primary uppercase tracking-wider block">
+                Pasar Agrikultur Lokal
+              </span>
+              <h1 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight mt-1">
+                Jelajahi Panen &amp; Permintaan UMKM
+              </h1>
+              <p className="text-xs sm:text-sm text-ink-secondary mt-1">
+                Temukan hasil bumi segar dari petani binaan atau respon tender pengadaan dapur resto lokal.
+              </p>
             </div>
 
-            <div className="bg-surface p-3 sm:p-4 rounded-2xl border border-border flex flex-col sm:flex-row items-center gap-3">
-              <div className="relative flex-1 w-full">
-                <Search className="w-4 h-4 text-ink-muted absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                <input
-                  type="text"
-                  placeholder={
-                    activeTab === "ETALASE"
-                      ? "Cari komoditas, kebun, atau nama petani..."
-                      : "Cari tender, jenis sayur, atau nama usaha..."
-                  }
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-[#E6E4DA] border border-border rounded-xl pl-10 pr-4 py-2.5 text-xs text-ink placeholder:text-ink-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink cursor-pointer"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
+            <div className="inline-flex bg-surface p-1 rounded-xl border border-border shrink-0">
+              <button
+                type="button"
+                onClick={() => setActiveTab("ETALASE")}
+                className={`py-2 px-4 rounded-lg text-xs font-bold transition-all duration-150 flex items-center gap-2 cursor-pointer ${
+                  activeTab === "ETALASE"
+                    ? "bg-primary text-[#E6E4DA] shadow-xs"
+                    : "text-ink-secondary hover:text-ink hover:bg-black/5"
+                }`}
+              >
+                <Sprout className="w-4 h-4" />
+                <span>Etalase Panen ({filteredCommodities.length})</span>
+              </button>
 
-              <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
-                <div className="flex items-center gap-1.5 bg-[#E6E4DA] border border-border rounded-xl px-3 py-2 text-xs">
-                  <ArrowUpDown className="w-3.5 h-3.5 text-ink-muted shrink-0" />
-                  <span className="text-[11px] text-ink-muted hidden md:inline">Urut:</span>
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="bg-transparent text-xs font-semibold text-ink focus:outline-none cursor-pointer"
-                  >
-                    <option value="TERDEKAT">Jarak Terdekat</option>
-                    <option value="HARGA_TERENDAH">Harga Terendah</option>
-                    <option value="KUOTA_TERBANYAK">Kuota Terbesar</option>
-                  </select>
-                </div>
+              <button
+                type="button"
+                onClick={() => setActiveTab("TENDER")}
+                className={`py-2 px-4 rounded-lg text-xs font-bold transition-all duration-150 flex items-center gap-2 cursor-pointer ${
+                  activeTab === "TENDER"
+                    ? "bg-primary text-[#E6E4DA] shadow-xs"
+                    : "text-ink-secondary hover:text-ink hover:bg-black/5"
+                }`}
+              >
+                <Store className="w-4 h-4" />
+                <span>Tender UMKM ({filteredTenders.length})</span>
+              </button>
+            </div>
+          </div>
 
+          <div className="flex flex-col sm:flex-row items-center gap-3">
+            <div className="relative w-full flex-1">
+              <Search className="w-4 h-4 text-ink-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder={
+                  activeTab === "ETALASE"
+                    ? "Cari nama sayuran, buah, cabai, atau nama petani..."
+                    : "Cari kebutuhan pengadaan, jenis komoditas, atau UMKM..."
+                }
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-border bg-surface text-ink text-xs sm:text-sm placeholder:text-ink-muted focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
+              />
+              {searchQuery && (
                 <button
                   type="button"
-                  onClick={() => setIsMobileFilterOpen(true)}
-                  className="lg:hidden flex items-center gap-1.5 px-3 py-2 rounded-xl bg-primary text-[#E6E4DA] text-xs font-semibold shadow-xs cursor-pointer"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink p-1 cursor-pointer"
                 >
-                  <SlidersHorizontal className="w-3.5 h-3.5" />
-                  <span>Filter</span>
+                  <X className="w-3.5 h-3.5" />
                 </button>
-              </div>
+              )}
             </div>
-          </header>
+
+            <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+              <button
+                type="button"
+                onClick={() => setIsMobileFilterOpen(true)}
+                className="lg:hidden flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-surface text-xs font-semibold text-ink hover:border-primary transition-colors cursor-pointer w-full sm:w-auto justify-center"
+              >
+                <SlidersHorizontal className="w-4 h-4 text-primary" />
+                <span>Filter &amp; Urutan</span>
+              </button>
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <aside className="hidden lg:block lg:col-span-3 bg-surface rounded-2xl p-5 border border-border sticky top-24">
+            <aside className="hidden lg:block lg:col-span-3 bg-surface rounded-2xl p-6 border border-border sticky top-24">
               {renderFilterPanel()}
             </aside>
 
@@ -324,14 +336,14 @@ export default function ExplorePage() {
                     {filteredCommodities.map((item) => (
                       <article
                         key={item.id}
-                        className="bg-surface rounded-2xl border border-border overflow-hidden hover:border-primary/50 transition-all flex flex-col justify-between"
+                        className="bg-surface rounded-2xl border border-border overflow-hidden hover:border-primary/50 transition-all flex flex-col justify-between group shadow-xs hover:shadow-md"
                       >
                         <div>
                           <div className="relative h-44 w-full bg-[#E6E4DA] overflow-hidden">
                             <img
                               src={item.image}
                               alt={item.name}
-                              className="w-full h-full object-cover"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             />
                             <div className="absolute top-3 left-3 flex items-center gap-1.5">
                               <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#1A1A1A]/80 backdrop-blur-md text-[#E6E4DA]">
@@ -354,7 +366,7 @@ export default function ExplorePage() {
                                 <Calendar className="w-3 h-3" />
                                 <span>Panen: {item.harvestDate}</span>
                               </div>
-                              <h3 className="text-base font-bold text-ink leading-tight">
+                              <h3 className="text-base font-bold text-ink leading-tight group-hover:text-primary transition-colors">
                                 {item.name}
                               </h3>
                               <p className="text-xs text-ink-secondary line-clamp-2 mt-1">
@@ -403,7 +415,12 @@ export default function ExplorePage() {
                         </div>
 
                         <div className="p-5 pt-0">
-                          <Button variant="primary" fullWidth size="md">
+                          <Button
+                            variant="primary"
+                            fullWidth
+                            size="md"
+                            onClick={() => navigate("/escrow")}
+                          >
                             Pesan Langsung
                           </Button>
                         </div>
@@ -433,7 +450,8 @@ export default function ExplorePage() {
                   {filteredTenders.map((tender) => (
                     <article
                       key={tender.id}
-                      className="bg-surface rounded-2xl p-6 border border-border hover:border-primary/50 transition-all flex flex-col justify-between"
+                      onClick={() => navigate(`/tender/${tender.id}`)}
+                      className="bg-surface rounded-2xl p-6 border border-border hover:border-primary/50 transition-all flex flex-col justify-between cursor-pointer group shadow-xs hover:shadow-md"
                     >
                       <div className="space-y-4">
                         <div className="flex items-start justify-between gap-3">
@@ -447,7 +465,7 @@ export default function ExplorePage() {
                                 Target {tender.requiredQuantityKg} Kg
                               </span>
                             </div>
-                            <h3 className="text-base font-bold text-ink leading-tight">
+                            <h3 className="text-base font-bold text-ink leading-tight group-hover:text-primary transition-colors">
                               {tender.title}
                             </h3>
                           </div>
@@ -509,7 +527,14 @@ export default function ExplorePage() {
                           Penawaran masuk: <strong className="text-ink">{tender.bidsCount} Petani</strong>
                         </span>
 
-                        <Button variant="primary" size="sm">
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/tender/${tender.id}`);
+                          }}
+                        >
                           Ajukan Penawaran
                         </Button>
                       </div>

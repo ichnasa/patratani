@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -17,12 +18,14 @@ import {
   MapPin,
   Lock,
   ChevronRight,
+  ArrowRight,
 } from "lucide-react";
 
 export default function CheckoutEscrowPage({
   onBack,
   onPaymentSuccess,
 }) {
+  const navigate = useNavigate();
   const [selectedMethod, setSelectedMethod] = useState("QRIS");
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPaidSuccess, setIsPaidSuccess] = useState(false);
@@ -105,7 +108,7 @@ export default function CheckoutEscrowPage({
       if (onPaymentSuccess) {
         onPaymentSuccess();
       }
-    }, 1200);
+    }, 1000);
   };
 
   return (
@@ -117,7 +120,7 @@ export default function CheckoutEscrowPage({
           <div>
             <button
               type="button"
-              onClick={onBack}
+              onClick={() => (onBack ? onBack() : navigate(-1))}
               className="inline-flex items-center gap-2 text-xs font-semibold text-ink-muted hover:text-primary transition-colors cursor-pointer select-none mb-4"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -150,7 +153,11 @@ export default function CheckoutEscrowPage({
                   {steps.map((st, idx) => (
                     <div
                       key={st.key}
-                      className={`p-3.5 rounded-xl border transition-all flex flex-col justify-between min-h-[85px] ${
+                      onClick={() => {
+                        if (st.key === "HANDOVER") navigate("/handover");
+                        else if (st.key === "COMPLETED") navigate("/completed");
+                      }}
+                      className={`p-3.5 rounded-xl border transition-all flex flex-col justify-between min-h-[85px] cursor-pointer hover:scale-[1.01] ${
                         st.isActive
                           ? "bg-[#FEF3C7] border-[#FDE68A] ring-2 ring-[#D97706]/20"
                           : st.isDone
@@ -235,9 +242,16 @@ export default function CheckoutEscrowPage({
                   size="lg"
                   icon={ChevronRight}
                   iconPosition="right"
-                  onClick={onBack}
+                  onClick={() => navigate("/handover")}
                 >
-                  Lihat Transaksi Berjalan
+                  Lanjutkan ke Serah-Terima (Handover)
+                </Button>
+                <Button
+                  variant="outline"
+                  size="md"
+                  onClick={() => navigate("/")}
+                >
+                  Kembali ke Beranda
                 </Button>
               </div>
             </section>
@@ -269,134 +283,129 @@ export default function CheckoutEscrowPage({
                         <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#1A1A1A] text-[#E6E4DA]">
                           {dealData.grade}
                         </span>
-                        <span className="text-xs text-ink-muted">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-surface-green text-primary border border-primary/20">
                           {dealData.category}
                         </span>
                       </div>
 
-                      <h3 className="text-base font-bold text-ink">
-                        {dealData.title}
+                      <h3 className="text-base font-bold text-ink leading-tight">
+                        {dealData.commodityName}
                       </h3>
-
-                      <div className="flex items-center gap-2 text-xs text-ink-secondary">
-                        <span>Kuota: <strong className="text-ink">{dealData.quantityKg} Kg</strong></span>
-                        <span>•</span>
-                        <span>Harga: <strong className="text-primary font-bold">Rp {dealData.pricePerKg.toLocaleString("id-ID")}/kg</strong></span>
-                      </div>
-
-                      <p className="text-xs text-ink-muted">
-                        Total panen pokok: Rp {dealData.subtotal.toLocaleString("id-ID")}
+                      <p className="text-xs text-ink-secondary">
+                        Tender: {dealData.title}
                       </p>
+
+                      <div className="pt-2 flex flex-wrap items-center gap-4 text-xs">
+                        <div className="flex items-center gap-1.5 text-ink">
+                          <Calendar className="w-3.5 h-3.5 text-primary" />
+                          <span>Serah Terima: <strong>{dealData.deliveryDate}</strong></span>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-ink">
+                          <Truck className="w-3.5 h-3.5 text-primary" />
+                          <span>Metode: <strong>Kurir Petani Langsung</strong></span>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                    <div className="p-3.5 rounded-xl bg-[#E6E4DA] border border-border space-y-1.5">
-                      <span className="text-[10px] uppercase font-bold text-ink-muted block">
-                        Petani Penyedia
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-border/80">
+                    <div className="p-3.5 rounded-xl bg-[#EFEEE7] border border-border space-y-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-ink-muted block">
+                        Pihak Petani Pemenang
                       </span>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-3">
                         <img
                           src={dealData.farmer.avatar}
                           alt={dealData.farmer.name}
-                          className="w-7 h-7 rounded-full object-cover border border-border"
+                          className="w-8 h-8 rounded-full object-cover border border-border"
                         />
                         <div>
                           <p className="text-xs font-bold text-ink leading-tight">
                             {dealData.farmer.name}
                           </p>
                           <p className="text-[10px] text-ink-muted">
-                            {dealData.farmer.farmName}
+                            {dealData.farmer.farmName} • {dealData.farmer.distanceKm} km
                           </p>
                         </div>
                       </div>
-                      <p className="text-[11px] text-ink-secondary flex items-center gap-1 pt-1">
-                        <MapPin className="w-3 h-3 text-primary shrink-0" />
-                        <span>{dealData.farmer.location} ({dealData.farmer.distanceKm} km)</span>
+                      <p className="text-[11px] text-ink-secondary">
+                        {dealData.farmer.location}
                       </p>
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-[#E6E4DA] border border-border space-y-1.5">
-                      <span className="text-[10px] uppercase font-bold text-ink-muted block">
-                        Alamat Dapur Penerima
+                    <div className="p-3.5 rounded-xl bg-[#EFEEE7] border border-border space-y-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-ink-muted block">
+                        Alamat Dapur UMKM Penerima
                       </span>
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-2">
                         <Store className="w-4 h-4 text-primary shrink-0" />
-                        <p className="text-xs font-bold text-ink">
-                          {dealData.buyer.businessName}
-                        </p>
+                        <div>
+                          <p className="text-xs font-bold text-ink leading-tight">
+                            {dealData.buyer.businessName}
+                          </p>
+                          <p className="text-[10px] text-ink-muted">
+                            PIC: {dealData.buyer.contactPerson} ({dealData.buyer.phone})
+                          </p>
+                        </div>
                       </div>
                       <p className="text-[11px] text-ink-secondary">
                         {dealData.buyer.deliveryAddress}
                       </p>
-                      <p className="text-[10px] text-ink-muted">
-                        Penerima: {dealData.buyer.contactPerson} ({dealData.buyer.phone})
-                      </p>
                     </div>
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-surface border border-border/80 flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-primary shrink-0" />
-                      <span>Jadwal Pengantaran ke Dapur:</span>
-                    </div>
-                    <strong className="text-ink font-semibold">
-                      {dealData.deliveryDate} (Pagi Hari)
-                    </strong>
                   </div>
                 </section>
 
-                <section className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-4">
+                <section className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-5">
                   <div className="flex items-center justify-between pb-3 border-b border-border/80">
                     <div className="flex items-center gap-2">
-                      <CreditCard className="w-5 h-5 text-primary" />
+                      <Lock className="w-5 h-5 text-primary" />
                       <h2 className="text-base font-bold text-ink">
-                        Pilih Metode Pembayaran (Sandbox)
+                        Pilih Metode Pembayaran Escrow (Sandbox)
                       </h2>
                     </div>
-                    <span className="text-[11px] text-ink-muted">
-                      Simulasi Pembayaran Uji Coba
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-status-bidding/20 text-status-bidding">
+                      Simulasi Aktif
                     </span>
                   </div>
 
-                  <div className="space-y-2.5">
+                  <p className="text-xs text-ink-secondary">
+                    Pilih salah satu metode simulasi di bawah ini untuk mendanai rekening penampung bersama:
+                  </p>
+
+                  <div className="space-y-3">
                     {paymentMethods.map((pm) => {
-                      const IconComp = pm.icon;
+                      const Icon = pm.icon;
                       const isSelected = selectedMethod === pm.id;
+
                       return (
                         <div
                           key={pm.id}
-                          role="button"
-                          tabIndex={0}
                           onClick={() => setSelectedMethod(pm.id)}
-                          onKeyDown={(e) => e.key === "Enter" && setSelectedMethod(pm.id)}
-                          className={`p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
+                          className={`p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
                             isSelected
-                              ? "bg-surface-green border-primary ring-2 ring-primary/20"
-                              : "bg-[#E6E4DA] border-border hover:bg-surface-green/40"
+                              ? "bg-surface-green/70 border-primary ring-2 ring-primary/20 shadow-xs"
+                              : "bg-[#EFEEE7] border-border hover:border-primary/50"
                           }`}
                         >
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-3.5">
                             <div
                               className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
                                 isSelected
                                   ? "bg-primary text-[#E6E4DA]"
-                                  : "bg-surface text-ink"
+                                  : "bg-surface text-ink-secondary border border-border"
                               }`}
                             >
-                              <IconComp className="w-5 h-5" />
+                              <Icon className="w-5 h-5" />
                             </div>
 
                             <div>
                               <div className="flex items-center gap-2">
-                                <p className="text-xs font-bold text-ink">
+                                <span className="text-xs sm:text-sm font-bold text-ink">
                                   {pm.name}
-                                </p>
-                                {pm.tag && (
-                                  <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-primary/10 text-primary">
-                                    {pm.tag}
-                                  </span>
-                                )}
+                                </span>
+                                <span className="text-[10px] font-medium px-2 py-0.2 rounded bg-surface border border-border/60 text-ink-secondary">
+                                  {pm.tag}
+                                </span>
                               </div>
                               <p className="text-[11px] text-ink-secondary">
                                 {pm.subtitle}

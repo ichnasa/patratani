@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -24,9 +25,11 @@ import {
   BadgeCheck,
   X,
   Building2,
+  ArrowLeft,
 } from "lucide-react";
 
 export default function ProfilePage({ onBack, onLogout }) {
+  const navigate = useNavigate();
   const [activeMenu, setActiveMenu] = useState("TRANSAKSI");
   const [transactionFilter, setTransactionFilter] = useState("SEMUA");
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
@@ -347,7 +350,13 @@ export default function ProfilePage({ onBack, onLogout }) {
                     {filteredTenders.map((tender) => (
                       <div
                         key={tender.id}
-                        className="p-4 sm:p-5 rounded-xl bg-[#E6E4DA] border border-border hover:border-primary/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                        onClick={() => {
+                          if (tender.status === "HANDOVER") navigate("/handover");
+                          else if (tender.status === "COMPLETED") navigate("/completed");
+                          else if (tender.status === "AWARDED" || tender.status === "PAID_HELD") navigate("/escrow");
+                          else navigate(`/tender/${tender.id}`);
+                        }}
+                        className="p-4 sm:p-5 rounded-xl bg-[#E6E4DA] border border-border hover:border-primary/50 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer group shadow-xs hover:shadow-sm"
                       >
                         <div className="space-y-1.5 flex-1">
                           <div className="flex items-center gap-2">
@@ -360,7 +369,7 @@ export default function ProfilePage({ onBack, onLogout }) {
                             </span>
                           </div>
 
-                          <h3 className="text-sm font-bold text-ink">
+                          <h3 className="text-sm font-bold text-ink group-hover:text-primary transition-colors">
                             {tender.title}
                           </h3>
 
@@ -381,8 +390,9 @@ export default function ProfilePage({ onBack, onLogout }) {
 
                         <div className="flex sm:flex-col items-center sm:items-end justify-between gap-2 shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-border/80">
                           <StatusBadge status={tender.status} size="sm" showIcon />
-                          <span className="text-[11px] text-ink-muted">
-                            Jadwal: {tender.deliveryDate}
+                          <span className="text-[11px] text-ink-muted flex items-center gap-1 group-hover:text-primary transition-colors">
+                            <span>Detail Transaksi</span>
+                            <ChevronRight className="w-3.5 h-3.5" />
                           </span>
                         </div>
                       </div>
@@ -397,7 +407,11 @@ export default function ProfilePage({ onBack, onLogout }) {
                     <h2 className="text-base font-bold text-ink">
                       Daftar Tender Permintaan Dibuat
                     </h2>
-                    <Button variant="primary" size="sm">
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => navigate("/explore")}
+                    >
                       Buat Tender Baru
                     </Button>
                   </div>
@@ -406,12 +420,13 @@ export default function ProfilePage({ onBack, onLogout }) {
                     {mockTenders.slice(0, 2).map((item) => (
                       <div
                         key={item.id}
-                        className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                        onClick={() => navigate(`/tender/${item.id}`)}
+                        className="p-4 rounded-xl bg-[#E6E4DA] border border-border hover:border-primary/50 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 cursor-pointer group"
                       >
                         <div>
                           <div className="flex items-center gap-2 mb-1">
                             <StatusBadge status={item.status} size="sm" />
-                            <span className="text-xs font-bold text-ink">
+                            <span className="text-xs font-bold text-ink group-hover:text-primary transition-colors">
                               {item.title}
                             </span>
                           </div>
@@ -467,51 +482,50 @@ export default function ProfilePage({ onBack, onLogout }) {
                 <div className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-6">
                   <div className="pb-3 border-b border-border/80">
                     <h2 className="text-base font-bold text-ink">
-                      Pengaturan Keamanan &amp; Akun
+                      Keamanan Akun &amp; Rekening Bank
                     </h2>
                     <p className="text-xs text-ink-muted mt-0.5">
-                      Kelola otentikasi transaksi dan rekening pencairan
+                      Kelola kredensial keamanan penarikan dana hasil panen
                     </p>
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="space-y-4 text-xs">
                     <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex items-center justify-between">
                       <div>
-                        <p className="text-xs font-bold text-ink">
-                          PIN Transaksi Escrow
-                        </p>
-                        <p className="text-[11px] text-ink-muted">
-                          Digunakan untuk menyetujui pencairan dana dan penarikan saldo
-                        </p>
+                        <span className="font-bold text-ink block">
+                          Autentikasi Dua Langkah (2FA)
+                        </span>
+                        <span className="text-ink-muted">
+                          Wajib untuk konfirmasi penarikan saldo di atas Rp 2.000.000
+                        </span>
                       </div>
-                      <Button variant="outline" size="sm">
-                        Ubah PIN
-                      </Button>
-                    </div>
-
-                    <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex items-center justify-between">
-                      <div>
-                        <p className="text-xs font-bold text-ink">
-                          Verifikasi Kamera &amp; Izin Geotag
-                        </p>
-                        <p className="text-[11px] text-ink-muted">
-                          Status izin kamera browser: Aktif (Diizinkan)
-                        </p>
-                      </div>
-                      <span className="text-xs font-semibold text-[#16A34A] flex items-center gap-1">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        Terverifikasi
+                      <span className="px-2.5 py-1 rounded-full bg-surface-green text-primary font-bold text-[10px]">
+                        Aktif
                       </span>
                     </div>
 
                     <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex items-center justify-between">
                       <div>
-                        <p className="text-xs font-bold text-ink">
-                          Rekening Bank Pencairan
-                        </p>
-                        <p className="text-[11px] text-ink-muted">
+                        <span className="font-bold text-ink block">
+                          Kata Sandi Akun
+                        </span>
+                        <span className="text-ink-muted">
+                          Terakhir diperbarui 14 hari yang lalu
+                        </span>
+                      </div>
+                      <Button variant="outline" size="sm">
+                        Ubah Sandi
+                      </Button>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex items-center justify-between">
+                      <div>
+                        <span className="font-bold text-ink block">
+                          Rekening Bank Pencairan Utama
+                        </span>
+                        <span className="text-ink-muted">
                           {profile.bankName} • {profile.accountNumber} ({profile.accountHolder})
-                        </p>
+                        </span>
                       </div>
                       <Button variant="outline" size="sm">
                         Ganti Rekening
@@ -537,7 +551,7 @@ export default function ProfilePage({ onBack, onLogout }) {
               <div className="flex items-center gap-2">
                 <ArrowDownToLine className="w-5 h-5 text-primary" />
                 <h3 className="text-base font-bold text-ink">
-                  Tarik Saldo Kas ke Rekening Bank
+                  Tarik Saldo Kas Hasil Panen
                 </h3>
               </div>
               <button
@@ -549,20 +563,15 @@ export default function ProfilePage({ onBack, onLogout }) {
               </button>
             </div>
 
-            <div className="p-4 rounded-xl bg-surface-green/40 border border-primary/20 text-xs space-y-1">
-              <span className="text-ink-muted block">Saldo yang dapat ditarik:</span>
-              <p className="text-xl font-bold text-primary">
-                Rp {profile.activeBalance.toLocaleString("id-ID")}
-              </p>
-            </div>
-
             <div className="space-y-3 text-xs">
-              <div className="p-3.5 rounded-xl bg-[#E6E4DA] border border-border space-y-1">
-                <span className="text-ink-muted block text-[10px] uppercase font-bold">
+              <div className="p-3.5 rounded-xl bg-[#E6E4DA] border border-border">
+                <span className="text-[10px] uppercase font-bold text-ink-muted block">
                   Rekening Tujuan Pencairan
                 </span>
-                <p className="font-bold text-ink">{profile.bankName} - {profile.accountNumber}</p>
-                <p className="text-ink-muted">a.n. {profile.accountHolder}</p>
+                <p className="font-bold text-ink mt-0.5">
+                  {profile.bankName} - {profile.accountNumber}
+                </p>
+                <p className="text-ink-secondary">a.n. {profile.accountHolder}</p>
               </div>
 
               <div>
@@ -570,12 +579,12 @@ export default function ProfilePage({ onBack, onLogout }) {
                   Nominal Penarikan (Rp)
                 </label>
                 <input
-                  type="number"
-                  defaultValue="4000000"
-                  className="w-full rounded-xl px-3.5 py-2 text-sm font-bold text-ink bg-[#EFEEE7] border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
+                  type="text"
+                  defaultValue="4.250.000"
+                  className="w-full rounded-xl px-4 py-2.5 text-base font-bold text-primary bg-[#EFEEE7] border border-border focus:border-primary focus:outline-none"
                 />
                 <span className="text-[10px] text-ink-muted mt-1 block">
-                  Bebas biaya transfer antar bank mitra
+                  Bebas biaya transfer antar-bank sandbox
                 </span>
               </div>
             </div>
@@ -592,11 +601,11 @@ export default function ProfilePage({ onBack, onLogout }) {
                 variant="primary"
                 size="md"
                 onClick={() => {
-                  alert("Permintaan penarikan dana berhasil diproses ke rekening BRI!");
+                  alert("Simulasi penarikan dana berhasil diproses!");
                   setIsWithdrawModalOpen(false);
                 }}
               >
-                Konfirmasi Penarikan
+                Konfirmasi Tarik Dana
               </Button>
             </div>
           </div>
@@ -718,8 +727,8 @@ export default function ProfilePage({ onBack, onLogout }) {
                   setIsLogoutModalOpen(false);
                   if (onLogout) {
                     onLogout();
-                  } else if (onBack) {
-                    onBack();
+                  } else {
+                    navigate("/login");
                   }
                 }}
               >

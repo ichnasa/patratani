@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -17,14 +18,19 @@ import {
   Coins,
   Send,
   BadgeCheck,
+  ChevronRight,
 } from "lucide-react";
 
 export default function TenderDetailPage({
   tenderId = "TND-2026-002",
   onBack,
 }) {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const activeId = id || tenderId;
+
   const tender =
-    mockTenders.find((t) => t.id === tenderId) || mockTenders[1];
+    mockTenders.find((t) => t.id === activeId) || mockTenders[1];
 
   const [offeredPrice, setOfferedPrice] = useState(tender.targetPricePerKg);
   const [offeredQuantity, setOfferedQuantity] = useState(
@@ -65,7 +71,7 @@ export default function TenderDetailPage({
           <div>
             <button
               type="button"
-              onClick={onBack}
+              onClick={() => (onBack ? onBack() : navigate(-1))}
               className="inline-flex items-center gap-2 text-xs font-semibold text-ink-muted hover:text-primary transition-colors cursor-pointer select-none mb-3"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -98,93 +104,94 @@ export default function TenderDetailPage({
                   </p>
                 </div>
 
-                <div className="flex flex-col sm:items-end gap-2 shrink-0">
-                  <StatusBadge status={tender.status} size="lg" showIcon showDot />
-                  <span className="text-xs text-ink-muted">
-                    Batas Tender: <strong className="text-ink">{tender.deadlineDate}</strong>
-                  </span>
+                <div className="flex items-center gap-2 shrink-0">
+                  <StatusBadge status={tender.status} size="md" showIcon showDot />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border">
-                  <span className="text-[10px] uppercase font-bold text-ink-muted tracking-wider block">
-                    Kebutuhan Pasokan
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border/70 space-y-1">
+                  <span className="text-[11px] font-medium text-ink-muted flex items-center gap-1.5 uppercase tracking-wider">
+                    <Clock className="w-3.5 h-3.5 text-primary" />
+                    Batas Penawaran
                   </span>
-                  <p className="text-lg sm:text-xl font-bold text-ink mt-0.5">
-                    {tender.requiredQuantityKg} Kg
+                  <p className="text-base font-bold text-ink">{tender.deadlineDate}</p>
+                  <p className="text-[11px] text-[#D97706] font-medium">
+                    Sisa {tender.daysRemaining} hari lagi
                   </p>
-                  <span className="text-[11px] text-ink-secondary">Timbangan Pas</span>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border">
-                  <span className="text-[10px] uppercase font-bold text-ink-muted tracking-wider block">
-                    Target Anggaran
+                <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border/70 space-y-1">
+                  <span className="text-[11px] font-medium text-ink-muted flex items-center gap-1.5 uppercase tracking-wider">
+                    <Coins className="w-3.5 h-3.5 text-primary" />
+                    Anggaran Maksimal
                   </span>
-                  <p className="text-lg sm:text-xl font-bold text-primary mt-0.5">
+                  <p className="text-base font-bold text-primary">
                     Rp {tender.targetPricePerKg.toLocaleString("id-ID")}/kg
                   </p>
-                  <span className="text-[11px] text-ink-secondary">
-                    Maks. Rp {tender.totalBudget.toLocaleString("id-ID")}
-                  </span>
+                  <p className="text-[11px] text-ink-muted">
+                    Total Rp {tender.totalBudget.toLocaleString("id-ID")}
+                  </p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border">
-                  <span className="text-[10px] uppercase font-bold text-ink-muted tracking-wider block">
-                    Metode Serah Terima
+                <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border/70 space-y-1">
+                  <span className="text-[11px] font-medium text-ink-muted flex items-center gap-1.5 uppercase tracking-wider">
+                    <Truck className="w-3.5 h-3.5 text-primary" />
+                    Metode Serah-Terima
                   </span>
-                  <p className="text-sm sm:text-base font-bold text-ink mt-1 flex items-center gap-1.5">
-                    <Truck className="w-4 h-4 text-primary shrink-0" />
-                    <span>
-                      {tender.fulfillmentMethod === "SELF_PICKUP"
-                        ? "Ambil Sendiri"
-                        : "Diantar Petani"}
-                    </span>
-                  </p>
-                  <span className="text-[11px] text-ink-secondary">
+                  <p className="text-base font-bold text-ink">
                     {tender.fulfillmentMethod === "SELF_PICKUP"
-                      ? "Ongkir Rp 0"
-                      : `Tarif Rp ${tender.deliveryFee.toLocaleString("id-ID")}`}
-                  </span>
+                      ? "Ambil Sendiri"
+                      : "Kurir Petani"}
+                  </p>
+                  <p className="text-[11px] text-ink-muted">
+                    {tender.fulfillmentMethod === "SELF_PICKUP"
+                      ? "Diambil UMKM (Rp 0)"
+                      : `Ongkir Rp ${tender.deliveryFee.toLocaleString("id-ID")}`}
+                  </p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border">
-                  <span className="text-[10px] uppercase font-bold text-ink-muted tracking-wider block">
-                    Jadwal Diterima
+                <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border/70 space-y-1">
+                  <span className="text-[11px] font-medium text-ink-muted flex items-center gap-1.5 uppercase tracking-wider">
+                    <MapPin className="w-3.5 h-3.5 text-primary" />
+                    Lokasi Pemesan
                   </span>
-                  <p className="text-sm sm:text-base font-bold text-ink mt-1 flex items-center gap-1.5">
-                    <Calendar className="w-4 h-4 text-primary shrink-0" />
-                    <span>{tender.deliveryDate}</span>
+                  <p className="text-base font-bold text-ink truncate">
+                    {tender.buyer.businessName}
                   </p>
-                  <span className="text-[11px] text-ink-secondary">
-                    Pagi hari dapur buka
-                  </span>
+                  <p className="text-[11px] text-ink-muted">
+                    {tender.buyer.distanceKm} km dari radius Anda
+                  </p>
                 </div>
               </div>
 
-              <div className="p-4 rounded-xl bg-surface border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="p-4 rounded-xl bg-[#EFEEE7] border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-surface-green text-primary flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-full bg-surface-green text-primary flex items-center justify-center shrink-0">
                     <Store className="w-5 h-5" />
                   </div>
                   <div>
                     <div className="flex items-center gap-1.5">
-                      <p className="text-sm font-bold text-ink">
-                        {tender.buyer.businessName}
-                      </p>
-                      {tender.buyer.verified && (
-                        <BadgeCheck className="w-4 h-4 text-primary shrink-0" />
-                      )}
+                      <span className="font-bold text-ink">{tender.buyer.businessName}</span>
+                      <span className="px-1.5 py-0.2 bg-primary/10 text-primary text-[10px] font-semibold rounded">
+                        {tender.buyer.businessType}
+                      </span>
                     </div>
-                    <p className="text-xs text-ink-secondary">
-                      {tender.buyer.businessType} • Kontak: {tender.buyer.contactPerson}
+                    <p className="text-ink-secondary text-[11px]">
+                      Alamat Kirim: {tender.buyer.address}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 text-xs text-ink-secondary">
-                  <MapPin className="w-4 h-4 text-primary shrink-0" />
-                  <span>{tender.buyer.address} ({tender.buyer.distanceKm} km)</span>
+                <div className="flex items-center gap-4 text-ink-secondary text-right">
+                  <div>
+                    <span className="block text-ink-muted text-[10px]">Kontak PIC</span>
+                    <span className="font-semibold text-ink">{tender.buyer.contactPerson}</span>
+                  </div>
+                  <div>
+                    <span className="block text-ink-muted text-[10px]">Tingkat Keberhasilan</span>
+                    <span className="font-semibold text-primary">100% Selesai (9 Transaksi)</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -192,10 +199,10 @@ export default function TenderDetailPage({
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="lg:col-span-7 space-y-6">
-              <section className="bg-surface rounded-2xl p-6 border border-border space-y-6">
-                <div className="flex items-center justify-between pb-4 border-b border-border/80">
+              <section className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-6">
+                <div className="flex items-center justify-between pb-3 border-b border-border/80">
                   <div className="flex items-center gap-2">
-                    <Coins className="w-5 h-5 text-primary" />
+                    <Send className="w-5 h-5 text-primary" />
                     <h2 className="text-base font-bold text-ink">
                       Formulir Pengajuan Penawaran Petani
                     </h2>
@@ -206,23 +213,37 @@ export default function TenderDetailPage({
                 </div>
 
                 {isSubmitted ? (
-                  <div className="p-6 rounded-xl bg-[#DCFCE7] border border-[#BBF7D0] text-center space-y-3">
-                    <div className="w-12 h-12 rounded-full bg-[#16A34A] text-white flex items-center justify-center mx-auto">
+                  <div className="p-6 rounded-xl bg-[#DCFCE7] border border-[#BBF7D0] text-center space-y-4">
+                    <div className="w-12 h-12 rounded-full bg-[#16A34A] text-white flex items-center justify-center mx-auto shadow-sm">
                       <CheckCircle2 className="w-6 h-6" />
                     </div>
-                    <h3 className="text-base font-bold text-[#166534]">
-                      Penawaran Berhasil Diajukan!
-                    </h3>
-                    <p className="text-xs text-[#166534] max-w-md mx-auto leading-relaxed">
-                      Tawaran Anda sebesar Rp {parsedPrice.toLocaleString("id-ID")}/kg untuk kuota {parsedQuantity} kg telah terkirim ke {tender.buyer.businessName}. Anda akan mendapatkan notifikasi jika penawaran Anda ditunjuk sebagai pemenang (*AWARDED*).
-                    </p>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setIsSubmitted(false)}
-                    >
-                      Ajukan Revisi Penawaran
-                    </Button>
+                    <div className="space-y-1">
+                      <h3 className="text-base font-bold text-[#166534]">
+                        Penawaran Berhasil Diajukan!
+                      </h3>
+                      <p className="text-xs text-[#166534] max-w-md mx-auto leading-relaxed">
+                        Tawaran Anda sebesar Rp {parsedPrice.toLocaleString("id-ID")}/kg untuk kuota {parsedQuantity} kg telah terkirim ke {tender.buyer.businessName}. Anda akan mendapatkan notifikasi jika penawaran Anda ditunjuk sebagai pemenang (*AWARDED*).
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                      <Button
+                        variant="primary"
+                        size="md"
+                        icon={ChevronRight}
+                        iconPosition="right"
+                        onClick={() => navigate("/escrow")}
+                      >
+                        Lanjutkan ke Setor Escrow
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setIsSubmitted(false)}
+                      >
+                        Revisi Penawaran
+                      </Button>
+                    </div>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmitOffer} className="space-y-5">
@@ -282,24 +303,26 @@ export default function TenderDetailPage({
 
                     {deliveryMethod === "FARMER_DELIVERY" && (
                       <Input
-                        label="Tarif Pengantaran Petani (Rp)"
+                        label="Tarif Pengiriman Kurir Petani (Rp)"
                         type="number"
                         value={farmerDeliveryFee}
                         onChange={(e) => setFarmerDeliveryFee(e.target.value)}
-                        helperText="Tarif tetap pengantaran armada motor/mobil boks petani"
+                        placeholder="15000"
+                        required
+                        helperText="Biaya penuh tanpa potongan komisi, dibayar oleh pembeli"
                       />
                     )}
 
                     <div className="space-y-1.5">
                       <label className="text-xs font-semibold uppercase tracking-wider text-ink block">
-                        Catatan Penawaran Petani
+                        Catatan Mutu &amp; Kondisi Panen
                       </label>
                       <textarea
-                        rows={3}
+                        rows="3"
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
-                        className="w-full rounded-xl px-3.5 py-2.5 text-sm font-normal text-ink bg-[#EFEEE7] border border-border hover:border-ink/40 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
-                        placeholder="Jelaskan kondisi kualitas, tingkat kematangan, dan jam panen..."
+                        placeholder="Tuliskan spesifikasi bibit, metode sortasi, dan jaminan kesegaran..."
+                        className="w-full rounded-xl p-3.5 text-sm text-ink bg-[#EFEEE7] border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all resize-none"
                       />
                     </div>
 
@@ -307,46 +330,48 @@ export default function TenderDetailPage({
                       <Button
                         type="submit"
                         variant="primary"
-                        size="lg"
                         fullWidth
+                        size="lg"
                         icon={Send}
-                        disabled={parsedPrice <= 0 || parsedQuantity <= 0}
                       >
-                        Kirimkan Penawaran Resmi
+                        Kirim Penawaran ke Pembeli
                       </Button>
                     </div>
                   </form>
                 )}
               </section>
 
-              <section className="bg-surface rounded-2xl p-6 border border-border space-y-4">
+              <section className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-4">
                 <div className="flex items-center justify-between pb-3 border-b border-border/80">
-                  <h3 className="text-base font-bold text-ink">
-                    Daftar Penawaran Petani yang Masuk ({tender.bids.length})
-                  </h3>
-                  <span className="text-xs text-ink-muted">Proses Seleksi</span>
+                  <div className="flex items-center gap-2">
+                    <BadgeCheck className="w-5 h-5 text-primary" />
+                    <h3 className="text-base font-bold text-ink">
+                      Daftar Penawaran Petani yang Masuk
+                    </h3>
+                  </div>
+                  <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#E6E4DA] text-ink-secondary">
+                    {tender.bids.length} Tawaran
+                  </span>
                 </div>
 
-                {tender.bids.length > 0 ? (
+                {tender.bids && tender.bids.length > 0 ? (
                   <div className="space-y-3">
                     {tender.bids.map((bid) => (
                       <div
-                        key={bid.bidId}
-                        className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                        key={bid.id}
+                        className="p-4 rounded-xl border border-border/80 bg-[#EFEEE7] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-primary/40 transition-all"
                       >
                         <div className="space-y-1">
                           <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold text-ink">
+                            <span className="font-bold text-ink text-sm">
                               {bid.farmerName}
                             </span>
-                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-surface text-ink-muted">
-                              {bid.bidId}
+                            <span className="text-xs text-ink-muted">•</span>
+                            <span className="text-xs text-ink-secondary">
+                              {bid.farmLocation}
                             </span>
                           </div>
-                          <p className="text-xs text-ink-secondary">
-                            "{bid.notes}"
-                          </p>
-                          <span className="text-[10px] text-ink-muted flex items-center gap-1">
+                          <span className="text-[11px] text-ink-muted flex items-center gap-1">
                             <Clock className="w-3 h-3" />
                             Diajukan {bid.bidDate}
                           </span>
@@ -429,6 +454,16 @@ export default function TenderDetailPage({
                     </span>
                   </div>
                 </div>
+
+                <Button
+                  variant="primary"
+                  fullWidth
+                  size="md"
+                  icon={ShieldCheck}
+                  onClick={() => navigate("/escrow")}
+                >
+                  Simulasikan Setor Escrow
+                </Button>
 
                 <div className="p-4 rounded-xl bg-[#DDE0D4] border border-primary/20 space-y-2">
                   <div className="flex items-center gap-2 text-primary font-bold text-xs">

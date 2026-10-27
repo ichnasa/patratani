@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -21,9 +22,11 @@ import {
   Sprout,
   Check,
   FileCheck,
+  ChevronRight,
 } from "lucide-react";
 
 export default function CompletedPage({ onBack, onExploreMore }) {
+  const navigate = useNavigate();
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
   const [selectedTags, setSelectedTags] = useState([
@@ -102,80 +105,79 @@ export default function CompletedPage({ onBack, onExploreMore }) {
           <div>
             <button
               type="button"
-              onClick={onBack}
+              onClick={() => (onBack ? onBack() : navigate("/"))}
               className="inline-flex items-center gap-2 text-xs font-semibold text-ink-muted hover:text-primary transition-colors cursor-pointer select-none mb-4"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Kembali ke Riwayat Transaksi</span>
+              <span>Kembali ke Beranda</span>
             </button>
 
-            <section className="bg-surface rounded-2xl p-6 sm:p-8 border border-[#BBF7D0] bg-[#DCFCE7]/25 shadow-xs relative overflow-hidden">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
-                <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 rounded-2xl bg-[#16A34A] text-white flex items-center justify-center shrink-0 shadow-md">
+            <section className="bg-surface rounded-2xl p-6 sm:p-8 border border-[#BBF7D0] bg-[#DCFCE7]/20 shadow-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-border/80">
+                <div className="flex items-start sm:items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-[#16A34A] text-white flex items-center justify-center shrink-0 shadow-sm">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
 
-                  <div className="space-y-1.5">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#16A34A] text-white uppercase tracking-wider">
-                        Transaksi Tuntas
-                      </span>
-                      <span className="text-xs font-mono font-medium text-ink-muted">
-                        ID: {transactionData.tenderId}
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#DCFCE7] text-[#166534] border border-[#BBF7D0]">
+                        Transaksi Selesai • Escrow Dicairkan
                       </span>
                       <span className="text-xs text-ink-muted">•</span>
-                      <span className="text-xs text-ink-secondary">
-                        Escrow Ref: {transactionData.escrowId}
+                      <span className="text-xs font-mono text-ink-muted">
+                        {transactionData.tenderId}
                       </span>
                     </div>
 
-                    <h1 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight">
+                    <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
                       Transaksi Sukses! Dana Telah Dicairkan
                     </h1>
 
-                    <p className="text-xs sm:text-sm text-ink-secondary max-w-2xl leading-relaxed">
-                      Serah terima komoditas telah lolos verifikasi fisik kamera geotag. Dana escrow sebesar <strong>Rp {transactionData.netFarmerPayment.toLocaleString("id-ID")}</strong> berhasil dicairkan otomatis ke kas {transactionData.farmer.name}.
+                    <p className="text-xs sm:text-sm text-ink-secondary">
+                      Serah-terima fisik komoditas telah diverifikasi secara sah via geotag &amp; timbangan langsung di lokasi.
                     </p>
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:items-end gap-2 shrink-0">
-                  <StatusBadge status="COMPLETED" size="lg" showIcon showDot />
-                  <span className="text-xs text-ink-muted">
-                    Waktu Cair: <strong className="text-ink">{transactionData.releaseTime}</strong>
-                  </span>
+                <div className="flex items-center gap-2 shrink-0">
+                  <StatusBadge status="COMPLETED" size="md" showIcon showDot />
                 </div>
               </div>
 
-              <div className="mt-6 pt-5 border-t border-[#BBF7D0]/60 flex flex-wrap items-center justify-between gap-3 text-xs">
-                <div className="flex items-center gap-4 text-ink-secondary">
-                  <span className="flex items-center gap-1.5">
-                    <Sprout className="w-4 h-4 text-primary" />
-                    Petani: <strong className="text-ink">{transactionData.farmer.name}</strong>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-6 text-xs">
+                <div className="p-4 rounded-xl bg-[#EFEEE7] border border-border space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-ink-muted block">
+                    ID Rekening Escrow
                   </span>
-                  <span>•</span>
-                  <span className="flex items-center gap-1.5">
-                    <Store className="w-4 h-4 text-primary" />
-                    Pembeli: <strong className="text-ink">{transactionData.buyer.businessName}</strong>
-                  </span>
+                  <p className="font-mono font-bold text-ink">{transactionData.escrowId}</p>
+                  <p className="text-[10px] text-ink-secondary">Enkripsi sandbox Patra Tani</p>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    className="px-3 py-1.5 rounded-xl bg-surface border border-border text-ink text-xs font-medium hover:bg-surface-green/40 flex items-center gap-1.5 transition-colors cursor-pointer"
-                  >
-                    <Download className="w-3.5 h-3.5 text-ink-muted" />
-                    <span>Unduh Faktur Sah</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="px-3 py-1.5 rounded-xl bg-surface border border-border text-ink text-xs font-medium hover:bg-surface-green/40 flex items-center gap-1.5 transition-colors cursor-pointer"
-                  >
-                    <Share2 className="w-3.5 h-3.5 text-ink-muted" />
-                    <span>Bagikan Bukti</span>
-                  </button>
+                <div className="p-4 rounded-xl bg-[#EFEEE7] border border-border space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-ink-muted block">
+                    Total Dana Bersih Petani
+                  </span>
+                  <p className="text-base font-bold text-[#166534]">
+                    Rp {transactionData.netFarmerPayment.toLocaleString("id-ID")}
+                  </p>
+                  <p className="text-[10px] text-[#166534]">Sudah diteruskan ke rekening</p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#EFEEE7] border border-border space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-ink-muted block">
+                    Waktu Pelepasan Dana
+                  </span>
+                  <p className="font-bold text-ink">{transactionData.releaseTime}</p>
+                  <p className="text-[10px] text-ink-secondary">Otomatisasi smart escrow</p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#EFEEE7] border border-border space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-ink-muted block">
+                    Metode Pengantaran
+                  </span>
+                  <p className="font-bold text-ink">Kurir Petani Mandiri</p>
+                  <p className="text-[10px] text-primary font-medium">100% ongkir hak petani</p>
                 </div>
               </div>
             </section>
@@ -183,81 +185,90 @@ export default function CompletedPage({ onBack, onExploreMore }) {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="lg:col-span-7 space-y-6">
-              <section className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-6">
-                <div className="flex items-center justify-between pb-4 border-b border-border/80">
+              <section className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-5">
+                <div className="flex items-center justify-between pb-3 border-b border-border/80">
                   <div className="flex items-center gap-2">
                     <Receipt className="w-5 h-5 text-primary" />
                     <h2 className="text-base font-bold text-ink">
-                      Rincian Pencairan Dana Escrow
+                      Ringkasan Finansial &amp; Pencairan Dana Escrow
                     </h2>
                   </div>
-                  <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-surface-green text-primary">
-                    Otomatis Cair ke Petani
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-surface-green text-primary border border-primary/20">
+                    Transparansi 100%
                   </span>
                 </div>
 
-                <div className="space-y-3.5 text-xs">
+                <div className="space-y-3 text-xs">
                   <div className="flex items-center justify-between text-ink-secondary">
-                    <span>Nilai Pokok Panen ({transactionData.quantityKg} Kg × Rp {transactionData.pricePerKg.toLocaleString("id-ID")}):</span>
+                    <span>Nilai Komoditas Panen ({transactionData.quantityKg} Kg × Rp {transactionData.pricePerKg.toLocaleString("id-ID")}):</span>
                     <span className="font-semibold text-ink">
                       Rp {transactionData.harvestSubtotal.toLocaleString("id-ID")}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between text-[#DC2626]">
-                    <div className="space-y-0.5">
-                      <span>Komisi Platform Patra Tani ({transactionData.platformFeeRate}%):</span>
-                      <span className="text-[10px] text-ink-muted block">
-                        * Dihitung hanya dari harga panen, tanpa memotong ongkir
-                      </span>
+                    <div className="flex items-center gap-1.5">
+                      <span>Potongan Komisi Platform ({transactionData.platformFeeRate}%):</span>
                     </div>
                     <span className="font-semibold">
                       - Rp {transactionData.platformFee.toLocaleString("id-ID")}
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between text-ink-secondary pt-1 border-t border-border/40">
-                    <span>Subtotal Hasil Panen Petani:</span>
+                  <div className="text-[10px] text-ink-muted pl-2 border-l-2 border-primary/30 leading-relaxed">
+                    Komisi platform 4% digunakan untuk biaya operasional platform &amp; keamanan escrow tanpa gudang.
+                  </div>
+
+                  <div className="flex items-center justify-between text-ink-secondary">
+                    <span>Hasil Bersih Komoditas Petani:</span>
                     <span className="font-semibold text-ink">
                       Rp {transactionData.netHarvestValue.toLocaleString("id-ID")}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between text-ink-secondary">
-                    <div className="space-y-0.5">
-                      <span>Ongkos Kirim Kurir Petani (100% Utuh):</span>
-                      <span className="text-[10px] text-[#16A34A] block">
-                        * 100% hak kurir petani, bebas komisi platform
-                      </span>
+                    <div className="flex items-center gap-1">
+                      <span>Ongkos Kirim Kurir Petani (Utuh 100%):</span>
                     </div>
-                    <span className="font-semibold text-[#16A34A]">
+                    <span className="font-semibold text-primary">
                       + Rp {transactionData.deliveryFee.toLocaleString("id-ID")}
                     </span>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-surface-green/50 border border-primary/20 flex items-center justify-between text-ink mt-2">
+                  <div className="pt-3 border-t border-border/80 flex items-center justify-between">
                     <div>
-                      <span className="text-xs font-bold block">
+                      <span className="text-sm font-bold text-ink block">
                         Total Bersih Diterima Petani
                       </span>
                       <span className="text-[10px] text-ink-muted">
-                        Ditransfer ke {transactionData.farmer.bankAccount}
+                        Dikirim ke rekening BRI: {transactionData.farmer.bankAccount}
                       </span>
                     </div>
-                    <strong className="text-xl font-bold text-primary">
+                    <strong className="text-xl font-extrabold text-[#16A34A]">
                       Rp {transactionData.netFarmerPayment.toLocaleString("id-ID")}
                     </strong>
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border/80 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-primary" />
-                    <span className="text-ink-secondary">Status Rekening Escrow:</span>
+                <div className="p-4 rounded-xl bg-[#EFEEE7] border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                  <div className="flex items-center gap-2.5">
+                    <img
+                      src={transactionData.farmer.avatar}
+                      alt={transactionData.farmer.name}
+                      className="w-8 h-8 rounded-full object-cover border border-border"
+                    />
+                    <div>
+                      <p className="font-bold text-ink leading-tight">
+                        {transactionData.farmer.name}
+                      </p>
+                      <p className="text-[10px] text-ink-muted">
+                        {transactionData.farmer.farmName}
+                      </p>
+                    </div>
                   </div>
-                  <span className="font-bold text-[#16A34A] flex items-center gap-1">
-                    <Check className="w-3.5 h-3.5" />
-                    Dilepaskan &amp; Tuntas (RELEASED)
+
+                  <span className="px-2.5 py-1 rounded-md bg-[#DCFCE7] text-[#166534] font-bold text-[10px] border border-[#BBF7D0]">
+                    Pencairan Berhasil (Settled)
                   </span>
                 </div>
               </section>
@@ -265,128 +276,115 @@ export default function CompletedPage({ onBack, onExploreMore }) {
               <section className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-5">
                 <div className="flex items-center justify-between pb-3 border-b border-border/80">
                   <div className="flex items-center gap-2">
-                    <Star className="w-5 h-5 text-[#D97706]" />
+                    <Star className="w-5 h-5 text-[#F59E0B]" />
                     <h3 className="text-base font-bold text-ink">
                       Penilaian &amp; Ulasan Pembeli
                     </h3>
                   </div>
-                  <span className="text-xs text-ink-muted">Membangun Reputasi Petani</span>
+                  <span className="text-xs text-ink-muted">
+                    Bantu Petani Mendapat Reputasi Terbaik
+                  </span>
                 </div>
 
                 {isReviewSubmitted ? (
-                  <div className="p-5 rounded-xl bg-[#DCFCE7] border border-[#BBF7D0] space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1">
-                        {[1, 2, 3, 4, 5].map((s) => (
-                          <Star
-                            key={s}
-                            className="w-4 h-4 fill-[#D97706] text-[#D97706]"
-                          />
-                        ))}
-                      </div>
-                      <span className="text-xs font-bold text-[#166534]">
-                        Ulasan Terverifikasi
-                      </span>
+                  <div className="p-6 rounded-xl bg-[#DCFCE7] border border-[#BBF7D0] text-center space-y-3">
+                    <div className="w-12 h-12 rounded-full bg-[#16A34A] text-white flex items-center justify-center mx-auto">
+                      <Check className="w-6 h-6" />
                     </div>
-
-                    <p className="text-xs text-ink leading-relaxed italic">
-                      "{reviewText}"
+                    <h4 className="text-base font-bold text-[#166534]">
+                      Terima Kasih atas Penilaian Anda!
+                    </h4>
+                    <p className="text-xs text-[#166534] max-w-md mx-auto leading-relaxed">
+                      Ulasan bintang {rating}.0 Anda telah dicatat ke profil publik {transactionData.farmer.name} untuk memperkuat kepercayaan rantai pasok agrikultur lokal.
                     </p>
-
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {selectedTags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white text-[#166534] border border-[#BBF7D0]"
-                        >
-                          ✓ {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="pt-2 flex items-center justify-between text-[11px] text-[#166534]">
-                      <span>Diberikan oleh {transactionData.buyer.businessName}</span>
-                      <button
-                        type="button"
+                    <div className="flex justify-center pt-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
                         onClick={() => setIsReviewSubmitted(false)}
-                        className="hover:underline font-semibold cursor-pointer"
                       >
-                        Ubah Ulasan
-                      </button>
+                        Ubah Penilaian
+                      </Button>
                     </div>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmitReview} className="space-y-4">
-                    <div>
-                      <label className="text-xs font-bold text-ink uppercase tracking-wider block mb-2">
-                        Beri Bintang Kepuasan Transaksi
+                  <form onSubmit={handleSubmitReview} className="space-y-5">
+                    <div className="space-y-2 text-center sm:text-left">
+                      <label className="text-xs font-semibold uppercase tracking-wider text-ink block">
+                        Tingkat Kepuasan Mutu Panen
                       </label>
-                      <div className="flex items-center gap-2">
-                        {[1, 2, 3, 4, 5].map((starIndex) => (
+                      <div className="flex items-center justify-center sm:justify-start gap-1.5">
+                        {[1, 2, 3, 4, 5].map((star) => (
                           <button
-                            key={starIndex}
                             type="button"
-                            onClick={() => setRating(starIndex)}
-                            onMouseEnter={() => setHoverRating(starIndex)}
+                            key={star}
+                            onClick={() => setRating(star)}
+                            onMouseEnter={() => setHoverRating(star)}
                             onMouseLeave={() => setHoverRating(0)}
-                            className="p-1 text-ink-muted hover:scale-110 transition-transform cursor-pointer focus:outline-none"
+                            className="p-1 hover:scale-110 transition-transform cursor-pointer"
                           >
                             <Star
-                              className={`w-7 h-7 transition-colors ${
-                                (hoverRating || rating) >= starIndex
-                                  ? "fill-[#D97706] text-[#D97706]"
+                              className={`w-7 h-7 ${
+                                star <= (hoverRating || rating)
+                                  ? "text-[#F59E0B] fill-[#F59E0B]"
                                   : "text-border"
                               }`}
                             />
                           </button>
                         ))}
                         <span className="ml-2 text-sm font-bold text-ink">
-                          {rating}.0 / 5.0
+                          {hoverRating || rating}.0 / 5.0
                         </span>
                       </div>
                     </div>
 
-                    <div>
-                      <label className="text-xs font-bold text-ink uppercase tracking-wider block mb-2">
-                        Poin Penilaian Cepat (Tag Pengalaman)
+                    <div className="space-y-2">
+                      <label className="text-xs font-semibold uppercase tracking-wider text-ink block">
+                        Pilih Penilaian Cepat
                       </label>
                       <div className="flex flex-wrap gap-2">
                         {tagOptions.map((tag) => {
                           const isSelected = selectedTags.includes(tag);
                           return (
-                            <Chip
+                            <button
+                              type="button"
                               key={tag}
-                              label={tag}
-                              active={isSelected}
                               onClick={() => handleToggleTag(tag)}
-                            />
+                              className={`text-xs px-3 py-1.5 rounded-full border transition-all cursor-pointer ${
+                                isSelected
+                                  ? "bg-surface-green text-primary border-primary font-bold shadow-xs"
+                                  : "bg-[#EFEEE7] text-ink-secondary border-border hover:border-primary/50"
+                              }`}
+                            >
+                              {tag}
+                            </button>
                           );
                         })}
                       </div>
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-ink uppercase tracking-wider block">
-                        Tulis Ulasan untuk {transactionData.farmer.name}
+                      <label className="text-xs font-semibold uppercase tracking-wider text-ink block">
+                        Ulasan Pengalaman Transaksi
                       </label>
                       <textarea
-                        rows={3}
+                        rows="3"
+                        required
                         value={reviewText}
                         onChange={(e) => setReviewText(e.target.value)}
-                        placeholder="Bagikan pengalaman kesegaran komoditas dan ketepatan serah terima..."
-                        className="w-full rounded-xl px-3.5 py-2.5 text-xs text-ink bg-[#EFEEE7] border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all"
+                        placeholder="Bagaimana kesegaran komoditas, ketepatan waktu pengiriman, dan timbangan hasil panen?"
+                        className="w-full rounded-xl p-3.5 text-xs text-ink bg-[#EFEEE7] border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all resize-none"
                       />
                     </div>
 
-                    <div className="pt-2">
+                    <div className="pt-1">
                       <Button
                         type="submit"
                         variant="primary"
                         size="md"
                         icon={Send}
-                        fullWidth
                       >
-                        Kirimkan Penilaian &amp; Ulasan
+                        Kirim Ulasan &amp; Rating
                       </Button>
                     </div>
                   </form>
@@ -395,7 +393,7 @@ export default function CompletedPage({ onBack, onExploreMore }) {
             </div>
 
             <aside className="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
-              <section className="bg-surface rounded-2xl p-6 border border-border shadow-xs space-y-4">
+              <section className="bg-surface rounded-2xl p-6 border border-border shadow-xs space-y-5">
                 <div className="flex items-center justify-between pb-3 border-b border-border/80">
                   <div className="flex items-center gap-2">
                     <Camera className="w-5 h-5 text-primary" />
@@ -481,7 +479,9 @@ export default function CompletedPage({ onBack, onExploreMore }) {
                   variant="primary"
                   fullWidth
                   size="md"
-                  onClick={onExploreMore || onBack}
+                  icon={ChevronRight}
+                  iconPosition="right"
+                  onClick={() => (onExploreMore ? onExploreMore() : navigate("/explore"))}
                 >
                   Jelajahi Komoditas Lainnya
                 </Button>

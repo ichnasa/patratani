@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -16,9 +17,11 @@ import {
   Store,
   X,
   FileCheck2,
+  ChevronRight,
 } from "lucide-react";
 
 export default function HandoverPage({ onBack, onComplete }) {
+  const navigate = useNavigate();
   const [isPhotoCaptured, setIsPhotoCaptured] = useState(false);
   const [actualWeight, setActualWeight] = useState("25.2");
   const [checklist, setChecklist] = useState({
@@ -97,10 +100,10 @@ export default function HandoverPage({ onBack, onComplete }) {
       if (onComplete) {
         onComplete();
       }
-    }, 1200);
+    }, 1000);
   };
 
-  const handleReportDispute = (e) => {
+  const handleFileDispute = (e) => {
     e.preventDefault();
     setIsDisputeModalOpen(false);
     setIsDisputed(true);
@@ -115,21 +118,27 @@ export default function HandoverPage({ onBack, onComplete }) {
           <div>
             <button
               type="button"
-              onClick={onBack}
+              onClick={() => (onBack ? onBack() : navigate(-1))}
               className="inline-flex items-center gap-2 text-xs font-semibold text-ink-muted hover:text-primary transition-colors cursor-pointer select-none mb-4"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Kembali ke Riwayat Transaksi</span>
+              <span>Kembali ke Transaksi</span>
             </button>
 
             <section className="bg-surface rounded-2xl p-6 sm:p-7 border border-border shadow-xs">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border/80">
-                <div>
-                  <span className="text-[10px] font-bold text-ink-muted uppercase tracking-wider block">
-                    Verifikasi Fisik di Lokasi • {handoverData.tenderId}
-                  </span>
-                  <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight mt-0.5">
-                    Serah Terima &amp; Verifikasi Kamera Geotag
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-full bg-status-handover/15 text-status-handover">
+                      {handoverData.tenderId}
+                    </span>
+                    <span className="text-xs text-ink-muted">•</span>
+                    <span className="text-xs text-ink-secondary">
+                      Serah-Terima Fisik &amp; Verifikasi Geotag
+                    </span>
+                  </div>
+                  <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
+                    {handoverData.title}
                   </h1>
                 </div>
 
@@ -149,9 +158,49 @@ export default function HandoverPage({ onBack, onComplete }) {
                 </div>
               </div>
 
-              <p className="text-xs text-ink-secondary mt-3 leading-relaxed">
-                Pemeriksaan fisik dilakukan bersama antara pembeli dan petani. Dana escrow sebesar <strong>Rp {handoverData.escrowAmount.toLocaleString("id-ID")}</strong> baru akan dilepaskan ke petani setelah foto bukti berstempel geotag diambil dan checklist mutu disetujui.
-              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 text-xs">
+                <div className="flex items-center justify-between p-3 rounded-xl bg-[#EFEEE7] border border-border">
+                  <div className="flex items-center gap-2.5">
+                    <img
+                      src={handoverData.farmer.avatar}
+                      alt={handoverData.farmer.name}
+                      className="w-8 h-8 rounded-full object-cover border border-border"
+                    />
+                    <div>
+                      <p className="font-bold text-ink leading-tight">
+                        {handoverData.farmer.name}
+                      </p>
+                      <p className="text-[10px] text-ink-muted">
+                        Petani • {handoverData.farmer.farmName}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="px-2 py-1 rounded-md bg-[#DCFCE7] text-[#166534] font-bold text-[10px] flex items-center gap-1 border border-[#BBF7D0]">
+                    <CheckCircle2 className="w-3 h-3" />
+                    Telah Tiba di Lokasi
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between p-3 rounded-xl bg-[#EFEEE7] border border-border">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-surface-green text-primary flex items-center justify-center">
+                      <Store className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="font-bold text-ink leading-tight">
+                        {handoverData.buyer.businessName}
+                      </p>
+                      <p className="text-[10px] text-ink-muted">
+                        Penerima: {handoverData.buyer.contactPerson}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="px-2 py-1 rounded-md bg-[#FEF3C7] text-[#B45309] font-bold text-[10px] flex items-center gap-1 border border-[#FDE68A]">
+                    <Clock className="w-3 h-3" />
+                    Pemeriksaan Fisik
+                  </span>
+                </div>
+              </div>
             </section>
           </div>
 
@@ -166,7 +215,7 @@ export default function HandoverPage({ onBack, onComplete }) {
                   Status Transaksi: COMPLETED
                 </span>
                 <h2 className="text-2xl font-bold text-ink">
-                  Serah Terima Berhasil &amp; Dana Telah Dicairkan!
+                  Serah-Terima Selesai &amp; Dana Escrow Berhasil Dicairkan!
                 </h2>
                 <p className="text-sm text-ink-secondary leading-relaxed">
                   Verifikasi geotag dan timbangan dinyatakan sah. Dana sebesar <strong>Rp {handoverData.netFarmerPayment.toLocaleString("id-ID")}</strong> telah diteruskan ke rekening {handoverData.farmer.name} (setelah potongan komisi platform 3,5% sebesar Rp {handoverData.platformFee.toLocaleString("id-ID")}).
@@ -188,8 +237,21 @@ export default function HandoverPage({ onBack, onComplete }) {
                 </div>
               </div>
 
-              <div className="flex justify-center pt-2">
-                <Button variant="primary" size="lg" onClick={onBack}>
+              <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  icon={ChevronRight}
+                  iconPosition="right"
+                  onClick={() => navigate("/completed")}
+                >
+                  Lihat Rincian Pencairan &amp; Beri Ulasan
+                </Button>
+                <Button
+                  variant="outline"
+                  size="md"
+                  onClick={() => navigate("/")}
+                >
                   Kembali ke Beranda
                 </Button>
               </div>
@@ -239,210 +301,167 @@ export default function HandoverPage({ onBack, onComplete }) {
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-[#D5D8CC]">
                         1080p • 60 FPS
                       </span>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#16A34A]/80 text-white font-bold">
+                        GPS LOCKED
+                      </span>
                     </div>
                   </div>
 
-                  <div className="relative aspect-4/3 w-full bg-neutral-900 overflow-hidden flex items-center justify-center select-none">
+                  <div className="relative aspect-[4/3] w-full bg-[#262626] flex items-center justify-center overflow-hidden">
                     <img
                       src={handoverData.samplePhoto}
-                      alt="Komoditas Timbangan"
+                      alt="Pratinjau Serah Terima Kamera"
                       className={`w-full h-full object-cover transition-all duration-300 ${
-                        isPhotoCaptured ? "scale-100 brightness-100" : "scale-105 brightness-95"
+                        isPhotoCaptured ? "brightness-95 contrast-105" : "brightness-75 blur-[0.5px]"
                       }`}
                     />
 
-                    <div className="absolute inset-6 pointer-events-none border border-white/20 rounded-xl flex flex-col justify-between p-3">
-                      <div className="flex justify-between">
-                        <div className="w-6 h-6 border-t-2 border-l-2 border-[#E6E4DA]" />
-                        <div className="w-6 h-6 border-t-2 border-r-2 border-[#E6E4DA]" />
+                    <div className="absolute inset-0 pointer-events-none p-6 flex flex-col justify-between">
+                      <div className="flex justify-between items-start">
+                        <div className="w-8 h-8 border-t-2 border-l-2 border-white/80" />
+                        <div className="w-8 h-8 border-t-2 border-r-2 border-white/80" />
                       </div>
-                      <div className="flex justify-center">
-                        <div className="w-8 h-8 rounded-full border border-white/30 flex items-center justify-center">
-                          <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-                        </div>
-                      </div>
-                      <div className="flex justify-between">
-                        <div className="w-6 h-6 border-b-2 border-l-2 border-[#E6E4DA]" />
-                        <div className="w-6 h-6 border-b-2 border-r-2 border-[#E6E4DA]" />
+                      <div className="flex justify-between items-end">
+                        <div className="w-8 h-8 border-b-2 border-l-2 border-white/80" />
+                        <div className="w-8 h-8 border-b-2 border-r-2 border-white/80" />
                       </div>
                     </div>
 
-                    <div className="absolute bottom-4 left-4 right-4 bg-black/75 backdrop-blur-md rounded-xl p-3 border border-white/15 text-[11px] space-y-1.5 text-white/90">
-                      <div className="flex items-center justify-between border-b border-white/10 pb-1">
-                        <span className="flex items-center gap-1 text-[#D5D8CC] font-mono">
-                          <Clock className="w-3 h-3" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                      <div className="w-12 h-12 border border-white/40 rounded-full flex items-center justify-center">
+                        <div className="w-2 h-2 bg-primary rounded-full shadow-xs" />
+                      </div>
+                    </div>
+
+                    <div className="absolute bottom-3 left-3 right-3 bg-black/80 backdrop-blur-md rounded-xl p-3 border border-white/15 text-[11px] font-mono space-y-1 shadow-md">
+                      <div className="flex items-center justify-between text-white/70 text-[10px]">
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3 h-3 text-[#FBBF24]" />
                           {handoverData.timestamp}
                         </span>
-                        <span className="text-[10px] font-mono text-white/60">
-                          {handoverData.hash}
+                        <span>HASH: {handoverData.hash}</span>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 text-white">
+                        <MapPin className="w-3.5 h-3.5 text-[#60A5FA] shrink-0" />
+                        <span className="truncate">
+                          {handoverData.geotag.latitude}, {handoverData.geotag.longitude} ({handoverData.geotag.accuracy})
                         </span>
                       </div>
 
-                      <div className="flex items-center justify-between text-[10px]">
-                        <span className="flex items-center gap-1 text-white/80">
-                          <MapPin className="w-3 h-3 text-status-handover" />
-                          {handoverData.geotag.latitude}, {handoverData.geotag.longitude}
-                        </span>
-                        <span className="text-status-completed font-semibold">
-                          {handoverData.geotag.accuracy}
-                        </span>
-                      </div>
-
-                      <p className="text-[10px] text-white/60 truncate">
+                      <div className="text-[10px] text-white/60 truncate pt-0.5 border-t border-white/10">
                         {handoverData.geotag.address}
-                      </p>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="p-4 bg-black/60 backdrop-blur-md border-t border-white/10 flex items-center justify-between gap-4">
-                    <div className="text-xs text-white/70">
+                  <div className="p-4 bg-[#141414] border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div className="text-xs text-[#D5D8CC]">
                       {isPhotoCaptured ? (
-                        <span className="flex items-center gap-1.5 text-status-completed font-semibold">
+                        <span className="text-[#4ADE80] font-semibold flex items-center gap-1.5">
                           <CheckCircle2 className="w-4 h-4" />
-                          Foto Bukti Berhasil Direkam
+                          Foto bukti dan stempel GPS berhasil disimpan.
                         </span>
                       ) : (
-                        <span>Arahkan kamera ke komoditas di atas timbangan</span>
+                        <span>Arahkan kamera ke komoditas &amp; timbangan untuk mengambil bukti.</span>
                       )}
                     </div>
 
-                    <button
-                      type="button"
+                    <Button
+                      variant={isPhotoCaptured ? "outline" : "primary"}
+                      size="sm"
+                      icon={Camera}
                       onClick={handleCapturePhoto}
-                      className="px-4 py-2 rounded-xl bg-primary hover:bg-primary-hover text-[#E6E4DA] text-xs font-bold flex items-center gap-2 transition-all shadow-sm cursor-pointer"
                     >
-                      <Camera className="w-4 h-4" />
-                      <span>{isPhotoCaptured ? "Foto Ulang" : "Bidik Foto Bukti"}</span>
-                    </button>
+                      {isPhotoCaptured ? "Ambil Ulang Foto" : "Bidikan Foto Geotag"}
+                    </Button>
                   </div>
                 </section>
 
-                <section className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-5">
+                <section className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-4">
                   <div className="flex items-center justify-between pb-3 border-b border-border/80">
                     <div className="flex items-center gap-2">
-                      <FileCheck2 className="w-5 h-5 text-primary" />
-                      <h2 className="text-base font-bold text-ink">
-                        Konfirmasi Persetujuan Dua Pihak
-                      </h2>
+                      <Scale className="w-5 h-5 text-primary" />
+                      <h3 className="text-base font-bold text-ink">
+                        Pemeriksaan Timbangan Aktual
+                      </h3>
                     </div>
-                    <span className="text-xs text-ink-muted">Tatap Muka Langsung</span>
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#E6E4DA] text-ink">
+                      Target: {handoverData.targetQuantityKg} Kg
+                    </span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="p-4 rounded-xl bg-[#DCFCE7]/50 border border-[#BBF7D0] space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] uppercase font-bold text-[#166534] tracking-wider">
-                          Pihak Petani
-                        </span>
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#16A34A] text-white">
-                          Sudah Menyerahkan
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-2.5 pt-1">
-                        <img
-                          src={handoverData.farmer.avatar}
-                          alt={handoverData.farmer.name}
-                          className="w-8 h-8 rounded-full object-cover border border-[#BBF7D0]"
-                        />
-                        <div>
-                          <p className="text-xs font-bold text-ink leading-tight">
-                            {handoverData.farmer.name}
-                          </p>
-                          <p className="text-[10px] text-ink-muted">
-                            {handoverData.farmer.farmName}
-                          </p>
-                        </div>
-                      </div>
-
-                      <p className="text-[10px] text-[#166534] pt-1">
-                        Konfirmasi tuntas pada {handoverData.farmer.confirmedTime} di lokasi.
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-semibold text-ink uppercase tracking-wider block">
+                        Input Timbangan Aktual (Kg)
+                      </label>
+                      <input
+                        type="number"
+                        step="0.1"
+                        value={actualWeight}
+                        onChange={(e) => setActualWeight(e.target.value)}
+                        className={`w-full rounded-xl px-4 py-2.5 text-base font-bold bg-[#EFEEE7] border focus:outline-none transition-all ${
+                          isWeightValid
+                            ? "border-border text-ink focus:border-primary focus:ring-2 focus:ring-primary/20"
+                            : "border-[#DC2626] text-[#DC2626] focus:border-[#DC2626]"
+                        }`}
+                      />
+                      <p className="text-[11px] text-ink-muted">
+                        Angka riil hasil timbangan di depan kurir &amp; pembeli
                       </p>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-surface-green/40 border border-primary/20 space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] uppercase font-bold text-primary tracking-wider">
-                          Pihak Pembeli UMKM
-                        </span>
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-primary text-[#E6E4DA]">
-                          Sedang Memeriksa
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-2.5 pt-1">
-                        <div className="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-xs">
-                          <Store className="w-4 h-4" />
+                    <div className="p-3.5 rounded-xl bg-[#EFEEE7] border border-border flex flex-col justify-between">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-ink-muted">
+                        Status Selisih Kuota
+                      </span>
+                      <div>
+                        <div className="flex items-baseline gap-2">
+                          <span
+                            className={`text-xl font-extrabold ${
+                              isWeightValid ? "text-[#16A34A]" : "text-[#DC2626]"
+                            }`}
+                          >
+                            {weightDiff > 0 ? `+${weightDiff}` : weightDiff} Kg
+                          </span>
+                          <span className="text-xs text-ink-secondary">
+                            {isWeightValid ? "(Memenuhi Kuota)" : "(Kurang dari Target)"}
+                          </span>
                         </div>
-                        <div>
-                          <p className="text-xs font-bold text-ink leading-tight">
-                            {handoverData.buyer.contactPerson}
-                          </p>
-                          <p className="text-[10px] text-ink-muted">
-                            {handoverData.buyer.businessName}
-                          </p>
-                        </div>
+                        <p className="text-[10px] text-ink-muted mt-0.5">
+                          {isWeightValid
+                            ? "Sesuai dengan kesepakatan pesanan."
+                            : "Berat kurang dari target! Ajukan penyesuaian/sengketa."}
+                        </p>
                       </div>
-
-                      <p className="text-[10px] text-ink-secondary pt-1">
-                        Periksa timbangan &amp; mutu sebelum menyetujui pencairan dana.
-                      </p>
                     </div>
                   </div>
                 </section>
               </div>
 
               <aside className="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
-                <section className="bg-surface rounded-2xl p-6 border border-border shadow-xs space-y-5">
-                  <div className="flex items-center justify-between pb-3 border-b border-border/80">
-                    <div className="flex items-center gap-2">
-                      <Scale className="w-5 h-5 text-primary" />
-                      <h3 className="text-base font-bold text-ink">
-                        Pemeriksaan Fisik &amp; Timbangan
-                      </h3>
-                    </div>
-                    <span className="text-xs font-bold text-primary px-2.5 py-0.5 rounded-full bg-surface-green">
-                      Kuota: {handoverData.targetQuantityKg} Kg
-                    </span>
+                <section className="bg-surface rounded-2xl p-6 sm:p-7 border border-border shadow-xs space-y-5">
+                  <div className="flex items-center gap-2 pb-3 border-b border-border/80">
+                    <FileCheck2 className="w-5 h-5 text-primary" />
+                    <h3 className="text-base font-bold text-ink">
+                      Persetujuan &amp; Pelepasan Escrow
+                    </h3>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border space-y-3">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-ink-secondary">Target Kuota Kesepakatan:</span>
-                      <strong className="text-ink font-bold">
-                        {handoverData.targetQuantityKg.toFixed(1)} Kg
-                      </strong>
+                  <div className="space-y-3 text-xs">
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-[#EFEEE7] border border-border">
+                      <span className="text-ink-secondary">Status Petani Mitra:</span>
+                      <span className="font-bold text-[#16A34A] flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        Dikonfirmasi ({handoverData.farmer.confirmedTime})
+                      </span>
                     </div>
 
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-ink uppercase tracking-wider block">
-                        Timbangan Aktual di Lokasi (Kg)
-                      </label>
-                      <div className="flex items-center gap-2">
-                        <input
-                          type="number"
-                          step="0.1"
-                          value={actualWeight}
-                          onChange={(e) => setActualWeight(e.target.value)}
-                          className="w-full rounded-xl px-3.5 py-2 text-sm font-bold text-ink bg-surface border border-border focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none"
-                        />
-                        <span className="text-xs font-bold text-ink-secondary px-2">
-                          Kg
-                        </span>
-                      </div>
-                    </div>
-
-                    <div
-                      className={`flex items-center justify-between p-2.5 rounded-xl text-xs font-semibold ${
-                        isWeightValid
-                          ? "bg-[#DCFCE7] text-[#166534] border border-[#BBF7D0]"
-                          : "bg-[#FEE2E2] text-[#991B1B] border border-[#FECACA]"
-                      }`}
-                    >
-                      <span>Selisih Timbangan:</span>
-                      <span>
-                        {weightDiff >= 0 ? `+${weightDiff}` : weightDiff} Kg{" "}
-                        {isWeightValid ? "(Memenuhi Kuota)" : "(Kurang dari Target)"}
+                    <div className="flex items-center justify-between p-3 rounded-xl bg-[#EFEEE7] border border-border">
+                      <span className="text-ink-secondary">Total Nilai Escrow Tertahan:</span>
+                      <span className="font-bold text-primary text-sm">
+                        Rp {handoverData.escrowAmount.toLocaleString("id-ID")}
                       </span>
                     </div>
                   </div>
@@ -565,41 +584,44 @@ export default function HandoverPage({ onBack, onComplete }) {
             </div>
 
             <p className="text-xs text-ink-secondary leading-relaxed">
-              Jika komoditas yang diserahkan busuk, cacat, atau berat timbangan kurang tanpa kompensasi dari petani, dana escrow akan ditahan hingga mediasi admin selesai.
+              Jika komoditas tidak sesuai spesifikasi, rusak saat transit, atau kuota timbangan kurang dan petani tidak bersedia menyesuaikan, dana escrow akan ditahan hingga admin meninjau.
             </p>
 
-            <form onSubmit={handleReportDispute} className="space-y-4">
+            <form onSubmit={handleFileDispute} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-ink uppercase tracking-wider block">
-                  Uraikan Kendala / Kerusakan Komoditas
+                <label className="text-xs font-semibold uppercase tracking-wider text-ink block">
+                  Detail Masalah / Keluhan
                 </label>
                 <textarea
-                  rows={4}
+                  rows="4"
                   required
                   value={disputeReason}
                   onChange={(e) => setDisputeReason(e.target.value)}
-                  placeholder="Contoh: Ditemukan 4 kg bawang merah berjamur dan basah saat diperiksa, tidak sesuai standar Grade A yang disepakati..."
-                  className="w-full rounded-xl px-3.5 py-2.5 text-xs text-ink bg-[#EFEEE7] border border-border focus:border-[#DC2626] focus:ring-2 focus:ring-[#DC2626]/20 focus:outline-none"
+                  placeholder="Jelaskan kondisi komoditas, cacat fisik, atau kekurangan timbangan aktual..."
+                  className="w-full rounded-xl p-3.5 text-xs text-ink bg-[#EFEEE7] border border-border focus:border-[#DC2626] focus:outline-none transition-all resize-none"
                 />
               </div>
 
-              <div className="p-3 rounded-xl bg-[#FEE2E2] border border-[#FECACA] text-[11px] text-[#991B1B] flex items-start gap-2">
-                <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-                <span>
-                  Admin akan memeriksa foto geotag kamera dan menghubungi kedua belah pihak via telepon terdaftar.
-                </span>
+              <div className="p-3 rounded-xl bg-[#FEE2E2] border border-[#FECACA] text-[11px] text-[#991B1B] space-y-1">
+                <strong className="block font-bold">Catatan Investigasi:</strong>
+                <p>Foto kamera dengan stempel GPS dan riwayat berat timbangan akan dilampirkan otomatis sebagai barang bukti sah.</p>
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-2">
                 <Button
-                  variant="outline"
-                  size="md"
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => setIsDisputeModalOpen(false)}
                 >
                   Batal
                 </Button>
-                <Button variant="destructive" size="md" type="submit">
+                <Button
+                  type="submit"
+                  variant="danger"
+                  size="sm"
+                  icon={AlertTriangle}
+                >
                   Kirim Laporan Sengketa
                 </Button>
               </div>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -25,6 +26,7 @@ import {
 } from "lucide-react";
 
 export default function HomePage() {
+  const navigate = useNavigate();
   const [role, setRole] = useState("PETANI");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [feedTab, setFeedTab] = useState("KOMODITAS");
@@ -86,6 +88,7 @@ export default function HomePage() {
                 <Button
                   variant="primary"
                   icon={role === "PETANI" ? ShoppingBag : FileText}
+                  onClick={() => navigate("/explore")}
                 >
                   {role === "PETANI" ? "Pasang Hasil Panen" : "Buka Tender Baru"}
                 </Button>
@@ -93,6 +96,7 @@ export default function HomePage() {
                   variant="outline"
                   icon={ArrowRight}
                   iconPosition="right"
+                  onClick={() => navigate("/profile")}
                 >
                   Lihat Riwayat Pesanan
                 </Button>
@@ -124,7 +128,7 @@ export default function HomePage() {
                 className={`py-2 px-5 rounded-lg text-xs font-semibold transition-all duration-150 flex items-center gap-1.5 cursor-pointer ${
                   role === "PETANI"
                     ? "bg-primary text-[#E6E4DA] shadow-xs"
-                    : "text-ink-secondary hover:text-ink"
+                    : "text-ink-secondary hover:text-ink hover:bg-black/5"
                 }`}
               >
                 <Sprout className="w-4 h-4" />
@@ -137,7 +141,7 @@ export default function HomePage() {
                 className={`py-2 px-5 rounded-lg text-xs font-semibold transition-all duration-150 flex items-center gap-1.5 cursor-pointer ${
                   role === "PEMBELI"
                     ? "bg-primary text-[#E6E4DA] shadow-xs"
-                    : "text-ink-secondary hover:text-ink"
+                    : "text-ink-secondary hover:text-ink hover:bg-black/5"
                 }`}
               >
                 <Store className="w-4 h-4" />
@@ -148,7 +152,7 @@ export default function HomePage() {
 
           <div className="px-6 lg:px-16 pt-6 pb-16 space-y-8">
             <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-surface rounded-2xl p-6 border border-border flex flex-col justify-between gap-4">
+              <div className="bg-surface rounded-2xl p-6 border border-border flex flex-col justify-between gap-4 transition-all hover:border-primary/40 hover:shadow-sm">
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between">
                     <div className="w-10 h-10 rounded-xl bg-surface-green text-primary flex items-center justify-center">
@@ -172,16 +176,16 @@ export default function HomePage() {
                   </span>
                   <button
                     type="button"
-                    onClick={() => setFeedTab("KOMODITAS")}
-                    className="text-xs font-bold text-ink hover:text-primary flex items-center gap-1 transition-colors cursor-pointer"
+                    onClick={() => navigate("/explore")}
+                    className="text-xs font-bold text-ink hover:text-primary flex items-center gap-1 transition-colors cursor-pointer group"
                   >
                     <span>Buka Etalase</span>
-                    <ChevronRight className="w-4 h-4" />
+                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
                   </button>
                 </div>
               </div>
 
-              <div className="bg-surface rounded-2xl p-6 border border-border flex flex-col justify-between gap-4">
+              <div className="bg-surface rounded-2xl p-6 border border-border flex flex-col justify-between gap-4 transition-all hover:border-primary/40 hover:shadow-sm">
                 <div className="space-y-2.5">
                   <div className="flex items-center justify-between">
                     <div className="w-10 h-10 rounded-xl bg-[#FEF3C7] text-[#D97706] flex items-center justify-center">
@@ -205,11 +209,11 @@ export default function HomePage() {
                   </span>
                   <button
                     type="button"
-                    onClick={() => setFeedTab("TENDER")}
-                    className="text-xs font-bold text-ink hover:text-primary flex items-center gap-1 transition-colors cursor-pointer"
+                    onClick={() => navigate("/explore")}
+                    className="text-xs font-bold text-ink hover:text-primary flex items-center gap-1 transition-colors cursor-pointer group"
                   >
                     <span>Buka Tender</span>
-                    <ChevronRight className="w-4 h-4" />
+                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
                   </button>
                 </div>
               </div>
@@ -222,36 +226,48 @@ export default function HomePage() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-surface p-5 rounded-xl border border-border">
+                <div
+                  onClick={() => navigate("/profile")}
+                  className="bg-surface p-5 rounded-xl border border-border hover:border-primary/40 transition-all cursor-pointer group"
+                >
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-ink-muted">Transaksi Aktif</span>
-                    <Clock className="w-4 h-4 text-ink-muted" />
+                    <span className="text-xs font-medium text-ink-muted group-hover:text-primary transition-colors">Transaksi Aktif</span>
+                    <Clock className="w-4 h-4 text-ink-muted group-hover:text-primary transition-colors" />
                   </div>
                   <p className="text-2xl font-bold text-ink">4</p>
                   <p className="text-[11px] text-ink-secondary mt-1">2 Bidding • 1 Handover</p>
                 </div>
 
-                <div className="bg-surface p-5 rounded-xl border border-border">
+                <div
+                  onClick={() => navigate("/profile")}
+                  className="bg-surface p-5 rounded-xl border border-border hover:border-primary/40 transition-all cursor-pointer group"
+                >
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-ink-muted">Dana di Escrow</span>
+                    <span className="text-xs font-medium text-ink-muted group-hover:text-primary transition-colors">Dana di Escrow</span>
                     <ShieldCheck className="w-4 h-4 text-[#0D9488]" />
                   </div>
                   <p className="text-2xl font-bold text-primary">Rp 1.585.000</p>
                   <p className="text-[11px] text-[#0D9488] font-medium mt-1">Aman dalam sandbox</p>
                 </div>
 
-                <div className="bg-surface p-5 rounded-xl border border-border">
+                <div
+                  onClick={() => navigate("/handover")}
+                  className="bg-surface p-5 rounded-xl border border-border hover:border-primary/40 transition-all cursor-pointer group"
+                >
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-ink-muted">Menunggu Serah-Terima</span>
+                    <span className="text-xs font-medium text-ink-muted group-hover:text-primary transition-colors">Menunggu Serah-Terima</span>
                     <Camera className="w-4 h-4 text-[#2563EB]" />
                   </div>
                   <p className="text-2xl font-bold text-ink">1 Pesanan</p>
                   <p className="text-[11px] text-[#2563EB] font-medium mt-1">Verifikasi kamera geotag</p>
                 </div>
 
-                <div className="bg-surface p-5 rounded-xl border border-border">
+                <div
+                  onClick={() => navigate("/profile")}
+                  className="bg-surface p-5 rounded-xl border border-border hover:border-primary/40 transition-all cursor-pointer group"
+                >
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-ink-muted">Pendapatan Bulan Ini</span>
+                    <span className="text-xs font-medium text-ink-muted group-hover:text-primary transition-colors">Pendapatan Bulan Ini</span>
                     <TrendingUp className="w-4 h-4 text-[#16A34A]" />
                   </div>
                   <p className="text-2xl font-bold text-ink">Rp 4.820.000</p>
@@ -266,7 +282,7 @@ export default function HomePage() {
                 <span className="text-xs text-ink-muted">ID: TND-2026-005</span>
               </div>
 
-              <div className="bg-surface rounded-2xl p-6 border border-border space-y-5">
+              <div className="bg-surface rounded-2xl p-6 border border-border space-y-5 hover:border-primary/40 transition-all">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
                   <div>
                     <h4 className="text-base font-bold text-ink">
@@ -279,7 +295,12 @@ export default function HomePage() {
 
                   <div className="flex items-center gap-2">
                     <StatusBadge status="HANDOVER" showIcon showDot />
-                    <Button variant="primary" size="sm" icon={Camera}>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      icon={Camera}
+                      onClick={() => navigate("/handover")}
+                    >
                       Verifikasi Kamera
                     </Button>
                   </div>
@@ -293,7 +314,13 @@ export default function HomePage() {
                     return (
                       <div
                         key={step.key}
-                        className={`p-3 rounded-xl border transition-all flex flex-col justify-between min-h-[85px] ${
+                        onClick={() => {
+                          if (step.key === "HANDOVER") navigate("/handover");
+                          else if (step.key === "PAID_HELD") navigate("/escrow");
+                          else if (step.key === "COMPLETED") navigate("/completed");
+                          else navigate("/tender");
+                        }}
+                        className={`p-3 rounded-xl border transition-all flex flex-col justify-between min-h-[85px] cursor-pointer hover:scale-[1.02] ${
                           isCurrent
                             ? "bg-[#DBEAFE] border-[#BFDBFE] ring-2 ring-[#2563EB]/20"
                             : isCompleted
@@ -349,6 +376,13 @@ export default function HomePage() {
                     <span className="text-ink-muted">
                       Escrow: <strong className="text-ink font-semibold">Rp 800.000</strong>
                     </span>
+                    <button
+                      type="button"
+                      onClick={() => navigate("/escrow")}
+                      className="font-bold text-primary hover:underline cursor-pointer"
+                    >
+                      Detail Escrow
+                    </button>
                   </div>
                 </div>
               </div>
@@ -372,7 +406,7 @@ export default function HomePage() {
                     className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                       feedTab === "KOMODITAS"
                         ? "bg-primary text-[#E6E4DA]"
-                        : "text-ink-secondary hover:text-ink"
+                        : "text-ink-secondary hover:text-ink hover:bg-black/5"
                     }`}
                   >
                     Etalase Panen ({mockCommodities.length})
@@ -383,7 +417,7 @@ export default function HomePage() {
                     className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                       feedTab === "TENDER"
                         ? "bg-primary text-[#E6E4DA]"
-                        : "text-ink-secondary hover:text-ink"
+                        : "text-ink-secondary hover:text-ink hover:bg-black/5"
                     }`}
                   >
                     Tender UMKM ({mockTenders.length})
@@ -411,14 +445,14 @@ export default function HomePage() {
                   {filteredCommodities.map((item) => (
                     <article
                       key={item.id}
-                      className="bg-surface rounded-2xl border border-border overflow-hidden hover:border-primary/50 transition-all flex flex-col justify-between"
+                      className="bg-surface rounded-2xl border border-border overflow-hidden hover:border-primary/50 transition-all flex flex-col justify-between group shadow-xs hover:shadow-md"
                     >
                       <div>
                         <div className="relative h-44 w-full bg-[#E6E4DA] overflow-hidden">
                           <img
                             src={item.image}
                             alt={item.name}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                           <div className="absolute top-3 left-3 flex items-center gap-1.5">
                             <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#1A1A1A]/80 backdrop-blur-md text-[#E6E4DA]">
@@ -437,7 +471,7 @@ export default function HomePage() {
 
                         <div className="p-5 space-y-3">
                           <div>
-                            <h4 className="text-base font-bold text-ink leading-tight">
+                            <h4 className="text-base font-bold text-ink leading-tight group-hover:text-primary transition-colors">
                               {item.name}
                             </h4>
                             <p className="text-xs text-ink-secondary line-clamp-2 mt-1">
@@ -486,7 +520,12 @@ export default function HomePage() {
                       </div>
 
                       <div className="p-5 pt-0">
-                        <Button variant="primary" fullWidth size="md">
+                        <Button
+                          variant="primary"
+                          fullWidth
+                          size="md"
+                          onClick={() => navigate("/escrow")}
+                        >
                           Pesan Langsung
                         </Button>
                       </div>
@@ -498,7 +537,8 @@ export default function HomePage() {
                   {filteredTenders.map((tender) => (
                     <article
                       key={tender.id}
-                      className="bg-surface rounded-2xl p-6 border border-border hover:border-primary/50 transition-all flex flex-col justify-between"
+                      onClick={() => navigate(`/tender/${tender.id}`)}
+                      className="bg-surface rounded-2xl p-6 border border-border hover:border-primary/50 transition-all flex flex-col justify-between cursor-pointer group shadow-xs hover:shadow-md"
                     >
                       <div className="space-y-4">
                         <div className="flex items-start justify-between gap-3">
@@ -512,7 +552,7 @@ export default function HomePage() {
                                 Target {tender.requiredQuantityKg} Kg
                               </span>
                             </div>
-                            <h4 className="text-base font-bold text-ink leading-tight">
+                            <h4 className="text-base font-bold text-ink leading-tight group-hover:text-primary transition-colors">
                               {tender.title}
                             </h4>
                           </div>
@@ -557,7 +597,14 @@ export default function HomePage() {
                           Batas: <strong className="text-ink">{tender.deadlineDate}</strong>
                         </div>
 
-                        <Button variant="primary" size="sm">
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/tender/${tender.id}`);
+                          }}
+                        >
                           Ajukan Penawaran
                         </Button>
                       </div>

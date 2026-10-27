@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import {
@@ -15,11 +16,8 @@ import {
   Check,
 } from "lucide-react";
 
-export default function RegisterPage({
-  onRegister,
-  onNavigateLogin,
-  onBackHome,
-}) {
+export default function RegisterPage() {
+  const navigate = useNavigate();
   const [role, setRole] = useState("PETANI");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -49,27 +47,28 @@ export default function RegisterPage({
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      if (onRegister) {
-        onRegister({
-          fullName,
-          email,
-          role,
-        });
-      }
-    }, 800);
+      navigate("/");
+    }, 700);
+  };
+
+  const handleGoogleRegister = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      navigate("/");
+    }, 500);
   };
 
   return (
     <div className="min-h-screen bg-surface-light text-ink flex flex-col justify-between items-center px-4 py-8 sm:py-12 selection:bg-primary-50 selection:text-primary">
       <div className="w-full max-w-lg flex items-center justify-between mb-4">
-        <button
-          type="button"
-          onClick={onBackHome}
+        <Link
+          to="/"
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-ink-muted hover:text-primary transition-colors cursor-pointer select-none"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Kembali ke Beranda</span>
-        </button>
+        </Link>
 
         <span className="text-[11px] font-medium text-ink-muted">
           Pendaftaran Pengguna Baru
@@ -78,20 +77,17 @@ export default function RegisterPage({
 
       <div className="w-full max-w-lg bg-surface rounded-3xl p-6 sm:p-8 border border-border shadow-sm space-y-6">
         <div className="text-center space-y-2">
-          <div
-            role="button"
-            tabIndex={0}
-            onClick={onBackHome}
-            onKeyDown={(e) => e.key === "Enter" && onBackHome && onBackHome()}
-            className="inline-flex items-center gap-2 cursor-pointer select-none mb-1"
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 select-none mb-1 group"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-[#E6E4DA] shadow-xs">
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-[#E6E4DA] shadow-xs group-hover:bg-primary-hover transition-colors">
               <Sprout className="w-6 h-6" />
             </div>
-            <span className="text-2xl font-bold tracking-tight text-primary">
+            <span className="text-2xl font-bold tracking-tight text-primary group-hover:text-primary-hover transition-colors">
               PatraTani
             </span>
-          </div>
+          </Link>
 
           <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
             Buat Akun Patra Tani
@@ -259,6 +255,7 @@ export default function RegisterPage({
               isLoading={isLoading}
               icon={ArrowRight}
               iconPosition="right"
+              className="hover:bg-primary-hover transition-colors"
             >
               Daftar Akun Baru
             </Button>
@@ -276,19 +273,7 @@ export default function RegisterPage({
 
         <button
           type="button"
-          onClick={() => {
-            setIsLoading(true);
-            setTimeout(() => {
-              setIsLoading(false);
-              if (onRegister) {
-                onRegister({
-                  fullName: "Pengguna Google",
-                  email: "google.user@patratani.id",
-                  role,
-                });
-              }
-            }, 600);
-          }}
+          onClick={handleGoogleRegister}
           className="w-full py-2.5 px-4 rounded-xl border border-border bg-surface hover:bg-surface-green/40 active:bg-surface-green transition-colors flex items-center justify-center gap-2.5 text-xs font-semibold text-ink cursor-pointer"
         >
           <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
@@ -314,13 +299,12 @@ export default function RegisterPage({
 
         <div className="pt-2 text-center text-xs text-ink-secondary border-t border-border/80">
           Sudah memiliki akun Patra Tani?{" "}
-          <button
-            type="button"
-            onClick={onNavigateLogin}
-            className="font-bold text-primary hover:underline cursor-pointer"
+          <Link
+            to="/login"
+            className="font-bold text-primary hover:text-primary-hover hover:underline cursor-pointer transition-colors"
           >
             Masuk Sekarang
-          </button>
+          </Link>
         </div>
       </div>
 
