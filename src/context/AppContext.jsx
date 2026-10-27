@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { mockUserProfile } from "../data/mockData";
 
 const AppContext = createContext();
@@ -69,7 +69,23 @@ export function AppProvider({ children }) {
     },
   };
 
-  const [activeTransaction, setActiveTransaction] = useState(initialTransaction);
+  const [activeTransaction, setActiveTransaction] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem("patratani_active_transaction");
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {}
+    return initialTransaction;
+  });
+
+  useEffect(() => {
+    try {
+      if (activeTransaction) {
+        sessionStorage.setItem("patratani_active_transaction", JSON.stringify(activeTransaction));
+      }
+    } catch (e) {}
+  }, [activeTransaction]);
 
   const showToast = (message, type = "success") => {
     setToast({ message, type });

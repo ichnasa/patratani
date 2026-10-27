@@ -213,51 +213,57 @@ export default function BuyerDashboardPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {buyerTenders.map((tender) => (
-                    <div
-                      key={tender.id}
-                      className="bg-surface rounded-2xl p-5 border border-border shadow-xs flex flex-col justify-between gap-4"
-                    >
-                      <div className="space-y-2.5">
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-ink-muted">
-                            Tender #{tender.id}
-                          </span>
-                          <span
-                            className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
-                              tender.isBidding
-                                ? "bg-primary text-[#E6E4DA]"
-                                : "bg-[#FEF3C7] text-[#D97706]"
-                            }`}
-                          >
-                            {tender.badge}
-                          </span>
+                  {buyerTenders.length === 0 ? (
+                    <div className="col-span-full py-8 text-center text-ink-muted bg-surface rounded-2xl border border-border">
+                      Belum ada tender permintaan yang dibuat.
+                    </div>
+                  ) : (
+                    buyerTenders.map((tender) => (
+                      <div
+                        key={tender.id}
+                        className="bg-surface rounded-2xl p-5 border border-border shadow-xs flex flex-col justify-between gap-4"
+                      >
+                        <div className="space-y-2.5">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-ink-muted">
+                              Tender #{tender.id}
+                            </span>
+                            <span
+                              className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
+                                tender.isBidding
+                                  ? "bg-primary text-[#E6E4DA]"
+                                  : "bg-[#FEF3C7] text-[#D97706]"
+                              }`}
+                            >
+                              {tender.badge}
+                            </span>
+                          </div>
+
+                          <h3 className="text-sm font-bold text-ink leading-tight">
+                            {tender.title}
+                          </h3>
+
+                          <p className="text-xs text-ink-secondary leading-relaxed">
+                            {tender.meta}
+                          </p>
                         </div>
 
-                        <h3 className="text-sm font-bold text-ink leading-tight">
-                          {tender.title}
-                        </h3>
-
-                        <p className="text-xs text-ink-secondary leading-relaxed">
-                          {tender.meta}
-                        </p>
+                        <div className="pt-3 border-t border-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                          <span className="text-[11px] text-ink-muted italic">
+                            {tender.note}
+                          </span>
+                          <Button
+                            variant={tender.isBidding ? "primary" : "outline"}
+                            size="sm"
+                            onClick={() => navigate(tender.actionRoute)}
+                            className="shrink-0"
+                          >
+                            {tender.actionText}
+                          </Button>
+                        </div>
                       </div>
-
-                      <div className="pt-3 border-t border-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                        <span className="text-[11px] text-ink-muted italic">
-                          {tender.note}
-                        </span>
-                        <Button
-                          variant={tender.isBidding ? "primary" : "outline"}
-                          size="sm"
-                          onClick={() => navigate(tender.actionRoute)}
-                          className="shrink-0"
-                        >
-                          {tender.actionText}
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  )}
                 </div>
               </div>
 
@@ -284,53 +290,61 @@ export default function BuyerDashboardPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border/60">
-                      {buyerOrders.map((order) => (
-                        <tr key={order.id} className="hover:bg-[#E6E4DA]/20 transition-colors">
-                          <td className="py-4 font-bold text-primary whitespace-nowrap">
-                            {order.id}
-                          </td>
-                          <td className="py-4 whitespace-nowrap">
-                            <span className="font-bold text-ink block">
-                              {order.commodity}
-                            </span>
-                            <span className="text-[11px] text-ink-secondary">
-                              {order.farmerName}
-                            </span>
-                          </td>
-                          <td className="py-4 whitespace-nowrap">
-                            <span className="text-ink block">
-                              {order.schedule}
-                            </span>
-                            <span className="text-[11px] text-ink-muted">
-                              {order.deliveryType}
-                            </span>
-                          </td>
-                          <td className="py-4 whitespace-nowrap">
-                            {order.status === "HANDOVER" && (
-                              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#FEF3C7] text-[#D97706]">
-                                HANDOVER
-                              </span>
-                            )}
-                            {order.status === "COMPLETED" && (
-                              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-surface-green text-primary">
-                                COMPLETED
-                              </span>
-                            )}
-                          </td>
-                          <td className="py-4 font-bold text-ink whitespace-nowrap">
-                            Rp {order.depositAmount.toLocaleString("id-ID")}
-                          </td>
-                          <td className="py-4 text-right whitespace-nowrap">
-                            <Button
-                              variant={order.status === "HANDOVER" ? "primary" : "outline"}
-                              size="sm"
-                              onClick={() => navigate(order.actionRoute)}
-                            >
-                              {order.actionText}
-                            </Button>
+                      {buyerOrders.length === 0 ? (
+                        <tr>
+                          <td colSpan="6" className="py-10 text-center text-ink-muted">
+                            Belum ada pesanan aktif atau deposit escrow saat ini.
                           </td>
                         </tr>
-                      ))}
+                      ) : (
+                        buyerOrders.map((order) => (
+                          <tr key={order.id} className="hover:bg-[#E6E4DA]/20 transition-colors">
+                            <td className="py-4 font-bold text-primary whitespace-nowrap">
+                              {order.id}
+                            </td>
+                            <td className="py-4 whitespace-nowrap">
+                              <span className="font-bold text-ink block">
+                                {order.commodity}
+                              </span>
+                              <span className="text-[11px] text-ink-secondary">
+                                {order.farmerName}
+                              </span>
+                            </td>
+                            <td className="py-4 whitespace-nowrap">
+                              <span className="text-ink block">
+                                {order.schedule}
+                              </span>
+                              <span className="text-[11px] text-ink-muted">
+                                {order.deliveryType}
+                              </span>
+                            </td>
+                            <td className="py-4 whitespace-nowrap">
+                              {order.status === "HANDOVER" && (
+                                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#FEF3C7] text-[#D97706]">
+                                  HANDOVER
+                                </span>
+                              )}
+                              {order.status === "COMPLETED" && (
+                                <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-surface-green text-primary">
+                                  COMPLETED
+                                </span>
+                              )}
+                            </td>
+                            <td className="py-4 font-bold text-ink whitespace-nowrap">
+                              Rp {order.depositAmount.toLocaleString("id-ID")}
+                            </td>
+                            <td className="py-4 text-right whitespace-nowrap">
+                              <Button
+                                variant={order.status === "HANDOVER" ? "primary" : "outline"}
+                                size="sm"
+                                onClick={() => navigate(order.actionRoute)}
+                              >
+                                {order.actionText}
+                              </Button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
                     </tbody>
                   </table>
                 </div>

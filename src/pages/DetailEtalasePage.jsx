@@ -21,7 +21,11 @@ import Button from "../components/Button";
 export default function DetailEtalasePage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { startTransactionFromCommodity, showToast } = useApp();
+  const { currentUser, startTransactionFromCommodity, showToast } = useApp();
+
+  const isFarmerRole = (currentUser?.role || "").toLowerCase().includes("petani");
+  const isOwnCommodity = currentUser?.name === commodity.farmer?.name;
+  const isSelfPurchaseBlocked = isFarmerRole || isOwnCommodity;
 
   const foundItem = mockCommodities.find(
     (item) => String(item.id) === String(id)
@@ -104,6 +108,12 @@ export default function DetailEtalasePage() {
   };
 
   const handleProceedEscrow = () => {
+    if (isSelfPurchaseBlocked) {
+      if (showToast) {
+        showToast("Akun Petani tidak dapat membeli komoditas. Masuk sebagai Pembeli UMKM untuk melakukan checkout.", "warning");
+      }
+      return;
+    }
     const payload = {
       ...commodity,
       quantityKg: orderQuantity,
@@ -472,15 +482,34 @@ export default function DetailEtalasePage() {
                   </div>
                 </div>
 
-                <Button
-                  variant="primary"
-                  fullWidth
-                  size="lg"
-                  onClick={handleProceedEscrow}
-                  className="font-bold"
-                >
-                  Lanjut ke Pembayaran Escrow
-                </Button>
+                {isSelfPurchaseBlocked ? (
+                  <div className="space-y-2">
+                    <Button
+                      variant="outline"
+                      fullWidth
+                      size="lg"
+                      disabled
+                      className="font-bold opacity-60 cursor-not-allowed bg-[#EFEEE7] text-ink-muted border-border"
+                    >
+                      Beli / Pesan Dinonaktifkan
+                    </Button>
+                    <p className="text-[11px] text-center text-[#DC2626] font-medium">
+                      {isOwnCommodity
+                        ? "Anda tidak dapat membeli komoditas milik sendiri."
+                        : "Akun Mitra Petani tidak dapat membeli komoditas. Masuk sebagai Pembeli UMKM untuk checkout."}
+                    </p>
+                  </div>
+                ) : (
+                  <Button
+                    variant="primary"
+                    fullWidth
+                    size="lg"
+                    onClick={handleProceedEscrow}
+                    className="font-bold"
+                  >
+                    Lanjut ke Pembayaran Escrow
+                  </Button>
+                )}
 
                 <div className="p-3 rounded-xl bg-surface-green/40 border border-border flex items-start gap-2.5">
                   <ShieldCheck className="w-4 h-4 text-primary shrink-0 mt-0.5" />

@@ -426,56 +426,64 @@ export default function ProfilePage({ onBack, onLogout }) {
                   </div>
 
                   <div className="space-y-3.5">
-                    {filteredTenders.map((tender) => (
-                      <div
-                        key={tender.id}
-                        onClick={() => {
-                          if (tender.status === "HANDOVER") navigate("/handover");
-                          else if (tender.status === "COMPLETED") navigate("/completed");
-                          else if (tender.status === "AWARDED" || tender.status === "PAID_HELD") navigate("/escrow");
-                          else navigate(`/tender/${tender.id}`);
-                        }}
-                        className="p-4 sm:p-5 rounded-xl bg-[#E6E4DA] border border-border hover:border-primary/50 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer group shadow-xs hover:shadow-sm"
-                      >
-                        <div className="space-y-1.5 flex-1">
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold text-primary">
-                              {tender.category}
-                            </span>
-                            <span className="text-xs text-ink-muted">•</span>
-                            <span className="text-xs font-mono text-ink-muted">
-                              {tender.id}
-                            </span>
-                          </div>
-
-                          <h3 className="text-sm font-bold text-ink group-hover:text-primary transition-colors">
-                            {tender.title}
-                          </h3>
-
-                          <div className="flex flex-wrap items-center gap-3 text-xs text-ink-secondary">
-                            <span>
-                              Target: <strong className="text-ink">{tender.requiredQuantityKg} Kg</strong>
-                            </span>
-                            <span>•</span>
-                            <span>
-                              Total: <strong className="text-primary">Rp {tender.totalBudget.toLocaleString("id-ID")}</strong>
-                            </span>
-                            <span>•</span>
-                            <span>
-                              Mitra: {tender.buyer.businessName}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="flex sm:flex-col items-center sm:items-end justify-between gap-2 shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-border/80">
-                          <StatusBadge status={tender.status} size="sm" showIcon />
-                          <span className="text-[11px] text-ink-muted flex items-center gap-1 group-hover:text-primary transition-colors">
-                            <span>Detail Transaksi</span>
-                            <ChevronRight className="w-3.5 h-3.5" />
-                          </span>
-                        </div>
+                    {filteredTenders.length === 0 ? (
+                      <div className="py-12 px-4 rounded-xl border border-dashed border-border bg-[#E6E4DA]/40 text-center space-y-2">
+                        <History className="w-8 h-8 text-ink-muted mx-auto" />
+                        <p className="text-sm font-semibold text-ink">Tidak ada transaksi ditemukan</p>
+                        <p className="text-xs text-ink-muted">Belum ada riwayat transaksi pada filter status ini.</p>
                       </div>
-                    ))}
+                    ) : (
+                      filteredTenders.map((tender) => (
+                        <div
+                          key={tender.id}
+                          onClick={() => {
+                            if (tender.status === "HANDOVER") navigate("/handover");
+                            else if (tender.status === "COMPLETED") navigate("/completed");
+                            else if (tender.status === "AWARDED" || tender.status === "PAID_HELD") navigate("/escrow");
+                            else navigate(`/tender/${tender.id}`);
+                          }}
+                          className="p-4 sm:p-5 rounded-xl bg-[#E6E4DA] border border-border hover:border-primary/50 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer group shadow-xs hover:shadow-sm"
+                        >
+                          <div className="space-y-1.5 flex-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-bold text-primary">
+                                {tender.category}
+                              </span>
+                              <span className="text-xs text-ink-muted">•</span>
+                              <span className="text-xs font-mono text-ink-muted">
+                                {tender.id}
+                              </span>
+                            </div>
+
+                            <h3 className="text-sm font-bold text-ink group-hover:text-primary transition-colors">
+                              {tender.title}
+                            </h3>
+
+                            <div className="flex flex-wrap items-center gap-3 text-xs text-ink-secondary">
+                              <span>
+                                Target: <strong className="text-ink">{tender.requiredQuantityKg} Kg</strong>
+                              </span>
+                              <span>•</span>
+                              <span>
+                                Total: <strong className="text-primary">Rp {tender.totalBudget.toLocaleString("id-ID")}</strong>
+                              </span>
+                              <span>•</span>
+                              <span>
+                                Mitra: {tender.buyer.businessName}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="flex sm:flex-col items-center sm:items-end justify-between gap-2 shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-border/80">
+                            <StatusBadge status={tender.status} size="sm" showIcon />
+                            <span className="text-[11px] text-ink-muted flex items-center gap-1 group-hover:text-primary transition-colors">
+                              <span>Detail Transaksi</span>
+                              <ChevronRight className="w-3.5 h-3.5" />
+                            </span>
+                          </div>
+                        </div>
+                      ))
+                    )}
                   </div>
                 </div>
               )}

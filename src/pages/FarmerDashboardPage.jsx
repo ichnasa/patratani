@@ -467,58 +467,66 @@ export default function FarmerDashboardPage() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-border/60">
-                          {farmerOrders.map((order) => (
-                            <tr key={order.id} className="hover:bg-[#E6E4DA]/20 transition-colors">
-                              <td className="py-4 font-bold text-primary whitespace-nowrap">
-                                {order.id}
-                              </td>
-                              <td className="py-4 whitespace-nowrap">
-                                <span className="font-bold text-ink block">
-                                  {order.commodity}
-                                </span>
-                                <span className="text-[11px] text-ink-secondary">
-                                  {order.buyerName}
-                                </span>
-                              </td>
-                              <td className="py-4 whitespace-nowrap">
-                                <span className="text-ink block">
-                                  {order.schedule}
-                                </span>
-                                <span className="text-[11px] text-ink-muted">
-                                  {order.deliveryType}
-                                </span>
-                              </td>
-                              <td className="py-4 whitespace-nowrap">
-                                {order.status === "HANDOVER" && (
-                                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#FEF3C7] text-[#D97706]">
-                                    HANDOVER
-                                  </span>
-                                )}
-                                {order.status === "PAID_HELD" && (
-                                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-primary-50 text-primary">
-                                    PAID_HELD
-                                  </span>
-                                )}
-                                {order.status === "COMPLETED" && (
-                                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-surface-green text-primary">
-                                    COMPLETED
-                                  </span>
-                                )}
-                              </td>
-                              <td className="py-4 font-bold text-ink whitespace-nowrap">
-                                Rp {order.netPayment.toLocaleString("id-ID")}
-                              </td>
-                              <td className="py-4 text-right whitespace-nowrap">
-                                <Button
-                                  variant={order.status === "HANDOVER" ? "primary" : "outline"}
-                                  size="sm"
-                                  onClick={() => navigate(order.actionRoute)}
-                                >
-                                  {order.actionText}
-                                </Button>
+                          {farmerOrders.length === 0 ? (
+                            <tr>
+                              <td colSpan="6" className="py-10 text-center text-ink-muted">
+                                Belum ada pesanan aktif di kebun saat ini.
                               </td>
                             </tr>
-                          ))}
+                          ) : (
+                            farmerOrders.map((order) => (
+                              <tr key={order.id} className="hover:bg-[#E6E4DA]/20 transition-colors">
+                                <td className="py-4 font-bold text-primary whitespace-nowrap">
+                                  {order.id}
+                                </td>
+                                <td className="py-4 whitespace-nowrap">
+                                  <span className="font-bold text-ink block">
+                                    {order.commodity}
+                                  </span>
+                                  <span className="text-[11px] text-ink-secondary">
+                                    {order.buyerName}
+                                  </span>
+                                </td>
+                                <td className="py-4 whitespace-nowrap">
+                                  <span className="text-ink block">
+                                    {order.schedule}
+                                  </span>
+                                  <span className="text-[11px] text-ink-muted">
+                                    {order.deliveryType}
+                                  </span>
+                                </td>
+                                <td className="py-4 whitespace-nowrap">
+                                  {order.status === "HANDOVER" && (
+                                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#FEF3C7] text-[#D97706]">
+                                      HANDOVER
+                                    </span>
+                                  )}
+                                  {order.status === "PAID_HELD" && (
+                                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-primary-50 text-primary">
+                                      PAID_HELD
+                                    </span>
+                                  )}
+                                  {order.status === "COMPLETED" && (
+                                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-surface-green text-primary">
+                                      COMPLETED
+                                    </span>
+                                  )}
+                                </td>
+                                <td className="py-4 font-bold text-ink whitespace-nowrap">
+                                  Rp {order.netPayment.toLocaleString("id-ID")}
+                                </td>
+                                <td className="py-4 text-right whitespace-nowrap">
+                                  <Button
+                                    variant={order.status === "HANDOVER" ? "primary" : "outline"}
+                                    size="sm"
+                                    onClick={() => navigate(order.actionRoute)}
+                                  >
+                                    {order.actionText}
+                                  </Button>
+                                </td>
+                              </tr>
+                            ))
+                          )}
                         </tbody>
                       </table>
                     </div>

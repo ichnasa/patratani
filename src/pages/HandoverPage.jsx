@@ -176,6 +176,12 @@ export default function HandoverPage({ onBack, onComplete }) {
   };
 
   const handleBuyerRelease = () => {
+    if (!farmerConfirmed || !isPhotoCaptured || !allChecklistPassed) {
+      if (showToast) {
+        showToast("Harap lengkapi verifikasi foto, checklist mutu, dan konfirmasi petani terlebih dahulu.", "warning");
+      }
+      return;
+    }
     setBuyerConfirmed(true);
     handleReleaseFunds();
   };
@@ -385,7 +391,7 @@ export default function HandoverPage({ onBack, onComplete }) {
                 <section className="bg-[#1A1A1A] rounded-2xl border border-border/40 shadow-lg text-[#E6E4DA] relative overflow-hidden">
                   <canvas ref={canvasRef} className="hidden" />
 
-                  <div className="p-4 bg-black/40 backdrop-blur-md flex items-center justify-between border-b border-white/10 z-10 relative">
+                  <div className="p-4 bg-black/40 backdrop-blur-md flex flex-wrap items-center justify-between gap-2 border-b border-white/10 z-10 relative">
                     <div className="flex items-center gap-2">
                       <span className={`w-2.5 h-2.5 rounded-full ${cameraStatus === "STREAMING" ? "bg-[#22C55E] animate-pulse" : "bg-[#DC2626]"}`} />
                       <span className="text-xs font-bold tracking-wider uppercase text-white">

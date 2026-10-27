@@ -52,14 +52,22 @@ export default function CreateTenderPage() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    let finalValue = value;
+    if (type === "checkbox") {
+      finalValue = checked;
+    } else if (type === "number") {
+      const num = Number(value);
+      if (name === "requiredQuantityKg") {
+        finalValue = Math.max(10, num);
+      } else if (name === "maxBudgetPerKg") {
+        finalValue = Math.max(100, num);
+      } else {
+        finalValue = Math.max(0, num);
+      }
+    }
     setFormData((prev) => ({
       ...prev,
-      [name]:
-        type === "checkbox"
-          ? checked
-          : type === "number"
-          ? Number(value)
-          : value,
+      [name]: finalValue,
     }));
   };
 
@@ -182,6 +190,7 @@ export default function CreateTenderPage() {
                       name="title"
                       value={formData.title}
                       onChange={handleChange}
+                      maxLength={80}
                       required
                       placeholder="Contoh: Cabai Rawit Merah Segar"
                       className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
@@ -311,6 +320,7 @@ export default function CreateTenderPage() {
                         name="kitchenAddress"
                         value={formData.kitchenAddress}
                         onChange={handleChange}
+                        maxLength={150}
                         required
                         className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                       />
@@ -381,6 +391,7 @@ export default function CreateTenderPage() {
                     name="qualitySpecs"
                     value={formData.qualitySpecs}
                     onChange={handleChange}
+                    maxLength={500}
                     className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl p-3.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                   />
 
