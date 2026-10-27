@@ -10,17 +10,14 @@ import {
   ClipboardList,
   User,
 } from "lucide-react";
+import { useApp } from "../context/AppContext";
 
 export default function Navbar({
   searchValue = "",
   onSearchChange,
   notificationCount = 2,
-  user = {
-    name: "Rizal",
-    role: "Petani",
-    avatar: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=100&auto=format&fit=crop&q=80",
-  },
 }) {
+  const { currentUser } = useApp();
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -110,19 +107,31 @@ export default function Navbar({
               )}
             </Link>
 
-            <Link
-              to="/profile"
-              className="flex items-center gap-2 select-none py-1 px-2 rounded-xl transition-colors hover:bg-surface-green/40 group"
-            >
-              <img
-                src={user.avatar}
-                alt={user.name}
-                className="w-8 h-8 rounded-full object-cover border border-border group-hover:border-primary transition-colors"
-              />
-              <span className="text-[13px] font-medium text-ink group-hover:text-primary transition-colors hidden sm:inline">
-                {user.role}
-              </span>
-            </Link>
+            {currentUser ? (
+              <Link
+                to="/profile"
+                className="flex items-center gap-2 select-none py-1 px-2 rounded-xl transition-colors hover:bg-surface-green/40 group"
+              >
+                <img
+                  src={
+                    currentUser.avatar ||
+                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80"
+                  }
+                  alt={currentUser.name || "Profil"}
+                  className="w-8 h-8 rounded-full object-cover border border-border group-hover:border-primary transition-colors"
+                />
+                <span className="text-[13px] font-medium text-ink group-hover:text-primary transition-colors hidden sm:inline">
+                  {currentUser.role || currentUser.name?.split(" ")[0]}
+                </span>
+              </Link>
+            ) : (
+              <Link
+                to="/login"
+                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-[#E6E4DA] hover:bg-primary-hover transition-colors"
+              >
+                Masuk
+              </Link>
+            )}
           </div>
         </div>
 
@@ -182,16 +191,16 @@ export default function Navbar({
         </Link>
 
         <Link
-          to="/profile"
+          to={currentUser ? "/profile" : "/login"}
           className={clsx(
             "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
-            isNavActive("/profile")
+            isNavActive("/profile") || isNavActive("/login")
               ? "text-primary font-bold"
               : "text-ink-secondary hover:text-ink"
           )}
         >
           <User className="w-5 h-5" />
-          <span className="text-[10px]">Akun</span>
+          <span className="text-[10px]">{currentUser ? "Akun" : "Masuk"}</span>
         </Link>
       </nav>
     </>

@@ -95,7 +95,7 @@ export default function Button({
         variantClasses[variant] || variantClasses.primary,
         stateClasses,
         fullWidth && "w-full",
-        className
+        className,
       )}
       {...props}
     >

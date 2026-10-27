@@ -5,6 +5,7 @@ const AppContext = createContext();
 
 export function AppProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(mockUserProfile);
+  const [toast, setToast] = useState(null);
 
   const initialTransaction = {
     tenderId: "TND-2026-004",
@@ -70,11 +71,52 @@ export function AppProvider({ children }) {
 
   const [activeTransaction, setActiveTransaction] = useState(initialTransaction);
 
+  const showToast = (message, type = "success") => {
+    setToast({ message, type });
+    setTimeout(() => {
+      setToast(null);
+    }, 3000);
+  };
+
+  const hideToast = () => {
+    setToast(null);
+  };
+
+  const login = (credentials = {}) => {
+    const user = {
+      ...mockUserProfile,
+      email: credentials.email || mockUserProfile.email,
+    };
+    setCurrentUser(user);
+    showToast("Login Berhasil", "success");
+    return user;
+  };
+
+  const logout = () => {
+    setCurrentUser(null);
+    showToast("Berhasil Keluar", "info");
+  };
+
+  const register = (userData = {}) => {
+    const user = {
+      ...mockUserProfile,
+      name: userData.name || mockUserProfile.name,
+      email: userData.email || mockUserProfile.email,
+      role: userData.role === "PETANI" ? "Petani Mitra" : "Pembeli UMKM",
+    };
+    setCurrentUser(user);
+    showToast("Pendaftaran Berhasil", "success");
+    return user;
+  };
+
   const updateUserProfile = (updatedFields) => {
-    setCurrentUser((prev) => ({
-      ...prev,
-      ...updatedFields,
-    }));
+    setCurrentUser((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        ...updatedFields,
+      };
+    });
   };
 
   const startTransactionFromTender = (tender, offerData = {}) => {
@@ -125,14 +167,14 @@ export function AppProvider({ children }) {
       },
       farmer: {
         id: "FARM-01",
-        name: currentUser.name || "Pak Mulyono",
+        name: currentUser?.name || "Pak Mulyono",
         farmName: "Sentra Tani Bina Mitra",
-        location: currentUser.location || "Lembang, Bandung Barat",
+        location: currentUser?.location || "Lembang, Bandung Barat",
         distanceKm: 4.5,
-        avatar: currentUser.avatar,
+        avatar: currentUser?.avatar || "https://images.unsplash.com/photo-1544717305-2782549b5136?w=150&auto=format&fit=crop&q=80",
         rating: 4.9,
-        phone: currentUser.phone || "+62 812-9988-7711",
-        bankAccount: `${currentUser.bankName || "BRI"} • ${currentUser.accountNumber || "4410-01-xxxxxx-53"}`,
+        phone: currentUser?.phone || "+62 812-9988-7711",
+        bankAccount: `${currentUser?.bankName || "BRI"} • ${currentUser?.accountNumber || "4410-01-xxxxxx-53"}`,
         verified: true,
         status: "CONFIRMED",
         confirmedTime: "11:45 WIB",
@@ -205,12 +247,12 @@ export function AppProvider({ children }) {
         confirmedTime: "11:45 WIB",
       },
       buyer: {
-        businessName: currentUser.name ? `${currentUser.name} (UMKM)` : "Resto Barokah",
-        contactPerson: currentUser.name || "Rizal",
+        businessName: currentUser?.name ? `${currentUser.name} (UMKM)` : "Resto Barokah",
+        contactPerson: currentUser?.name || "Rizal",
         businessType: "UMKM Kuliner Mandiri",
         deliveryAddress: "Jl. Gegerkalong Girang No. 34, Bandung",
         address: "Jl. Gegerkalong Girang No. 34, Bandung",
-        phone: currentUser.phone || "+62 812-9988-7711",
+        phone: currentUser?.phone || "+62 812-9988-7711",
         status: "CHECKING",
       },
     };
@@ -225,10 +267,14 @@ export function AppProvider({ children }) {
       status: "PAID_HELD",
     }));
 
-    setCurrentUser((prev) => ({
-      ...prev,
-      escrowBalance: prev.escrowBalance + (activeTransaction.totalPayment || 585000),
-    }));
+    setCurrentUser((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        escrowBalance: prev.escrowBalance + (activeTransaction.totalPayment || 585000),
+      };
+    });
+    showToast("Dana Berhasil Diamankan di Escrow", "success");
   };
 
   const completeHandover = (actualWeightKg) => {
@@ -239,11 +285,15 @@ export function AppProvider({ children }) {
       actualWeightKg: weight,
     }));
 
-    setCurrentUser((prev) => ({
-      ...prev,
-      activeBalance: prev.activeBalance + (activeTransaction.netFarmerPayment || 562600),
-      escrowBalance: Math.max(0, prev.escrowBalance - (activeTransaction.totalPayment || 585000)),
-    }));
+    setCurrentUser((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        activeBalance: prev.activeBalance + (activeTransaction.netFarmerPayment || 562600),
+        escrowBalance: Math.max(0, prev.escrowBalance - (activeTransaction.totalPayment || 585000)),
+      };
+    });
+    showToast("Dana Escrow Berhasil Dicairkan ke Petani!", "success");
   };
 
   const fileDispute = (reason) => {
@@ -252,11 +302,15 @@ export function AppProvider({ children }) {
       status: "DISPUTED",
       disputeReason: reason,
     }));
+    showToast("Laporan Sengketa Berhasil Dikirim ke Admin", "info");
   };
 
   const value = {
     currentUser,
     setCurrentUser,
+    login,
+    logout,
+    register,
     updateUserProfile,
     activeTransaction,
     setActiveTransaction,
@@ -265,6 +319,9 @@ export function AppProvider({ children }) {
     payEscrow,
     completeHandover,
     fileDispute,
+    toast,
+    showToast,
+    hideToast,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

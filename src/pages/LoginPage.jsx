@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useApp } from "../context/AppContext";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import {
@@ -15,6 +16,7 @@ import {
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { login } = useApp();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -32,16 +34,18 @@ export default function LoginPage() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
+      login({ email });
       navigate("/");
-    }, 700);
+    }, 400);
   };
 
   const handleGoogleLogin = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
+      login({ email: "rizal.firmansyah@patratani.id" });
       navigate("/");
-    }, 500);
+    }, 300);
   };
 
   return (

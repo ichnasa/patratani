@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useApp } from "../context/AppContext";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import {
@@ -18,6 +19,7 @@ import {
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const { register } = useApp();
   const [role, setRole] = useState("PETANI");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -47,16 +49,18 @@ export default function RegisterPage() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
+      register({ name: fullName, email, role });
       navigate("/");
-    }, 700);
+    }, 400);
   };
 
   const handleGoogleRegister = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
+      register({ name: "Pengguna Baru", email: "pengguna@patratani.id", role });
       navigate("/");
-    }, 500);
+    }, 300);
   };
 
   return (

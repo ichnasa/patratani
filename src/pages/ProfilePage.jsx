@@ -31,7 +31,7 @@ import {
 
 export default function ProfilePage({ onBack, onLogout }) {
   const navigate = useNavigate();
-  const { currentUser, updateUserProfile } = useApp();
+  const { currentUser, updateUserProfile, logout } = useApp();
   const [activeMenu, setActiveMenu] = useState("TRANSAKSI");
   const [transactionFilter, setTransactionFilter] = useState("SEMUA");
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
@@ -39,10 +39,12 @@ export default function ProfilePage({ onBack, onLogout }) {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const [editForm, setEditForm] = useState({
-    name: currentUser.name || "Rizal Firmansyah",
-    phone: currentUser.phone || "+62 812-9988-7711",
-    location: currentUser.location || "Lembang, Bandung Barat",
+    name: currentUser?.name || "Rizal Firmansyah",
+    phone: currentUser?.phone || "+62 812-9988-7711",
+    location: currentUser?.location || "Lembang, Bandung Barat",
   });
+
+  if (!currentUser) return null;
 
   const filterTabs = [
     { id: "SEMUA", label: "Semua" },
@@ -735,9 +737,9 @@ export default function ProfilePage({ onBack, onLogout }) {
                   setIsLogoutModalOpen(false);
                   if (onLogout) {
                     onLogout();
-                  } else {
-                    navigate("/login");
                   }
+                  logout();
+                  navigate("/login");
                 }}
               >
                 Ya, Keluar
