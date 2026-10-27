@@ -25,6 +25,7 @@ export default function ExplorePage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [maxDistance, setMaxDistance] = useState(20);
+  const [maxPrice, setMaxPrice] = useState(80000);
   const [deliveryOption, setDeliveryOption] = useState("SEMUA");
   const [sortBy, setSortBy] = useState("TERDEKAT");
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
@@ -42,6 +43,7 @@ export default function ExplorePage() {
     setSearchQuery("");
     setSelectedCategory("Semua");
     setMaxDistance(20);
+    setMaxPrice(80000);
     setDeliveryOption("SEMUA");
     setSortBy("TERDEKAT");
   };
@@ -60,13 +62,21 @@ export default function ExplorePage() {
 
       const matchesDistance = item.farmer.distanceKm <= maxDistance;
 
+      const matchesPrice = item.pricePerKg <= maxPrice;
+
       const matchesDelivery =
         deliveryOption === "SEMUA" ||
         (deliveryOption === "SELF_PICKUP" && item.logistics.selfPickup.available) ||
         (deliveryOption === "FARMER_DELIVERY" &&
           item.logistics.farmerDelivery.available);
 
-      return matchesSearch && matchesCategory && matchesDistance && matchesDelivery;
+      return (
+        matchesSearch &&
+        matchesCategory &&
+        matchesDistance &&
+        matchesPrice &&
+        matchesDelivery
+      );
     });
 
     if (sortBy === "TERDEKAT") {
@@ -78,7 +88,7 @@ export default function ExplorePage() {
     }
 
     return result;
-  }, [searchQuery, selectedCategory, maxDistance, deliveryOption, sortBy]);
+  }, [searchQuery, selectedCategory, maxDistance, maxPrice, deliveryOption, sortBy]);
 
   const filteredTenders = useMemo(() => {
     let result = mockTenders.filter((tender) => {
@@ -93,6 +103,9 @@ export default function ExplorePage() {
 
       const matchesDistance = tender.buyer.distanceKm <= maxDistance;
 
+      const tenderPrice = tender.targetPricePerKg || tender.maxBudgetPerKg || 0;
+      const matchesPrice = tenderPrice <= maxPrice;
+
       const matchesDelivery =
         deliveryOption === "SEMUA" ||
         (deliveryOption === "SELF_PICKUP" &&
@@ -100,7 +113,13 @@ export default function ExplorePage() {
         (deliveryOption === "FARMER_DELIVERY" &&
           tender.fulfillmentMethod === "FARMER_DELIVERY");
 
-      return matchesSearch && matchesCategory && matchesDistance && matchesDelivery;
+      return (
+        matchesSearch &&
+        matchesCategory &&
+        matchesDistance &&
+        matchesPrice &&
+        matchesDelivery
+      );
     });
 
     if (sortBy === "TERDEKAT") {
@@ -112,7 +131,7 @@ export default function ExplorePage() {
     }
 
     return result;
-  }, [searchQuery, selectedCategory, maxDistance, deliveryOption, sortBy]);
+  }, [searchQuery, selectedCategory, maxDistance, maxPrice, deliveryOption, sortBy]);
 
   const renderFilterPanel = () => (
     <div className="space-y-6">
@@ -170,6 +189,31 @@ export default function ExplorePage() {
           <span>2 km</span>
           <span>15 km</span>
           <span>30 km</span>
+        </div>
+      </div>
+
+      <div className="space-y-2.5">
+        <div className="flex items-center justify-between">
+          <label className="text-xs font-bold text-ink uppercase tracking-wider block">
+            Batas Harga Maksimal
+          </label>
+          <span className="text-xs font-bold text-primary px-2 py-0.5 rounded-md bg-surface-green">
+            ≤ Rp {maxPrice.toLocaleString("id-ID")}/kg
+          </span>
+        </div>
+        <input
+          type="range"
+          min="5000"
+          max="80000"
+          step="2500"
+          value={maxPrice}
+          onChange={(e) => setMaxPrice(Number(e.target.value))}
+          className="w-full accent-primary h-1.5 bg-[#CFCDC2] rounded-lg cursor-pointer"
+        />
+        <div className="flex items-center justify-between text-[10px] text-ink-muted">
+          <span>Rp 5.000</span>
+          <span>Rp 40.000</span>
+          <span>Rp 80.000</span>
         </div>
       </div>
 

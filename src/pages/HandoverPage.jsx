@@ -25,7 +25,7 @@ import {
 
 export default function HandoverPage({ onBack, onComplete }) {
   const navigate = useNavigate();
-  const { activeTransaction, completeHandover, fileDispute } = useApp();
+  const { currentUser, showToast, activeTransaction, completeHandover, fileDispute } = useApp();
 
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -34,6 +34,8 @@ export default function HandoverPage({ onBack, onComplete }) {
   const [cameraStatus, setCameraStatus] = useState("INITIALIZING");
   const [capturedPhotoUrl, setCapturedPhotoUrl] = useState(null);
   const [isPhotoCaptured, setIsPhotoCaptured] = useState(false);
+  const [farmerConfirmed, setFarmerConfirmed] = useState(true);
+  const [buyerConfirmed, setBuyerConfirmed] = useState(false);
   const [actualWeight, setActualWeight] = useState(
     activeTransaction?.actualWeightKg
       ? String(activeTransaction.actualWeightKg)
@@ -162,6 +164,20 @@ export default function HandoverPage({ onBack, onComplete }) {
       );
       setIsPhotoCaptured(true);
     }
+  };
+
+  const isPetani = (currentUser?.role || "").toLowerCase().includes("petani");
+
+  const handleFarmerConfirm = () => {
+    setFarmerConfirmed(true);
+    if (showToast) {
+      showToast("Penyerahan komoditas berhasil dikonfirmasi oleh Petani.", "success");
+    }
+  };
+
+  const handleBuyerRelease = () => {
+    setBuyerConfirmed(true);
+    handleReleaseFunds();
   };
 
   const handleReleaseFunds = () => {
@@ -551,12 +567,47 @@ export default function HandoverPage({ onBack, onComplete }) {
                   </div>
 
                   <div className="space-y-3 text-xs">
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-[#EFEEE7] border border-border">
-                      <span className="text-ink-secondary">Status Petani Mitra:</span>
-                      <span className="font-bold text-[#16A34A] flex items-center gap-1">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        Dikonfirmasi ({handoverData.farmer?.confirmedTime || "11:45 WIB"})
-                      </span>
+                    <div className="p-3.5 rounded-xl bg-[#EFEEE7] border border-border space-y-2.5">
+                      <div className="flex items-center justify-between pb-2 border-b border-border/60">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-ink-muted">
+                          Status Konfirmasi Dua Pihak
+                        </span>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-surface text-ink-secondary border border-border">
+                          {isPetani ? "Mode: Petani Mitra" : "Mode: Pembeli UMKM"}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <span className="text-ink font-medium">Petani ({handoverData.farmer?.name || "Kang Rizal"}):</span>
+                        {farmerConfirmed ? (
+                          <span className="font-bold text-[#16A34A] flex items-center gap-1 text-[11px]">
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            Sudah Konfirmasi ({handoverData.farmer?.confirmedTime || "07:15 WIB"})
+                          </span>
+                        ) : (
+                          <span className="font-bold text-[#D97706] text-[11px]">
+                            Menunggu Konfirmasi
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <span className="text-ink font-medium">Pembeli ({handoverData.buyer?.businessName || handoverData.buyer?.contactPerson || "Bu Lina"}):</span>
+                        {buyerConfirmed ? (
+                          <span className="font-bold text-[#16A34A] flex items-center gap-1 text-[11px]">
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            Disetujui ({handoverData.releaseTime || "07:16 WIB"})
+                          </span>
+                        ) : farmerConfirmed ? (
+                          <span className="font-bold text-primary text-[11px]">
+                            Siap Setujui
+                          </span>
+                        ) : (
+                          <span className="font-medium text-ink-muted text-[11px]">
+                            Menunggu Petani
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     <div className="flex items-center justify-between p-3 rounded-xl bg-[#EFEEE7] border border-border">
@@ -614,17 +665,48 @@ export default function HandoverPage({ onBack, onComplete }) {
                   </div>
 
                   <div className="pt-2 space-y-3">
-                    <Button
-                      variant="primary"
-                      size="lg"
-                      fullWidth
-                      icon={ShieldCheck}
-                      isLoading={isReleasing}
-                      disabled={!allChecklistPassed || !isPhotoCaptured}
-                      onClick={handleReleaseFunds}
-                    >
-                      Verifikasi &amp; Lepaskan Dana Escrow
-                    </Button>
+                    {isPetani ? (
+                      farmerConfirmed ? (
+                        <div className="p-3.5 rounded-xl bg-[#DCFCE7] border border-[#BBF7D0] text-center space-y-1">
+                          <span className="text-xs font-bold text-[#166534] flex items-center justify-center gap-1.5">
+                            <CheckCircle2 className="w-4 h-4" />
+                            Penyerahan Dikonfirmasi Petani
+                          </span>
+                          <p className="text-[11px] text-ink-secondary">
+                            Menunggu Pembeli ({handoverData.buyer?.businessName || "Pembeli"}) memeriksa fisik &amp; menyetujui pelepasan escrow.
+                          </p>
+                        </div>
+                      ) : (
+                        <Button
+                          variant="primary"
+                          size="lg"
+                          fullWidth
+                          icon={CheckCircle2}
+                          disabled={!isPhotoCaptured}
+                          onClick={handleFarmerConfirm}
+                        >
+                          Konfirmasi Penyerahan Komoditas
+                        </Button>
+                      )
+                    ) : (
+                      <Button
+                        variant="primary"
+                        size="lg"
+                        fullWidth
+                        icon={ShieldCheck}
+                        isLoading={isReleasing}
+                        disabled={!allChecklistPassed || !isPhotoCaptured || !farmerConfirmed}
+                        onClick={handleBuyerRelease}
+                      >
+                        Konfirmasi Penerimaan &amp; Cairkan Escrow
+                      </Button>
+                    )}
+
+                    {!isPetani && !farmerConfirmed && (
+                      <p className="text-[11px] text-[#D97706] text-center font-medium">
+                        * Menunggu petani mengonfirmasi penyerahan komoditas terlebih dahulu.
+                      </p>
+                    )}
 
                     {!isPhotoCaptured && (
                       <p className="text-[11px] text-[#D97706] text-center font-medium">

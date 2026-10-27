@@ -26,6 +26,7 @@ import {
   X,
   Building2,
   LayoutDashboard,
+  Truck,
 } from "lucide-react";
 
 export default function ProfilePage({ onBack, onLogout }) {
@@ -83,6 +84,12 @@ export default function ProfilePage({ onBack, onLogout }) {
       label: "Daftar Tender Saya",
       icon: FileText,
       badge: 2,
+    },
+    {
+      id: "DELIVERY",
+      label: "Pengaturan Delivery Mandiri",
+      icon: Truck,
+      isDeliveryLink: true,
     },
     {
       id: "BANTUAN",
@@ -297,6 +304,10 @@ export default function ProfilePage({ onBack, onLogout }) {
                           } else {
                             navigate("/dashboard/farmer");
                           }
+                        } else if (item.isDeliveryLink) {
+                          navigate("/dashboard/farmer", {
+                            state: { menu: "DELIVERY" },
+                          });
                         } else {
                           setActiveMenu(item.id);
                         }
@@ -561,6 +572,44 @@ export default function ProfilePage({ onBack, onLogout }) {
                       </div>
                       <Button variant="outline" size="sm">
                         Ganti Rekening
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeMenu === "DELIVERY" && (
+                <div className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-5">
+                  <div className="flex items-center justify-between pb-3 border-b border-border/80">
+                    <div>
+                      <h2 className="text-base font-bold text-ink">
+                        Pengaturan Delivery Mandiri Petani
+                      </h2>
+                      <p className="text-xs text-ink-muted">
+                        Kelola kapasitas armada, radius antar, dan tarif tetap pengiriman ke pembeli
+                      </p>
+                    </div>
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-surface-green text-primary border border-primary/20">
+                      100% Hak Petani
+                    </span>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border space-y-3 text-xs">
+                    <p className="text-ink-secondary leading-relaxed">
+                      Pengaturan kapasitas armada (maks. 50 kg), tarif tetap pengantaran (Rp 5.000/trip), dan radius jangkauan maksimal dikonfigurasi melalui Dasbor Operasional Petani.
+                    </p>
+                    <div className="pt-1">
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        icon={Truck}
+                        onClick={() =>
+                          navigate("/dashboard/farmer", {
+                            state: { menu: "DELIVERY" },
+                          })
+                        }
+                      >
+                        Buka Panel Pengaturan Delivery di Dasbor Petani
                       </Button>
                     </div>
                   </div>

@@ -31,6 +31,7 @@ export default function CheckoutEscrowPage({
   const [isPaidSuccess, setIsPaidSuccess] = useState(
     activeTransaction?.status === "PAID_HELD" || false
   );
+  const [isH1Confirmed, setIsH1Confirmed] = useState(true);
 
   const dealData = activeTransaction || {
     tenderId: "TND-2026-004",
@@ -238,6 +239,71 @@ export default function CheckoutEscrowPage({
                 <div className="pt-2 border-t border-border flex items-center justify-between text-ink font-medium">
                   <span>Penerima:</span>
                   <span>{dealData.buyer?.businessName} ({dealData.buyer?.contactPerson})</span>
+                </div>
+              </div>
+
+              <div className="p-5 max-w-xl mx-auto rounded-2xl bg-surface border border-border text-left space-y-4 text-xs shadow-xs">
+                <div className="flex items-center justify-between pb-3 border-b border-border">
+                  <div className="flex items-center gap-2 font-bold text-ink text-sm">
+                    <Calendar className="w-4 h-4 text-primary" />
+                    <span>Langkah Selanjutnya: Serah-Terima (HANDOVER)</span>
+                  </div>
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-surface-green text-primary border border-primary/20">
+                    Prosedur Resmi
+                  </span>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="p-3.5 rounded-xl bg-[#FEF3C7]/60 border border-[#FDE68A] space-y-2">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-2">
+                        <span className="w-5 h-5 rounded-full bg-[#D97706] text-white flex items-center justify-center font-bold text-[10px] shrink-0">
+                          1
+                        </span>
+                        <span className="font-bold text-ink">
+                          Konfirmasi Kesiapan Panen (H-1)
+                        </span>
+                      </div>
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        isH1Confirmed
+                          ? "bg-[#DCFCE7] text-[#166534] border border-[#BBF7D0]"
+                          : "bg-[#FEF3C7] text-[#B45309] border border-[#FDE68A]"
+                      }`}>
+                        {isH1Confirmed ? "Petik Subuh Siap (Dikonfirmasi)" : "Menunggu Konfirmasi"}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-ink-secondary leading-relaxed pl-7">
+                      Petani ({dealData.farmer?.name || "Kang Rizal"}) mengonfirmasi kesiapan petik subuh melalui sistem pada H-1 pengiriman ({dealData.deliveryDate || "28 Okt 2026"}, 18:00 WIB).
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-[#EFEEE7] border border-border space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="w-5 h-5 rounded-full bg-ink-muted text-white flex items-center justify-center font-bold text-[10px] shrink-0">
+                        2
+                      </span>
+                      <span className="font-bold text-ink">
+                        Verifikasi Kamera In-App saat Tiba di Lokasi
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-ink-secondary leading-relaxed pl-7">
+                      Buka kamera web Patra Tani untuk merekam bukti foto hasil panen dan kesesuaian timbangan. Sistem otomatis menyematkan koordinat GPS &amp; stempel waktu sah.
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-[#EFEEE7] border border-border space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      <span className="w-5 h-5 rounded-full bg-ink-muted text-white flex items-center justify-center font-bold text-[10px] shrink-0">
+                        3
+                      </span>
+                      <span className="font-bold text-ink">
+                        Pencairan Dana Escrow Otomatis
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-ink-secondary leading-relaxed pl-7">
+                      Dana Rp {(dealData.totalPayment || 585000).toLocaleString("id-ID")} hanya cair ke rekening dompet petani setelah pembeli menyetujui hasil foto dan timbangan di aplikasi.
+                    </p>
+                  </div>
                 </div>
               </div>
 

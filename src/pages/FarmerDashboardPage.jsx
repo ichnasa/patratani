@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   Sprout,
   ShoppingBag,
@@ -11,6 +11,7 @@ import {
   Wallet,
   Settings,
   UserCheck,
+  Truck,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import Navbar from "../components/Navbar";
@@ -19,8 +20,27 @@ import Button from "../components/Button";
 
 export default function FarmerDashboardPage() {
   const navigate = useNavigate();
-  const { currentUser } = useApp();
-  const [activeMenu, setActiveMenu] = useState("RINGKASAN");
+  const location = useLocation();
+  const { currentUser, showToast } = useApp();
+  const [activeMenu, setActiveMenu] = useState(
+    location.state?.menu || "RINGKASAN"
+  );
+
+  const [deliverySettings, setDeliverySettings] = useState({
+    isEnabled: true,
+    maxCapacityKg: 50,
+    fixedDeliveryFee: 5000,
+    maxRadiusKm: 15,
+    vehicleType: "Motor + Keranjang Bronjong",
+    operatingHours: "06:00 - 10:00 WIB (Sesuai Jam Panen Pagi)",
+  });
+
+  const handleSaveDelivery = (e) => {
+    e.preventDefault();
+    if (showToast) {
+      showToast("Pengaturan delivery mandiri berhasil disimpan!", "success");
+    }
+  };
 
   const farmerOrders = [
     {
@@ -148,172 +168,363 @@ export default function FarmerDashboardPage() {
             </aside>
 
             <div className="lg:col-span-9 space-y-8">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight">
-                    Ringkasan Kinerja Kebun &amp; Escrow
-                  </h1>
-                  <p className="text-xs sm:text-sm text-ink-secondary mt-1">
-                    Kelompok Tani Subur • Desa Pasirjambu, Ciwidey • Saldo Siap Tarik:{" "}
-                    <span className="font-bold text-primary">
-                      Rp {(currentUser?.activeBalance || 4250000).toLocaleString("id-ID")}
+              {activeMenu === "DELIVERY" ? (
+                <div className="bg-surface rounded-2xl border border-border p-6 sm:p-8 space-y-6 shadow-xs">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
+                    <div>
+                      <h1 className="text-xl sm:text-2xl font-bold text-ink">
+                        Pengaturan Delivery Mandiri
+                      </h1>
+                      <p className="text-xs sm:text-sm text-ink-secondary mt-1 max-w-2xl">
+                        Kelola armada pengantaran langsung ke dapur usaha pembeli. 100% ongkos kirim menjadi hak petani tanpa potongan komisi platform.
+                      </p>
+                    </div>
+
+                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-surface-green text-primary border border-primary/20 self-start sm:self-auto">
+                      100% Ongkir Milik Petani
                     </span>
-                  </p>
+                  </div>
+
+                  <form onSubmit={handleSaveDelivery} className="space-y-6">
+                    <div className="p-4 rounded-xl bg-[#E6E4DA]/40 border border-border flex items-center justify-between">
+                      <div>
+                        <span className="text-xs font-bold text-ink block">
+                          Status Layanan Pengantaran Mandiri
+                        </span>
+                        <span className="text-[11px] text-ink-secondary">
+                          Aktifkan agar pembeli UMKM dapat memilih opsi pengiriman saat checkout pre-order
+                        </span>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={deliverySettings.isEnabled}
+                          onChange={(e) =>
+                            setDeliverySettings((prev) => ({
+                              ...prev,
+                              isEnabled: e.target.checked,
+                            }))
+                          }
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-border peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                      </label>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-ink uppercase tracking-wider block">
+                          Kapasitas Maksimal Muatan (kg)
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="number"
+                            min="5"
+                            max="500"
+                            value={deliverySettings.maxCapacityKg}
+                            onChange={(e) =>
+                              setDeliverySettings((prev) => ({
+                                ...prev,
+                                maxCapacityKg: Number(e.target.value),
+                              }))
+                            }
+                            className="w-full bg-[#E6E4DA]/30 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-ink focus:outline-none focus:border-primary"
+                          />
+                          <span className="absolute right-3.5 top-2.5 text-xs font-bold text-ink-muted">
+                            kg
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-ink-muted">
+                          Batas muatan kendaraan per sekali jalan
+                        </p>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-ink uppercase tracking-wider block">
+                          Tarif Tetap Antar (Rp / trip)
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-3.5 top-2.5 text-xs font-bold text-ink-muted">
+                            Rp
+                          </span>
+                          <input
+                            type="number"
+                            min="0"
+                            step="1000"
+                            value={deliverySettings.fixedDeliveryFee}
+                            onChange={(e) =>
+                              setDeliverySettings((prev) => ({
+                                ...prev,
+                                fixedDeliveryFee: Number(e.target.value),
+                              }))
+                            }
+                            className="w-full bg-[#E6E4DA]/30 border border-border rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm font-bold text-ink focus:outline-none focus:border-primary"
+                          />
+                        </div>
+                        <p className="text-[11px] text-ink-muted">
+                          Tarif flat transparan yang ditagihkan ke pembeli
+                        </p>
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-ink uppercase tracking-wider block">
+                          Jangkauan Radius Maksimal (km)
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="number"
+                            min="1"
+                            max="50"
+                            value={deliverySettings.maxRadiusKm}
+                            onChange={(e) =>
+                              setDeliverySettings((prev) => ({
+                                ...prev,
+                                maxRadiusKm: Number(e.target.value),
+                              }))
+                            }
+                            className="w-full bg-[#E6E4DA]/30 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-ink focus:outline-none focus:border-primary"
+                          />
+                          <span className="absolute right-3.5 top-2.5 text-xs font-bold text-ink-muted">
+                            km
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-ink-muted">
+                          Radius dari koordinat kebun Ciwidey
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-ink uppercase tracking-wider block">
+                          Jenis Kendaraan &amp; Perlengkapan
+                        </label>
+                        <input
+                          type="text"
+                          value={deliverySettings.vehicleType}
+                          onChange={(e) =>
+                            setDeliverySettings((prev) => ({
+                              ...prev,
+                              vehicleType: e.target.value,
+                            }))
+                          }
+                          className="w-full bg-[#E6E4DA]/30 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary"
+                        />
+                      </div>
+
+                      <div className="space-y-1.5">
+                        <label className="text-xs font-bold text-ink uppercase tracking-wider block">
+                          Jadwal / Jam Operasional Antar
+                        </label>
+                        <input
+                          type="text"
+                          value={deliverySettings.operatingHours}
+                          onChange={(e) =>
+                            setDeliverySettings((prev) => ({
+                              ...prev,
+                              operatingHours: e.target.value,
+                            }))
+                          }
+                          className="w-full bg-[#E6E4DA]/30 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-surface-green/40 border border-primary/20 space-y-2 text-xs">
+                      <div className="flex items-center gap-2 font-bold text-primary">
+                        <ShieldCheck className="w-4 h-4" />
+                        <span>Klausul Perlindungan Ongkos Kirim</span>
+                      </div>
+                      <p className="text-[11px] text-ink-secondary leading-relaxed">
+                        Sistem Patra Tani tidak memotong komisi platform pada ongkos kirim. Dana ongkir Rp {deliverySettings.fixedDeliveryFee.toLocaleString("id-ID")} langsung diteruskan utuh ke rekening kas aktif petani saat foto serah-terima divalidasi.
+                      </p>
+                    </div>
+
+                    <div className="flex justify-end gap-3 pt-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="md"
+                        onClick={() => setActiveMenu("RINGKASAN")}
+                      >
+                        Kembali ke Ringkasan
+                      </Button>
+                      <Button type="submit" variant="primary" size="md">
+                        Simpan Pengaturan Delivery
+                      </Button>
+                    </div>
+                  </form>
                 </div>
+              ) : (
+                <>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <h1 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight">
+                        Ringkasan Kinerja Kebun &amp; Escrow
+                      </h1>
+                      <p className="text-xs sm:text-sm text-ink-secondary mt-1">
+                        Kelompok Tani Subur • Desa Pasirjambu, Ciwidey • Saldo Siap Tarik:{" "}
+                        <span className="font-bold text-primary">
+                          Rp {(currentUser?.activeBalance || 4250000).toLocaleString("id-ID")}
+                        </span>
+                      </p>
+                    </div>
 
-                <Button
-                  variant="primary"
-                  icon={Plus}
-                  onClick={() => navigate("/etalase/create")}
-                  className="font-bold shrink-0"
-                >
-                  Buka Etalase Panen
-                </Button>
-              </div>
+                    <Button
+                      variant="primary"
+                      icon={Plus}
+                      onClick={() => navigate("/etalase/create")}
+                      className="font-bold shrink-0"
+                    >
+                      Buka Etalase Panen
+                    </Button>
+                  </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
-                  <div className="flex items-center justify-between text-ink-muted">
-                    <span className="text-xs font-semibold">Pendapatan Bulan Ini</span>
-                    <div className="w-8 h-8 rounded-lg bg-surface-green text-primary flex items-center justify-center">
-                      <TrendingUp className="w-4 h-4" />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                    <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
+                      <div className="flex items-center justify-between text-ink-muted">
+                        <span className="text-xs font-semibold">Pendapatan Bulan Ini</span>
+                        <div className="w-8 h-8 rounded-lg bg-surface-green text-primary flex items-center justify-center">
+                          <TrendingUp className="w-4 h-4" />
+                        </div>
+                      </div>
+                      <p className="text-xl font-bold text-ink">
+                        Rp 8.420.000
+                      </p>
+                      <span className="text-[11px] font-semibold text-primary block">
+                        +18.4% dari bulan lalu
+                      </span>
+                    </div>
+
+                    <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
+                      <div className="flex items-center justify-between text-ink-muted">
+                        <span className="text-xs font-semibold">Kuota Terjual / Siap</span>
+                        <div className="w-8 h-8 rounded-lg bg-[#E6E4DA] text-ink flex items-center justify-center">
+                          <Sprout className="w-4 h-4" />
+                        </div>
+                      </div>
+                      <p className="text-xl font-bold text-ink">
+                        340 / 400 kg
+                      </p>
+                      <span className="text-[11px] text-ink-secondary block">
+                        85% teralokasi pre-order
+                      </span>
+                    </div>
+
+                    <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
+                      <div className="flex items-center justify-between text-ink-muted">
+                        <span className="text-xs font-semibold">Dana di Escrow</span>
+                        <div className="w-8 h-8 rounded-lg bg-[#FEF3C7] text-[#D97706] flex items-center justify-center">
+                          <ShieldCheck className="w-4 h-4" />
+                        </div>
+                      </div>
+                      <p className="text-xl font-bold text-[#D97706]">
+                        Rp {(currentUser?.escrowBalance || 1585000).toLocaleString("id-ID")}
+                      </p>
+                      <span className="text-[11px] text-ink-secondary block">
+                        Menunggu serah-terima selesai
+                      </span>
+                    </div>
+
+                    <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
+                      <div className="flex items-center justify-between text-ink-muted">
+                        <span className="text-xs font-semibold">Transaksi Sukses</span>
+                        <div className="w-8 h-8 rounded-lg bg-surface-green text-primary flex items-center justify-center">
+                          <CheckCircle2 className="w-4 h-4" />
+                        </div>
+                      </div>
+                      <p className="text-xl font-bold text-ink">
+                        64 Pesanan
+                      </p>
+                      <span className="text-[11px] text-primary font-semibold block">
+                        100% tanpa sengketa
+                      </span>
                     </div>
                   </div>
-                  <p className="text-xl font-bold text-ink">
-                    Rp 8.420.000
-                  </p>
-                  <span className="text-[11px] font-semibold text-primary block">
-                    +18.4% dari bulan lalu
-                  </span>
-                </div>
 
-                <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
-                  <div className="flex items-center justify-between text-ink-muted">
-                    <span className="text-xs font-semibold">Kuota Terjual / Siap</span>
-                    <div className="w-8 h-8 rounded-lg bg-[#E6E4DA] text-ink flex items-center justify-center">
-                      <Sprout className="w-4 h-4" />
+                  <div className="bg-surface rounded-2xl border border-border overflow-hidden shadow-xs space-y-4 p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h2 className="text-base font-bold text-ink">
+                          Pesanan Aktif &amp; Serah-Terima Kebun
+                        </h2>
+                        <p className="text-xs text-ink-secondary mt-0.5">
+                          Status real-time dana escrow dan verifikasi penyerahan hasil panen
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-xs">
+                        <thead>
+                          <tr className="border-b border-border text-ink-muted text-[11px] uppercase tracking-wider">
+                            <th className="pb-3 font-semibold">ID Transaksi</th>
+                            <th className="pb-3 font-semibold">Komoditas &amp; Pembeli</th>
+                            <th className="pb-3 font-semibold">Jadwal &amp; Pengiriman</th>
+                            <th className="pb-3 font-semibold">Status Escrow</th>
+                            <th className="pb-3 font-semibold">Total Bersih</th>
+                            <th className="pb-3 font-semibold text-right">Tindakan</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border/60">
+                          {farmerOrders.map((order) => (
+                            <tr key={order.id} className="hover:bg-[#E6E4DA]/20 transition-colors">
+                              <td className="py-4 font-bold text-primary whitespace-nowrap">
+                                {order.id}
+                              </td>
+                              <td className="py-4 whitespace-nowrap">
+                                <span className="font-bold text-ink block">
+                                  {order.commodity}
+                                </span>
+                                <span className="text-[11px] text-ink-secondary">
+                                  {order.buyerName}
+                                </span>
+                              </td>
+                              <td className="py-4 whitespace-nowrap">
+                                <span className="text-ink block">
+                                  {order.schedule}
+                                </span>
+                                <span className="text-[11px] text-ink-muted">
+                                  {order.deliveryType}
+                                </span>
+                              </td>
+                              <td className="py-4 whitespace-nowrap">
+                                {order.status === "HANDOVER" && (
+                                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#FEF3C7] text-[#D97706]">
+                                    HANDOVER
+                                  </span>
+                                )}
+                                {order.status === "PAID_HELD" && (
+                                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-primary-50 text-primary">
+                                    PAID_HELD
+                                  </span>
+                                )}
+                                {order.status === "COMPLETED" && (
+                                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-surface-green text-primary">
+                                    COMPLETED
+                                  </span>
+                                )}
+                              </td>
+                              <td className="py-4 font-bold text-ink whitespace-nowrap">
+                                Rp {order.netPayment.toLocaleString("id-ID")}
+                              </td>
+                              <td className="py-4 text-right whitespace-nowrap">
+                                <Button
+                                  variant={order.status === "HANDOVER" ? "primary" : "outline"}
+                                  size="sm"
+                                  onClick={() => navigate(order.actionRoute)}
+                                >
+                                  {order.actionText}
+                                </Button>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
-                  <p className="text-xl font-bold text-ink">
-                    340 / 400 kg
-                  </p>
-                  <span className="text-[11px] text-ink-secondary block">
-                    85% teralokasi pre-order
-                  </span>
-                </div>
-
-                <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
-                  <div className="flex items-center justify-between text-ink-muted">
-                    <span className="text-xs font-semibold">Dana di Escrow</span>
-                    <div className="w-8 h-8 rounded-lg bg-[#FEF3C7] text-[#D97706] flex items-center justify-center">
-                      <ShieldCheck className="w-4 h-4" />
-                    </div>
-                  </div>
-                  <p className="text-xl font-bold text-[#D97706]">
-                    Rp {(currentUser?.escrowBalance || 1585000).toLocaleString("id-ID")}
-                  </p>
-                  <span className="text-[11px] text-ink-secondary block">
-                    Menunggu serah-terima selesai
-                  </span>
-                </div>
-
-                <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
-                  <div className="flex items-center justify-between text-ink-muted">
-                    <span className="text-xs font-semibold">Transaksi Sukses</span>
-                    <div className="w-8 h-8 rounded-lg bg-surface-green text-primary flex items-center justify-center">
-                      <CheckCircle2 className="w-4 h-4" />
-                    </div>
-                  </div>
-                  <p className="text-xl font-bold text-ink">
-                    64 Pesanan
-                  </p>
-                  <span className="text-[11px] text-primary font-semibold block">
-                    100% tanpa sengketa
-                  </span>
-                </div>
-              </div>
-
-              <div className="bg-surface rounded-2xl border border-border overflow-hidden shadow-xs space-y-4 p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-base font-bold text-ink">
-                      Pesanan Aktif &amp; Serah-Terima Kebun
-                    </h2>
-                    <p className="text-xs text-ink-secondary mt-0.5">
-                      Status real-time dana escrow dan verifikasi penyerahan hasil panen
-                    </p>
-                  </div>
-                </div>
-
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs">
-                    <thead>
-                      <tr className="border-b border-border text-ink-muted text-[11px] uppercase tracking-wider">
-                        <th className="pb-3 font-semibold">ID Transaksi</th>
-                        <th className="pb-3 font-semibold">Komoditas &amp; Pembeli</th>
-                        <th className="pb-3 font-semibold">Jadwal &amp; Pengiriman</th>
-                        <th className="pb-3 font-semibold">Status Escrow</th>
-                        <th className="pb-3 font-semibold">Total Bersih</th>
-                        <th className="pb-3 font-semibold text-right">Tindakan</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-border/60">
-                      {farmerOrders.map((order) => (
-                        <tr key={order.id} className="hover:bg-[#E6E4DA]/20 transition-colors">
-                          <td className="py-4 font-bold text-primary whitespace-nowrap">
-                            {order.id}
-                          </td>
-                          <td className="py-4 whitespace-nowrap">
-                            <span className="font-bold text-ink block">
-                              {order.commodity}
-                            </span>
-                            <span className="text-[11px] text-ink-secondary">
-                              {order.buyerName}
-                            </span>
-                          </td>
-                          <td className="py-4 whitespace-nowrap">
-                            <span className="text-ink block">
-                              {order.schedule}
-                            </span>
-                            <span className="text-[11px] text-ink-muted">
-                              {order.deliveryType}
-                            </span>
-                          </td>
-                          <td className="py-4 whitespace-nowrap">
-                            {order.status === "HANDOVER" && (
-                              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#FEF3C7] text-[#D97706]">
-                                HANDOVER
-                              </span>
-                            )}
-                            {order.status === "PAID_HELD" && (
-                              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-primary-50 text-primary">
-                                PAID_HELD
-                              </span>
-                            )}
-                            {order.status === "COMPLETED" && (
-                              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-surface-green text-primary">
-                                COMPLETED
-                              </span>
-                            )}
-                          </td>
-                          <td className="py-4 font-bold text-ink whitespace-nowrap">
-                            Rp {order.netPayment.toLocaleString("id-ID")}
-                          </td>
-                          <td className="py-4 text-right whitespace-nowrap">
-                            <Button
-                              variant={order.status === "HANDOVER" ? "primary" : "outline"}
-                              size="sm"
-                              onClick={() => navigate(order.actionRoute)}
-                            >
-                              {order.actionText}
-                            </Button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+                </>
+              )}
             </div>
           </div>
         </div>
