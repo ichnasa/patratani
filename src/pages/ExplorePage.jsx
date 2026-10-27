@@ -16,6 +16,7 @@ import {
   RotateCcw,
   Check,
   Sparkles,
+  Plus,
 } from "lucide-react";
 
 export default function ExplorePage() {
@@ -310,6 +311,23 @@ export default function ExplorePage() {
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+              <button
+                type="button"
+                onClick={() =>
+                  navigate(
+                    activeTab === "ETALASE"
+                      ? "/etalase/create"
+                      : "/tender/create"
+                  )
+                }
+                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary text-[#E6E4DA] text-xs font-semibold hover:bg-primary-hover transition-colors shadow-xs shrink-0 cursor-pointer"
+              >
+                <Plus className="w-4 h-4" />
+                <span>
+                  {activeTab === "ETALASE" ? "Pasang Panen" : "Buat Tender"}
+                </span>
+              </button>
+
               <button
                 type="button"
                 onClick={() => setIsMobileFilterOpen(true)}

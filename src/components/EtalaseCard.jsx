@@ -18,15 +18,12 @@ export default function EtalaseCard({ commodity, onOrder }) {
       if (startTransactionFromCommodity) {
         startTransactionFromCommodity(commodity);
       }
-      navigate("/escrow");
+      navigate(`/etalase/${commodity.id}`);
     }
   };
 
   const handleCardClick = () => {
-    if (startTransactionFromCommodity) {
-      startTransactionFromCommodity(commodity);
-    }
-    navigate("/escrow");
+    navigate(`/etalase/${commodity.id}`);
   };
 
   const deliveryFee =

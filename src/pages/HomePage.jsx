@@ -91,7 +91,11 @@ export default function HomePage() {
                 <Button
                   variant="primary"
                   icon={role === "PETANI" ? ShoppingBag : FileText}
-                  onClick={() => navigate("/explore")}
+                  onClick={() =>
+                    navigate(
+                      role === "PETANI" ? "/etalase/create" : "/tender/create"
+                    )
+                  }
                 >
                   {role === "PETANI" ? "Pasang Hasil Panen" : "Buka Tender Baru"}
                 </Button>
@@ -179,7 +183,7 @@ export default function HomePage() {
                   </span>
                   <button
                     type="button"
-                    onClick={() => navigate("/explore")}
+                    onClick={() => navigate("/etalase/create")}
                     className="text-xs font-bold text-ink hover:text-primary flex items-center gap-1 transition-colors cursor-pointer group"
                   >
                     <span>Buka Etalase</span>
@@ -212,7 +216,7 @@ export default function HomePage() {
                   </span>
                   <button
                     type="button"
-                    onClick={() => navigate("/explore")}
+                    onClick={() => navigate("/tender/create")}
                     className="text-xs font-bold text-ink hover:text-primary flex items-center gap-1 transition-colors cursor-pointer group"
                   >
                     <span>Buka Tender</span>

@@ -5,6 +5,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Toast from "./components/Toast";
 import HomePage from "./pages/HomePage";
 import ExplorePage from "./pages/ExplorePage";
+import DetailEtalasePage from "./pages/DetailEtalasePage";
+import CreateEtalasePage from "./pages/CreateEtalasePage";
+import CreateTenderPage from "./pages/CreateTenderPage";
 import TenderDetailPage from "./pages/TenderDetailPage";
 import CheckoutEscrowPage from "./pages/CheckoutEscrowPage";
 import HandoverPage from "./pages/HandoverPage";
@@ -21,8 +24,26 @@ export default function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/explore" element={<ExplorePage />} />
+          <Route path="/etalase" element={<DetailEtalasePage />} />
+          <Route path="/etalase/:id" element={<DetailEtalasePage />} />
+          <Route
+            path="/etalase/create"
+            element={
+              <ProtectedRoute>
+                <CreateEtalasePage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/tender" element={<TenderDetailPage />} />
           <Route path="/tender/:id" element={<TenderDetailPage />} />
+          <Route
+            path="/tender/create"
+            element={
+              <ProtectedRoute>
+                <CreateTenderPage />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/escrow"
             element={
