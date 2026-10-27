@@ -9,10 +9,13 @@ import DetailEtalasePage from "./pages/DetailEtalasePage";
 import CreateEtalasePage from "./pages/CreateEtalasePage";
 import CreateTenderPage from "./pages/CreateTenderPage";
 import TenderDetailPage from "./pages/TenderDetailPage";
+import DetailTenderPembeliPage from "./pages/DetailTenderPembeliPage";
 import CheckoutEscrowPage from "./pages/CheckoutEscrowPage";
 import HandoverPage from "./pages/HandoverPage";
 import CompletedPage from "./pages/CompletedPage";
 import ProfilePage from "./pages/ProfilePage";
+import FarmerDashboardPage from "./pages/FarmerDashboardPage";
+import BuyerDashboardPage from "./pages/BuyerDashboardPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
@@ -36,6 +39,22 @@ export default function App() {
           />
           <Route path="/tender" element={<TenderDetailPage />} />
           <Route path="/tender/:id" element={<TenderDetailPage />} />
+          <Route
+            path="/tender/pembeli"
+            element={
+              <ProtectedRoute>
+                <DetailTenderPembeliPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tender/pembeli/:id"
+            element={
+              <ProtectedRoute>
+                <DetailTenderPembeliPage />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/tender/create"
             element={
@@ -89,6 +108,22 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <CompletedPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/farmer"
+            element={
+              <ProtectedRoute>
+                <FarmerDashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/buyer"
+            element={
+              <ProtectedRoute>
+                <BuyerDashboardPage />
               </ProtectedRoute>
             }
           />

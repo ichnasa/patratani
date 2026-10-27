@@ -1,0 +1,395 @@
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  Store,
+  FileText,
+  TrendingDown,
+  ShieldCheck,
+  CheckCircle2,
+  Clock,
+  Camera,
+  ChevronRight,
+  Plus,
+  ArrowUpRight,
+  PackageCheck,
+  MapPin,
+  Calendar,
+  Wallet,
+  Settings,
+  Users,
+  Building2,
+} from "lucide-react";
+import { useApp } from "../context/AppContext";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import Button from "../components/Button";
+
+export default function BuyerDashboardPage() {
+  const navigate = useNavigate();
+  const { currentUser } = useApp();
+  const [activeMenu, setActiveMenu] = useState("RINGKASAN");
+
+  const buyerTenders = [
+    {
+      id: "TND-8821",
+      badge: "BIDDING • 4 Penawaran",
+      title: "Kebutuhan Tomat Merah Segar (20 kg)",
+      meta: "Target: Rp 13.000/kg • Batas Waktu: 28 Okt 2026 • Penawaran termurah: Rp 12.800/kg",
+      note: "Ditinjau oleh Kang Rizal, Pak Hendra +2 lainnya",
+      actionText: "Pilih Petani & Kunci",
+      actionRoute: "/tender/pembeli/TND-8821",
+      isBidding: true,
+    },
+    {
+      id: "TND-8825",
+      badge: "OPEN • Baru Dibuat",
+      title: "Bawang Merah Brebes Grade Super (30 kg)",
+      meta: "Budget Maks: Rp 28.000/kg • Siap terima: 31 Okt 2026 • Menunggu respon petani",
+      note: "Belum ada penawaran masuk dari petani",
+      actionText: "Detail Tender",
+      actionRoute: "/tender",
+      isBidding: false,
+    },
+  ];
+
+  const buyerOrders = [
+    {
+      id: "#PT-2026-0842",
+      commodity: "Tomat Merah 20 kg",
+      farmerName: "Kang Rizal",
+      schedule: "29 Okt 07:00",
+      deliveryType: "Diantar Petani",
+      status: "HANDOVER",
+      depositAmount: 265000,
+      actionText: "Verifikasi Kamera In-App",
+      actionRoute: "/handover",
+    },
+    {
+      id: "#PT-2026-0815",
+      commodity: "Cabai Rawit 10 kg",
+      farmerName: "Pak Hendra",
+      schedule: "22 Okt 08:30",
+      deliveryType: "Self-Pickup Rp 0",
+      status: "COMPLETED",
+      depositAmount: 120000,
+      actionText: "Lihat Bukti & Rating",
+      actionRoute: "/completed",
+    },
+  ];
+
+  const sidebarMenuItems = [
+    { id: "RINGKASAN", label: "Ringkasan", icon: Building2 },
+    { id: "TENDERS", label: "Tender Permintaan", icon: FileText, badge: "2" },
+    { id: "ORDERS", label: "Pesanan & Escrow", icon: PackageCheck, badge: "1" },
+    { id: "FINANCE", label: "Dana & Simulasi VA", icon: Wallet },
+    { id: "FARMERS", label: "Mitra Petani Langganan", icon: Users },
+    { id: "PROFILE", label: "Profil Dapur Usaha", icon: Store },
+  ];
+
+  return (
+    <div className="min-h-screen bg-background text-ink flex flex-col justify-between selection:bg-primary-50 selection:text-primary">
+      <Navbar activeNav="akun" />
+
+      <main className="w-full flex-1">
+        <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-8 md:py-10 space-y-8 pb-28 md:pb-14">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <aside className="lg:col-span-3 space-y-4">
+              <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-4">
+                <div className="flex items-center gap-3">
+                  <img
+                    src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&auto=format&fit=crop&q=80"
+                    alt="Bu Lina"
+                    className="w-12 h-12 rounded-full object-cover border border-border"
+                  />
+                  <div>
+                    <h2 className="text-sm font-bold text-ink">
+                      Bu Lina (Warung Sederhana)
+                    </h2>
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-primary px-2 py-0.5 rounded-full bg-surface-green border border-primary/20 mt-0.5">
+                      <CheckCircle2 className="w-3 h-3" />
+                      UMKM Terverifikasi
+                    </span>
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-border space-y-1">
+                  {sidebarMenuItems.map((item) => {
+                    const IconComp = item.icon;
+                    const isActive = activeMenu === item.id;
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => {
+                          if (item.id === "TENDERS") navigate("/explore");
+                          else if (item.id === "PROFILE") navigate("/profile");
+                          else setActiveMenu(item.id);
+                        }}
+                        className={`w-full p-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
+                          isActive
+                            ? "bg-primary text-[#E6E4DA] shadow-xs"
+                            : "text-ink-secondary hover:text-ink hover:bg-surface-green/40"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <IconComp className="w-4 h-4 shrink-0" />
+                          <span>{item.label}</span>
+                        </div>
+
+                        {item.badge && (
+                          <span
+                            className={`text-[10px] font-bold px-2 py-0.2 rounded-full ${
+                              isActive
+                                ? "bg-[#E6E4DA] text-primary"
+                                : "bg-border text-ink"
+                            }`}
+                          >
+                            {item.badge}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-surface-green/30 border border-primary/20 space-y-2 text-xs">
+                <span className="font-bold text-primary block">
+                  Perlindungan Dana 100%
+                </span>
+                <p className="text-[11px] text-ink-secondary leading-relaxed">
+                  Deposit escrow Anda tetap aman di penampungan bersama. Petani baru menerima dana saat Anda mengonfirmasi verifikasi serah-terima.
+                </p>
+              </div>
+            </aside>
+
+            <div className="lg:col-span-9 space-y-8">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight">
+                    Ringkasan Pembelian &amp; Pasokan Dapur
+                  </h1>
+                  <p className="text-xs sm:text-sm text-ink-secondary mt-1">
+                    Warung Sederhana Bu Lina • Kuliner Lokal • Dana Aman di Rekening Escrow:{" "}
+                    <span className="font-bold text-[#D97706]">Rp 265.000</span>
+                  </p>
+                </div>
+
+                <Button
+                  variant="primary"
+                  icon={Plus}
+                  onClick={() => navigate("/tender/create")}
+                  className="font-bold shrink-0"
+                >
+                  Buat Tender Permintaan
+                </Button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+                <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
+                  <div className="flex items-center justify-between text-ink-muted">
+                    <span className="text-xs font-semibold">Pengeluaran Bulan Ini</span>
+                    <div className="w-8 h-8 rounded-lg bg-surface-green text-primary flex items-center justify-center">
+                      <TrendingDown className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <p className="text-xl font-bold text-ink">
+                    Rp 4.650.000
+                  </p>
+                  <span className="text-[11px] font-semibold text-primary block">
+                    Hemat 22.4% vs tengkulak
+                  </span>
+                </div>
+
+                <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
+                  <div className="flex items-center justify-between text-ink-muted">
+                    <span className="text-xs font-semibold">Tender Permintaan Aktif</span>
+                    <div className="w-8 h-8 rounded-lg bg-[#E6E4DA] text-ink flex items-center justify-center">
+                      <FileText className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <p className="text-xl font-bold text-ink">
+                    2 Tender
+                  </p>
+                  <span className="text-[11px] text-ink-secondary block">
+                    1 tender menerima 4 penawaran
+                  </span>
+                </div>
+
+                <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
+                  <div className="flex items-center justify-between text-ink-muted">
+                    <span className="text-xs font-semibold">Dana di Escrow</span>
+                    <div className="w-8 h-8 rounded-lg bg-[#FEF3C7] text-[#D97706] flex items-center justify-center">
+                      <ShieldCheck className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <p className="text-xl font-bold text-[#D97706]">
+                    Rp 265.000
+                  </p>
+                  <span className="text-[11px] text-ink-secondary block">
+                    Aman hingga serah-terima selesai
+                  </span>
+                </div>
+
+                <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
+                  <div className="flex items-center justify-between text-ink-muted">
+                    <span className="text-xs font-semibold">Menunggu Serah-Terima</span>
+                    <div className="w-8 h-8 rounded-lg bg-surface-green text-primary flex items-center justify-center">
+                      <Clock className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <p className="text-xl font-bold text-ink">
+                    1 Pesanan
+                  </p>
+                  <span className="text-[11px] text-primary font-semibold block">
+                    Jadwal hari ini pkl 07:00
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-base font-bold text-ink">
+                    Kelola Tender Permintaan Bahan Baku
+                  </h2>
+                  <Link
+                    to="/explore"
+                    className="text-xs font-bold text-primary hover:text-primary-hover flex items-center gap-1"
+                  >
+                    <span>Lihat Semua Tender</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </Link>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {buyerTenders.map((tender) => (
+                    <div
+                      key={tender.id}
+                      className="bg-surface rounded-2xl p-5 border border-border shadow-xs flex flex-col justify-between gap-4"
+                    >
+                      <div className="space-y-2.5">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-bold text-ink-muted">
+                            Tender #{tender.id}
+                          </span>
+                          <span
+                            className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
+                              tender.isBidding
+                                ? "bg-primary text-[#E6E4DA]"
+                                : "bg-[#FEF3C7] text-[#D97706]"
+                            }`}
+                          >
+                            {tender.badge}
+                          </span>
+                        </div>
+
+                        <h3 className="text-sm font-bold text-ink leading-tight">
+                          {tender.title}
+                        </h3>
+
+                        <p className="text-xs text-ink-secondary leading-relaxed">
+                          {tender.meta}
+                        </p>
+                      </div>
+
+                      <div className="pt-3 border-t border-border flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <span className="text-[11px] text-ink-muted italic">
+                          {tender.note}
+                        </span>
+                        <Button
+                          variant={tender.isBidding ? "primary" : "outline"}
+                          size="sm"
+                          onClick={() => navigate(tender.actionRoute)}
+                          className="shrink-0"
+                        >
+                          {tender.actionText}
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-surface rounded-2xl border border-border overflow-hidden shadow-xs space-y-4 p-6">
+                <div>
+                  <h2 className="text-base font-bold text-ink">
+                    Pesanan Berjalan &amp; Status Escrow Pembeli
+                  </h2>
+                  <p className="text-xs text-ink-secondary mt-0.5">
+                    Dana 100% Terlindungi oleh Sistem Escrow
+                  </p>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead>
+                      <tr className="border-b border-border text-ink-muted text-[11px] uppercase tracking-wider">
+                        <th className="pb-3 font-semibold">ID Transaksi</th>
+                        <th className="pb-3 font-semibold">Komoditas &amp; Petani</th>
+                        <th className="pb-3 font-semibold">Jadwal &amp; Metode</th>
+                        <th className="pb-3 font-semibold">Status Escrow</th>
+                        <th className="pb-3 font-semibold">Total Deposit</th>
+                        <th className="pb-3 font-semibold text-right">Tindakan</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border/60">
+                      {buyerOrders.map((order) => (
+                        <tr key={order.id} className="hover:bg-[#E6E4DA]/20 transition-colors">
+                          <td className="py-4 font-bold text-primary whitespace-nowrap">
+                            {order.id}
+                          </td>
+                          <td className="py-4 whitespace-nowrap">
+                            <span className="font-bold text-ink block">
+                              {order.commodity}
+                            </span>
+                            <span className="text-[11px] text-ink-secondary">
+                              {order.farmerName}
+                            </span>
+                          </td>
+                          <td className="py-4 whitespace-nowrap">
+                            <span className="text-ink block">
+                              {order.schedule}
+                            </span>
+                            <span className="text-[11px] text-ink-muted">
+                              {order.deliveryType}
+                            </span>
+                          </td>
+                          <td className="py-4 whitespace-nowrap">
+                            {order.status === "HANDOVER" && (
+                              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#FEF3C7] text-[#D97706]">
+                                HANDOVER
+                              </span>
+                            )}
+                            {order.status === "COMPLETED" && (
+                              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-surface-green text-primary">
+                                COMPLETED
+                              </span>
+                            )}
+                          </td>
+                          <td className="py-4 font-bold text-ink whitespace-nowrap">
+                            Rp {order.depositAmount.toLocaleString("id-ID")}
+                          </td>
+                          <td className="py-4 text-right whitespace-nowrap">
+                            <Button
+                              variant={order.status === "HANDOVER" ? "primary" : "outline"}
+                              size="sm"
+                              onClick={() => navigate(order.actionRoute)}
+                            >
+                              {order.actionText}
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
+}

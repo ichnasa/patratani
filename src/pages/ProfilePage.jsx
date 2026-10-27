@@ -27,6 +27,7 @@ import {
   X,
   Building2,
   ArrowLeft,
+  LayoutDashboard,
 } from "lucide-react";
 
 export default function ProfilePage({ onBack, onLogout }) {
@@ -84,6 +85,12 @@ export default function ProfilePage({ onBack, onLogout }) {
   ];
 
   const menuItems = [
+    {
+      id: "DASHBOARD",
+      label: "Dashboard Operasional",
+      icon: LayoutDashboard,
+      isDashboardLink: true,
+    },
     {
       id: "TRANSAKSI",
       label: "Riwayat Transaksi",
@@ -172,7 +179,22 @@ export default function ProfilePage({ onBack, onLogout }) {
                 </div>
               </div>
 
-              <div className="flex items-center justify-center sm:justify-end gap-2.5">
+              <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2.5">
+                <Button
+                  variant="primary"
+                  size="md"
+                  icon={LayoutDashboard}
+                  onClick={() => {
+                    const roleLower = (currentUser.role || "").toLowerCase();
+                    if (roleLower.includes("pembeli") || roleLower.includes("umkm")) {
+                      navigate("/dashboard/buyer");
+                    } else {
+                      navigate("/dashboard/farmer");
+                    }
+                  }}
+                >
+                  Lihat Dashboard
+                </Button>
                 <Button
                   variant="outline"
                   size="md"
@@ -281,7 +303,23 @@ export default function ProfilePage({ onBack, onLogout }) {
                     <button
                       key={item.id}
                       type="button"
-                      onClick={() => setActiveMenu(item.id)}
+                      onClick={() => {
+                        if (item.isDashboardLink) {
+                          const roleLower = (
+                            currentUser.role || ""
+                          ).toLowerCase();
+                          if (
+                            roleLower.includes("pembeli") ||
+                            roleLower.includes("umkm")
+                          ) {
+                            navigate("/dashboard/buyer");
+                          } else {
+                            navigate("/dashboard/farmer");
+                          }
+                        } else {
+                          setActiveMenu(item.id);
+                        }
+                      }}
                       className={`w-full p-3.5 rounded-xl text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
                         isActive
                           ? "bg-primary text-[#E6E4DA] shadow-xs"
