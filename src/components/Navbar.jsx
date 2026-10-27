@@ -8,7 +8,6 @@ import {
   Compass,
   ClipboardList,
   User,
-  ChevronDown,
 } from "lucide-react";
 
 export default function Navbar({
@@ -18,8 +17,8 @@ export default function Navbar({
   onSearchChange,
   notificationCount = 2,
   user = {
-    name: "Ibu Lina Marlina",
-    role: "Pembeli UMKM",
+    name: "Rizal",
+    role: "Petani",
     avatar: "https://images.unsplash.com/photo-1544717305-2782549b5136?w=100&auto=format&fit=crop&q=80",
   },
 }) {
@@ -36,37 +35,32 @@ export default function Navbar({
   };
 
   const navLinks = [
-    { id: "beranda", label: "Beranda", icon: Home },
-    { id: "jelajahi", label: "Jelajahi", icon: Compass },
-    { id: "transaksi", label: "Transaksi", icon: ClipboardList, badge: 3 },
+    { id: "beranda", label: "Beranda" },
+    { id: "jelajahi", label: "Jelajahi" },
+    { id: "transaksi", label: "Transaksi" },
   ];
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full bg-surface/95 backdrop-blur-md border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 gap-4">
+      <header className="sticky top-0 z-40 w-full bg-surface border-b border-border">
+        <div className="max-w-[1440px] mx-auto h-16 px-6 lg:px-16 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-6 shrink-0">
             <div
               role="button"
               tabIndex={0}
               onClick={() => handleNavClick("beranda")}
               onKeyDown={(e) => e.key === "Enter" && handleNavClick("beranda")}
-              className="flex items-center gap-2.5 cursor-pointer select-none shrink-0"
+              className="flex items-center gap-2 cursor-pointer select-none"
             >
-              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-[#E6E4DA] shadow-sm">
-                <Sprout className="w-6 h-6" />
+              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-[#E6E4DA]">
+                <Sprout className="w-5 h-5" />
               </div>
-              <div className="flex flex-col">
-                <span className="text-lg font-bold tracking-tight text-ink leading-tight">
-                  Patra<span className="text-primary">Tani</span>
-                </span>
-                <span className="text-[10px] font-medium text-ink-muted leading-none">
-                  Pasar Tani Mandiri
-                </span>
-              </div>
+              <span className="text-xl font-bold tracking-tight text-primary">
+                PatraTani
+              </span>
             </div>
 
-            <nav className="hidden md:flex items-center gap-1">
+            <nav className="hidden md:flex items-center gap-6">
               {navLinks.map((item) => {
                 const isActive = currentNav === item.id;
                 return (
@@ -75,93 +69,82 @@ export default function Navbar({
                     type="button"
                     onClick={() => handleNavClick(item.id)}
                     className={clsx(
-                      "px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-150 flex items-center gap-2 relative",
+                      "text-sm font-medium transition-colors cursor-pointer",
                       isActive
-                        ? "bg-surface-green text-primary font-semibold shadow-xs"
-                        : "text-ink-secondary hover:text-ink hover:bg-surface-green/50"
+                        ? "text-primary font-semibold"
+                        : "text-ink-secondary hover:text-ink"
                     )}
                   >
-                    <span>{item.label}</span>
-                    {item.badge && (
-                      <span className="px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-primary text-[#E6E4DA]">
-                        {item.badge}
-                      </span>
-                    )}
+                    {item.label}
                   </button>
                 );
               })}
             </nav>
-
-            <div className="hidden lg:flex items-center flex-1 max-w-xs relative">
-              <Search className="w-4 h-4 text-ink-muted absolute left-3 pointer-events-none" />
-              <input
-                type="text"
-                placeholder="Cari komoditas atau tender..."
-                value={searchValue}
-                onChange={onSearchChange}
-                className="w-full bg-[#E6E4DA] border border-border rounded-xl pl-9 pr-3.5 py-2 text-xs font-normal text-ink placeholder:text-ink-muted/70 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-150"
-              />
-            </div>
-
-            <div className="flex items-center gap-2.5">
-              <button
-                type="button"
-                aria-label="Pemberitahuan"
-                className="relative p-2.5 rounded-xl text-ink hover:bg-surface-green/60 active:bg-surface-green transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                <Bell className="w-5 h-5 text-ink" />
-                {notificationCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-status-disputed ring-2 ring-surface" />
-                )}
-              </button>
-
-              <div
-                role="button"
-                tabIndex={0}
-                onClick={() => handleNavClick("akun")}
-                onKeyDown={(e) => e.key === "Enter" && handleNavClick("akun")}
-                className="flex items-center gap-2.5 pl-2 py-1 pr-1.5 rounded-xl hover:bg-surface-green/50 cursor-pointer transition-colors"
-              >
-                <img
-                  src={user.avatar}
-                  alt={user.name}
-                  className="w-8 h-8 rounded-full object-cover border border-border"
-                />
-                <div className="hidden sm:flex flex-col text-left">
-                  <span className="text-xs font-semibold text-ink leading-tight line-clamp-1">
-                    {user.name}
-                  </span>
-                  <span className="text-[10px] text-ink-muted leading-none">
-                    {user.role}
-                  </span>
-                </div>
-                <ChevronDown className="w-3.5 h-3.5 text-ink-muted hidden sm:block" />
-              </div>
-            </div>
           </div>
 
-          <div className="pb-3 lg:hidden">
-            <div className="relative">
-              <Search className="w-4 h-4 text-ink-muted absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <div className="flex items-center gap-4">
+            <div className="hidden lg:flex items-center w-60 rounded-md border border-border px-3 py-2 gap-2 bg-[#E6E4DA]/40">
+              <Search className="w-4 h-4 text-ink-muted shrink-0 pointer-events-none" />
               <input
                 type="text"
-                placeholder="Cari komoditas atau tender..."
+                placeholder="Cari panen atau tender..."
                 value={searchValue}
                 onChange={onSearchChange}
-                className="w-full bg-[#E6E4DA] border border-border rounded-xl pl-9 pr-3.5 py-2 text-xs font-normal text-ink placeholder:text-ink-muted/70 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-150"
+                className="w-full bg-transparent text-[13px] text-ink placeholder:text-ink-muted focus:outline-none"
               />
             </div>
+
+            <button
+              type="button"
+              aria-label="Pemberitahuan"
+              className="relative w-10 h-10 rounded-full flex items-center justify-center text-ink-secondary hover:text-ink hover:bg-surface-green/40 transition-colors cursor-pointer"
+            >
+              <Bell className="w-5 h-5" />
+              {notificationCount > 0 && (
+                <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-status-disputed" />
+              )}
+            </button>
+
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={() => handleNavClick("akun")}
+              onKeyDown={(e) => e.key === "Enter" && handleNavClick("akun")}
+              className="flex items-center gap-2 cursor-pointer select-none"
+            >
+              <img
+                src={user.avatar}
+                alt={user.name}
+                className="w-8 h-8 rounded-full object-cover border border-border"
+              />
+              <span className="text-[13px] font-medium text-ink hidden sm:inline">
+                {user.role}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="px-6 pb-3 lg:hidden">
+          <div className="flex items-center w-full rounded-md border border-border px-3 py-2 gap-2 bg-[#E6E4DA]/40">
+            <Search className="w-4 h-4 text-ink-muted shrink-0 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Cari panen atau tender..."
+              value={searchValue}
+              onChange={onSearchChange}
+              className="w-full bg-transparent text-[13px] text-ink placeholder:text-ink-muted focus:outline-none"
+            />
           </div>
         </div>
       </header>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-surface/95 backdrop-blur-md border-t border-border px-4 py-2 flex items-center justify-around md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-surface/95 backdrop-blur-md border-t border-border px-6 py-2.5 flex items-center justify-around md:hidden">
         <button
           type="button"
           onClick={() => handleNavClick("beranda")}
           className={clsx(
-            "flex flex-col items-center gap-1 py-1 px-3 rounded-lg text-xs font-medium transition-colors",
-            currentNav === "beranda" ? "text-primary" : "text-ink-secondary"
+            "flex flex-col items-center gap-1 text-xs font-medium transition-colors",
+            currentNav === "beranda" ? "text-primary font-bold" : "text-ink-secondary"
           )}
         >
           <Home className="w-5 h-5" />
@@ -172,8 +155,8 @@ export default function Navbar({
           type="button"
           onClick={() => handleNavClick("jelajahi")}
           className={clsx(
-            "flex flex-col items-center gap-1 py-1 px-3 rounded-lg text-xs font-medium transition-colors",
-            currentNav === "jelajahi" ? "text-primary" : "text-ink-secondary"
+            "flex flex-col items-center gap-1 text-xs font-medium transition-colors",
+            currentNav === "jelajahi" ? "text-primary font-bold" : "text-ink-secondary"
           )}
         >
           <Compass className="w-5 h-5" />
@@ -184,21 +167,20 @@ export default function Navbar({
           type="button"
           onClick={() => handleNavClick("transaksi")}
           className={clsx(
-            "flex flex-col items-center gap-1 py-1 px-3 rounded-lg text-xs font-medium transition-colors relative",
-            currentNav === "transaksi" ? "text-primary" : "text-ink-secondary"
+            "flex flex-col items-center gap-1 text-xs font-medium transition-colors relative",
+            currentNav === "transaksi" ? "text-primary font-bold" : "text-ink-secondary"
           )}
         >
           <ClipboardList className="w-5 h-5" />
           <span className="text-[10px]">Transaksi</span>
-          <span className="absolute top-1 right-2 w-1.5 h-1.5 rounded-full bg-status-bidding" />
         </button>
 
         <button
           type="button"
           onClick={() => handleNavClick("akun")}
           className={clsx(
-            "flex flex-col items-center gap-1 py-1 px-3 rounded-lg text-xs font-medium transition-colors",
-            currentNav === "akun" ? "text-primary" : "text-ink-secondary"
+            "flex flex-col items-center gap-1 text-xs font-medium transition-colors",
+            currentNav === "akun" ? "text-primary font-bold" : "text-ink-secondary"
           )}
         >
           <User className="w-5 h-5" />

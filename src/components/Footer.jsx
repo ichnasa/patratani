@@ -5,7 +5,6 @@ import {
   CheckCircle2,
   Camera,
   Truck,
-  ArrowUpRight,
 } from "lucide-react";
 
 export default function Footer() {
@@ -23,21 +22,14 @@ export default function Footer() {
     { label: "Aturan Komisi 3–5%", href: "#" },
   ];
 
-  const linksBantuan = [
-    { label: "Pusat Bantuan", href: "#" },
-    { label: "Simulasi SandBox Escrow", href: "#" },
-    { label: "Syarat & Ketentuan", href: "#" },
-    { label: "Kebijakan Privasi", href: "#" },
-  ];
-
   return (
-    <footer className="w-full bg-[#1A1A1A] text-[#E6E4DA] pt-14 pb-20 md:pb-12 border-t border-border/20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 pb-12 border-b border-white/10">
+    <footer className="w-full bg-[#1A1A1A] text-[#E6E4DA] border-t border-border/20">
+      <div className="max-w-[1440px] mx-auto px-6 lg:px-16 py-8 md:py-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-8 border-b border-white/10">
           <div className="lg:col-span-4 flex flex-col justify-between space-y-4">
             <div className="space-y-3">
-              <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-[#E6E4DA]">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-[#E6E4DA]">
                   <Sprout className="w-5 h-5" />
                 </div>
                 <span className="text-xl font-bold tracking-tight text-white">
@@ -45,16 +37,16 @@ export default function Footer() {
                 </span>
               </div>
 
-              <p className="text-sm text-white/80 leading-relaxed font-normal">
+              <p className="text-sm font-medium text-white/90 leading-relaxed">
                 Dari Kebun ke Dapur Usaha Lokal, Lebih Dekat &amp; Tanpa Gudang.
               </p>
 
-              <p className="text-xs text-white/50 leading-relaxed">
+              <p className="text-xs text-white/60 leading-relaxed">
                 Platform demand-tender dan pre-order agritech yang menghubungkan kelompok tani kecil secara langsung dengan pelaku UMKM kuliner dan jaringan HoReCa lokal.
               </p>
             </div>
 
-            <div className="pt-2">
+            <div>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium bg-white/5 text-[#D5D8CC] border border-white/10">
                 <span className="w-1.5 h-1.5 rounded-full bg-status-completed" />
                 Sistem Terdesentralisasi Tanpa Gudang Perantara
@@ -62,31 +54,13 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="lg:col-span-4 grid grid-cols-2 sm:grid-cols-3 gap-6">
+          <div className="lg:col-span-4 grid grid-cols-2 gap-6">
             <div>
               <h4 className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-3.5">
                 Navigasi
               </h4>
               <ul className="space-y-2.5">
                 {linksNavigasi.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="text-xs text-white/70 hover:text-white transition-colors flex items-center gap-1"
-                    >
-                      <span>{link.label}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-3.5">
-                Ekosistem
-              </h4>
-              <ul className="space-y-2.5">
-                {linksEkosistem.map((link) => (
                   <li key={link.label}>
                     <a
                       href={link.href}
@@ -99,12 +73,12 @@ export default function Footer() {
               </ul>
             </div>
 
-            <div className="col-span-2 sm:col-span-1">
+            <div>
               <h4 className="text-xs font-semibold uppercase tracking-wider text-white/40 mb-3.5">
-                Bantuan
+                Ekosistem
               </h4>
               <ul className="space-y-2.5">
-                {linksBantuan.map((link) => (
+                {linksEkosistem.map((link) => (
                   <li key={link.label}>
                     <a
                       href={link.href}
@@ -162,7 +136,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50">
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50">
           <p>© 2026 Patra Tani Indonesia. Hak Cipta Dilindungi.</p>
           <div className="flex items-center gap-4">
             <a href="#" className="hover:text-white transition-colors">
