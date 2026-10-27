@@ -6,7 +6,6 @@ import StatusBadge from "../components/StatusBadge";
 import Chip from "../components/Chip";
 import { mockTenders } from "../data/mockTenders";
 import {
-  User,
   Star,
   Edit3,
   Wallet,
@@ -24,9 +23,7 @@ import {
   Mail,
   BadgeCheck,
   X,
-  CreditCard,
   Building2,
-  Lock,
 } from "lucide-react";
 
 export default function ProfilePage({ onBack, onLogout }) {
@@ -119,410 +116,412 @@ export default function ProfilePage({ onBack, onLogout }) {
     <div className="min-h-screen bg-background text-ink flex flex-col justify-between selection:bg-primary-50 selection:text-primary">
       <Navbar activeNav="akun" />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 pb-28 md:pb-14">
-        <section className="bg-surface rounded-3xl p-6 sm:p-8 border border-border shadow-xs">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-border/80">
-            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
-              <div className="relative">
-                <img
-                  src={profile.avatar}
-                  alt={profile.name}
-                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-primary shadow-sm"
-                />
-                <span className="absolute bottom-1 right-1 p-1 rounded-full bg-primary text-[#E6E4DA] border-2 border-surface">
-                  <BadgeCheck className="w-4 h-4" />
-                </span>
-              </div>
-
-              <div className="space-y-1.5">
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                  <h1 className="text-xl sm:text-2xl font-extrabold text-ink">
-                    {profile.name}
-                  </h1>
-                  <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-surface-green text-primary border border-primary/20">
-                    Akun Terverifikasi
+      <main className="w-full flex-1">
+        <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-8 md:py-10 space-y-8 pb-28 md:pb-14">
+          <section className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-xs">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-border/80">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
+                <div className="relative">
+                  <img
+                    src={profile.avatar}
+                    alt={profile.name}
+                    className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-primary shadow-sm"
+                  />
+                  <span className="absolute bottom-1 right-1 p-1 rounded-full bg-primary text-[#E6E4DA] border-2 border-surface">
+                    <BadgeCheck className="w-4 h-4" />
                   </span>
                 </div>
 
-                <p className="text-xs font-semibold text-primary">
-                  {profile.role}
-                </p>
-
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 text-xs text-ink-secondary pt-0.5">
-                  <span className="flex items-center gap-1 font-semibold text-ink">
-                    <Star className="w-3.5 h-3.5 fill-[#D97706] text-[#D97706]" />
-                    {profile.rating}
-                    <span className="text-ink-muted font-normal">
-                      ({profile.reviewCount} ulasan)
+                <div className="space-y-1.5">
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                    <h1 className="text-xl sm:text-2xl font-bold text-ink">
+                      {profile.name}
+                    </h1>
+                    <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-surface-green text-primary border border-primary/20">
+                      Akun Terverifikasi
                     </span>
-                  </span>
-                  <span>•</span>
-                  <span className="flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-primary" />
-                    {profile.location}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center sm:justify-end gap-2.5">
-              <Button
-                variant="outline"
-                size="md"
-                icon={Edit3}
-                onClick={() => setIsEditProfileOpen(true)}
-              >
-                Edit Profil
-              </Button>
-              <Button
-                variant="destructive"
-                size="md"
-                icon={LogOut}
-                onClick={() => setIsLogoutModalOpen(true)}
-              >
-                Keluar
-              </Button>
-            </div>
-          </div>
-
-          <div className="pt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-5 rounded-2xl bg-surface-green/40 border border-primary/20 flex flex-col justify-between space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-xl bg-primary text-[#E6E4DA]">
-                    <Wallet className="w-5 h-5" />
                   </div>
-                  <div>
-                    <span className="text-xs font-bold text-ink block">
-                      Saldo Kas Aktif (Bisa Ditarik)
+
+                  <p className="text-xs font-semibold text-primary">
+                    {profile.role}
+                  </p>
+
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 text-xs text-ink-secondary pt-0.5">
+                    <span className="flex items-center gap-1 font-semibold text-ink">
+                      <Star className="w-3.5 h-3.5 fill-[#D97706] text-[#D97706]" />
+                      {profile.rating}
+                      <span className="text-ink-muted font-normal">
+                        ({profile.reviewCount} ulasan)
+                      </span>
                     </span>
-                    <span className="text-[10px] text-ink-muted">
-                      Hasil panen tuntas &amp; ongkir 100% utuh
+                    <span>•</span>
+                    <span className="flex items-center gap-1">
+                      <MapPin className="w-3.5 h-3.5 text-primary" />
+                      {profile.location}
                     </span>
                   </div>
                 </div>
-
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary">
-                  Siap Cair
-                </span>
               </div>
 
-              <div className="flex items-baseline justify-between pt-1">
-                <p className="text-2xl sm:text-3xl font-extrabold text-primary">
-                  Rp {profile.activeBalance.toLocaleString("id-ID")}
-                </p>
-
+              <div className="flex items-center justify-center sm:justify-end gap-2.5">
                 <Button
-                  variant="primary"
-                  size="sm"
-                  icon={ArrowDownToLine}
-                  onClick={() => setIsWithdrawModalOpen(true)}
+                  variant="outline"
+                  size="md"
+                  icon={Edit3}
+                  onClick={() => setIsEditProfileOpen(true)}
                 >
-                  Tarik Saldo
+                  Edit Profil
+                </Button>
+                <Button
+                  variant="destructive"
+                  size="md"
+                  icon={LogOut}
+                  onClick={() => setIsLogoutModalOpen(true)}
+                >
+                  Keluar
                 </Button>
               </div>
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#FEF3C7]/40 border border-[#FDE68A] flex flex-col justify-between space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-xl bg-[#D97706] text-white">
-                    <ShieldCheck className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold text-ink block">
-                      Dana Tertahan di Escrow
-                    </span>
-                    <span className="text-[10px] text-ink-muted">
-                      Aman di rekening penampung sandbox
-                    </span>
-                  </div>
-                </div>
-
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#D97706]/10 text-[#D97706]">
-                  Sedang Bertransaksi
-                </span>
-              </div>
-
-              <div className="flex items-baseline justify-between pt-1">
-                <p className="text-2xl sm:text-3xl font-extrabold text-[#D97706]">
-                  Rp {profile.escrowBalance.toLocaleString("id-ID")}
-                </p>
-
-                <span className="text-xs text-ink-muted">
-                  3 Transaksi Berjalan
-                </span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <aside className="lg:col-span-4 space-y-3">
-            <div className="bg-surface rounded-3xl p-3 border border-border shadow-xs space-y-1">
-              {menuItems.map((item) => {
-                const IconComp = item.icon;
-                const isActive = activeMenu === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setActiveMenu(item.id)}
-                    className={`w-full p-3.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
-                      isActive
-                        ? "bg-primary text-[#E6E4DA] shadow-xs"
-                        : "text-ink-secondary hover:text-ink hover:bg-surface-green/40"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <IconComp className="w-4 h-4 shrink-0" />
-                      <span>{item.label}</span>
+            <div className="pt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="p-5 rounded-xl bg-surface-green/40 border border-primary/20 flex flex-col justify-between space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 rounded-xl bg-primary text-[#E6E4DA]">
+                      <Wallet className="w-5 h-5" />
                     </div>
-
-                    <div className="flex items-center gap-1.5">
-                      {item.badge !== undefined && (
-                        <span
-                          className={`text-[10px] font-bold px-2 py-0.2 rounded-full ${
-                            isActive
-                              ? "bg-[#E6E4DA] text-primary"
-                              : "bg-border text-ink"
-                          }`}
-                        >
-                          {item.badge}
-                        </span>
-                      )}
-                      <ChevronRight className="w-3.5 h-3.5 opacity-60" />
+                    <div>
+                      <span className="text-xs font-bold text-ink block">
+                        Saldo Kas Aktif (Bisa Ditarik)
+                      </span>
+                      <span className="text-[10px] text-ink-muted">
+                        Hasil panen tuntas &amp; ongkir 100% utuh
+                      </span>
                     </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="p-4 rounded-3xl bg-[#E6E4DA] border border-border text-xs space-y-2">
-              <span className="font-bold text-ink block">Info Kontak Akun:</span>
-              <p className="text-ink-secondary flex items-center gap-2">
-                <Mail className="w-3.5 h-3.5 text-primary" />
-                <span>{profile.email}</span>
-              </p>
-              <p className="text-ink-secondary flex items-center gap-2">
-                <Phone className="w-3.5 h-3.5 text-primary" />
-                <span>{profile.phone}</span>
-              </p>
-              <p className="text-ink-secondary flex items-center gap-2">
-                <Building2 className="w-3.5 h-3.5 text-primary" />
-                <span>Rekening: {profile.bankName} ({profile.accountNumber})</span>
-              </p>
-            </div>
-          </aside>
-
-          <section className="lg:col-span-8 space-y-6">
-            {activeMenu === "TRANSAKSI" && (
-              <div className="bg-surface rounded-3xl p-6 sm:p-7 border border-border space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-border/80">
-                  <div>
-                    <h2 className="text-lg font-bold text-ink">
-                      Riwayat Seluruh Transaksi
-                    </h2>
-                    <p className="text-xs text-ink-muted">
-                      Pantau transaksi aktif, serah-terima kamera, hingga pesanan tuntas
-                    </p>
                   </div>
 
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-surface-green text-primary self-start sm:self-auto">
-                    {filteredTenders.length} Transaksi Ditemukan
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+                    Siap Cair
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-                  {filterTabs.map((tab) => (
-                    <Chip
-                      key={tab.id}
-                      label={tab.label}
-                      size="sm"
-                      active={transactionFilter === tab.id}
-                      onClick={() => setTransactionFilter(tab.id)}
-                    />
-                  ))}
-                </div>
+                <div className="flex items-baseline justify-between pt-1">
+                  <p className="text-2xl sm:text-3xl font-bold text-primary">
+                    Rp {profile.activeBalance.toLocaleString("id-ID")}
+                  </p>
 
-                <div className="space-y-3.5">
-                  {filteredTenders.map((tender) => (
-                    <div
-                      key={tender.id}
-                      className="p-4 sm:p-5 rounded-2xl bg-[#E6E4DA] border border-border hover:border-primary/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
-                    >
-                      <div className="space-y-1.5 flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-bold text-primary">
-                            {tender.category}
-                          </span>
-                          <span className="text-xs text-ink-muted">•</span>
-                          <span className="text-xs font-mono text-ink-muted">
-                            {tender.id}
-                          </span>
-                        </div>
-
-                        <h3 className="text-sm font-bold text-ink">
-                          {tender.title}
-                        </h3>
-
-                        <div className="flex flex-wrap items-center gap-3 text-xs text-ink-secondary">
-                          <span>
-                            Target: <strong className="text-ink">{tender.requiredQuantityKg} Kg</strong>
-                          </span>
-                          <span>•</span>
-                          <span>
-                            Total: <strong className="text-primary">Rp {tender.totalBudget.toLocaleString("id-ID")}</strong>
-                          </span>
-                          <span>•</span>
-                          <span>
-                            Mitra: {tender.buyer.businessName}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex sm:flex-col items-center sm:items-end justify-between gap-2 shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-border/80">
-                        <StatusBadge status={tender.status} size="sm" showIcon />
-                        <span className="text-[11px] text-ink-muted">
-                          Jadwal: {tender.deliveryDate}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {activeMenu === "TENDER_SAYA" && (
-              <div className="bg-surface rounded-3xl p-6 sm:p-7 border border-border space-y-5">
-                <div className="flex items-center justify-between pb-3 border-b border-border/80">
-                  <h2 className="text-lg font-bold text-ink">
-                    Daftar Tender Permintaan Dibuat
-                  </h2>
-                  <Button variant="primary" size="sm">
-                    Buat Tender Baru
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    icon={ArrowDownToLine}
+                    onClick={() => setIsWithdrawModalOpen(true)}
+                  >
+                    Tarik Saldo
                   </Button>
                 </div>
-
-                <div className="space-y-3">
-                  {mockTenders.slice(0, 2).map((item) => (
-                    <div
-                      key={item.id}
-                      className="p-4 rounded-2xl bg-[#E6E4DA] border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3"
-                    >
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <StatusBadge status={item.status} size="sm" />
-                          <span className="text-xs font-bold text-ink">
-                            {item.title}
-                          </span>
-                        </div>
-                        <p className="text-xs text-ink-secondary">
-                          Spesifikasi: "{item.specifications}"
-                        </p>
-                      </div>
-
-                      <div className="text-right shrink-0">
-                        <span className="text-sm font-bold text-primary block">
-                          Rp {item.targetPricePerKg.toLocaleString("id-ID")}/kg
-                        </span>
-                        <span className="text-[11px] text-ink-muted">
-                          Batas: {item.deadlineDate}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
               </div>
-            )}
 
-            {activeMenu === "BANTUAN" && (
-              <div className="bg-surface rounded-3xl p-6 sm:p-7 border border-border space-y-6">
-                <div className="pb-3 border-b border-border/80">
-                  <h2 className="text-lg font-bold text-ink">
-                    Pusat Bantuan &amp; Panduan Escrow
-                  </h2>
-                  <p className="text-xs text-ink-muted mt-0.5">
-                    Pertanyaan umum seputar perlindungan transaksi tanpa gudang
-                  </p>
-                </div>
-
-                <div className="space-y-3.5">
-                  {faqs.map((faq, idx) => (
-                    <div
-                      key={idx}
-                      className="p-4 rounded-2xl bg-[#E6E4DA] border border-border space-y-1.5"
-                    >
-                      <h3 className="text-xs font-bold text-ink">
-                        {faq.q}
-                      </h3>
-                      <p className="text-xs text-ink-secondary leading-relaxed">
-                        {faq.a}
-                      </p>
+              <div className="p-5 rounded-xl bg-[#FEF3C7]/40 border border-[#FDE68A] flex flex-col justify-between space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 rounded-xl bg-[#D97706] text-white">
+                      <ShieldCheck className="w-5 h-5" />
                     </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {activeMenu === "KEAMANAN" && (
-              <div className="bg-surface rounded-3xl p-6 sm:p-7 border border-border space-y-6">
-                <div className="pb-3 border-b border-border/80">
-                  <h2 className="text-lg font-bold text-ink">
-                    Pengaturan Keamanan &amp; Akun
-                  </h2>
-                  <p className="text-xs text-ink-muted mt-0.5">
-                    Kelola otentikasi transaksi dan rekening pencairan
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="p-4 rounded-2xl bg-[#E6E4DA] border border-border flex items-center justify-between">
                     <div>
-                      <p className="text-xs font-bold text-ink">
-                        PIN Transaksi Escrow
-                      </p>
-                      <p className="text-[11px] text-ink-muted">
-                        Digunakan untuk menyetujui pencairan dana dan penarikan saldo
-                      </p>
+                      <span className="text-xs font-bold text-ink block">
+                        Dana Tertahan di Escrow
+                      </span>
+                      <span className="text-[10px] text-ink-muted">
+                        Aman di rekening penampung sandbox
+                      </span>
                     </div>
-                    <Button variant="outline" size="sm">
-                      Ubah PIN
-                    </Button>
                   </div>
 
-                  <div className="p-4 rounded-2xl bg-[#E6E4DA] border border-border flex items-center justify-between">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#D97706]/10 text-[#D97706]">
+                    Sedang Bertransaksi
+                  </span>
+                </div>
+
+                <div className="flex items-baseline justify-between pt-1">
+                  <p className="text-2xl sm:text-3xl font-bold text-[#D97706]">
+                    Rp {profile.escrowBalance.toLocaleString("id-ID")}
+                  </p>
+
+                  <span className="text-xs text-ink-muted">
+                    3 Transaksi Berjalan
+                  </span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <aside className="lg:col-span-4 space-y-4">
+              <div className="bg-surface rounded-2xl p-3 border border-border shadow-xs space-y-1">
+                {menuItems.map((item) => {
+                  const IconComp = item.icon;
+                  const isActive = activeMenu === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => setActiveMenu(item.id)}
+                      className={`w-full p-3.5 rounded-xl text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
+                        isActive
+                          ? "bg-primary text-[#E6E4DA] shadow-xs"
+                          : "text-ink-secondary hover:text-ink hover:bg-surface-green/40"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <IconComp className="w-4 h-4 shrink-0" />
+                        <span>{item.label}</span>
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        {item.badge !== undefined && (
+                          <span
+                            className={`text-[10px] font-bold px-2 py-0.2 rounded-full ${
+                              isActive
+                                ? "bg-[#E6E4DA] text-primary"
+                                : "bg-border text-ink"
+                            }`}
+                          >
+                            {item.badge}
+                          </span>
+                        )}
+                        <ChevronRight className="w-3.5 h-3.5 opacity-60" />
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="p-4 rounded-2xl bg-[#E6E4DA] border border-border text-xs space-y-2">
+                <span className="font-bold text-ink block">Info Kontak Akun:</span>
+                <p className="text-ink-secondary flex items-center gap-2">
+                  <Mail className="w-3.5 h-3.5 text-primary" />
+                  <span>{profile.email}</span>
+                </p>
+                <p className="text-ink-secondary flex items-center gap-2">
+                  <Phone className="w-3.5 h-3.5 text-primary" />
+                  <span>{profile.phone}</span>
+                </p>
+                <p className="text-ink-secondary flex items-center gap-2">
+                  <Building2 className="w-3.5 h-3.5 text-primary" />
+                  <span>Rekening: {profile.bankName} ({profile.accountNumber})</span>
+                </p>
+              </div>
+            </aside>
+
+            <section className="lg:col-span-8 space-y-6">
+              {activeMenu === "TRANSAKSI" && (
+                <div className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-border/80">
                     <div>
-                      <p className="text-xs font-bold text-ink">
-                        Verifikasi Kamera &amp; Izin Geotag
-                      </p>
-                      <p className="text-[11px] text-ink-muted">
-                        Status izin kamera browser: Aktif (Diizinkan)
+                      <h2 className="text-base font-bold text-ink">
+                        Riwayat Seluruh Transaksi
+                      </h2>
+                      <p className="text-xs text-ink-muted">
+                        Pantau transaksi aktif, serah-terima kamera, hingga pesanan tuntas
                       </p>
                     </div>
-                    <span className="text-xs font-semibold text-[#16A34A] flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      Terverifikasi
+
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-surface-green text-primary self-start sm:self-auto">
+                      {filteredTenders.length} Transaksi Ditemukan
                     </span>
                   </div>
 
-                  <div className="p-4 rounded-2xl bg-[#E6E4DA] border border-border flex items-center justify-between">
-                    <div>
-                      <p className="text-xs font-bold text-ink">
-                        Rekening Bank Pencairan
-                      </p>
-                      <p className="text-[11px] text-ink-muted">
-                        {profile.bankName} • {profile.accountNumber} ({profile.accountHolder})
-                      </p>
-                    </div>
-                    <Button variant="outline" size="sm">
-                      Ganti Rekening
-                    </Button>
+                  <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                    {filterTabs.map((tab) => (
+                      <Chip
+                        key={tab.id}
+                        label={tab.label}
+                        size="sm"
+                        active={transactionFilter === tab.id}
+                        onClick={() => setTransactionFilter(tab.id)}
+                      />
+                    ))}
+                  </div>
+
+                  <div className="space-y-3.5">
+                    {filteredTenders.map((tender) => (
+                      <div
+                        key={tender.id}
+                        className="p-4 sm:p-5 rounded-xl bg-[#E6E4DA] border border-border hover:border-primary/40 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                      >
+                        <div className="space-y-1.5 flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold text-primary">
+                              {tender.category}
+                            </span>
+                            <span className="text-xs text-ink-muted">•</span>
+                            <span className="text-xs font-mono text-ink-muted">
+                              {tender.id}
+                            </span>
+                          </div>
+
+                          <h3 className="text-sm font-bold text-ink">
+                            {tender.title}
+                          </h3>
+
+                          <div className="flex flex-wrap items-center gap-3 text-xs text-ink-secondary">
+                            <span>
+                              Target: <strong className="text-ink">{tender.requiredQuantityKg} Kg</strong>
+                            </span>
+                            <span>•</span>
+                            <span>
+                              Total: <strong className="text-primary">Rp {tender.totalBudget.toLocaleString("id-ID")}</strong>
+                            </span>
+                            <span>•</span>
+                            <span>
+                              Mitra: {tender.buyer.businessName}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex sm:flex-col items-center sm:items-end justify-between gap-2 shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-border/80">
+                          <StatusBadge status={tender.status} size="sm" showIcon />
+                          <span className="text-[11px] text-ink-muted">
+                            Jadwal: {tender.deliveryDate}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
-            )}
-          </section>
+              )}
+
+              {activeMenu === "TENDER_SAYA" && (
+                <div className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-5">
+                  <div className="flex items-center justify-between pb-3 border-b border-border/80">
+                    <h2 className="text-base font-bold text-ink">
+                      Daftar Tender Permintaan Dibuat
+                    </h2>
+                    <Button variant="primary" size="sm">
+                      Buat Tender Baru
+                    </Button>
+                  </div>
+
+                  <div className="space-y-3">
+                    {mockTenders.slice(0, 2).map((item) => (
+                      <div
+                        key={item.id}
+                        className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3"
+                      >
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <StatusBadge status={item.status} size="sm" />
+                            <span className="text-xs font-bold text-ink">
+                              {item.title}
+                            </span>
+                          </div>
+                          <p className="text-xs text-ink-secondary">
+                            Spesifikasi: "{item.specifications}"
+                          </p>
+                        </div>
+
+                        <div className="text-right shrink-0">
+                          <span className="text-sm font-bold text-primary block">
+                            Rp {item.targetPricePerKg.toLocaleString("id-ID")}/kg
+                          </span>
+                          <span className="text-[11px] text-ink-muted">
+                            Batas: {item.deadlineDate}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {activeMenu === "BANTUAN" && (
+                <div className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-6">
+                  <div className="pb-3 border-b border-border/80">
+                    <h2 className="text-base font-bold text-ink">
+                      Pusat Bantuan &amp; Panduan Escrow
+                    </h2>
+                    <p className="text-xs text-ink-muted mt-0.5">
+                      Pertanyaan umum seputar perlindungan transaksi tanpa gudang
+                    </p>
+                  </div>
+
+                  <div className="space-y-3.5">
+                    {faqs.map((faq, idx) => (
+                      <div
+                        key={idx}
+                        className="p-4 rounded-xl bg-[#E6E4DA] border border-border space-y-1.5"
+                      >
+                        <h3 className="text-xs font-bold text-ink">
+                          {faq.q}
+                        </h3>
+                        <p className="text-xs text-ink-secondary leading-relaxed">
+                          {faq.a}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {activeMenu === "KEAMANAN" && (
+                <div className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-6">
+                  <div className="pb-3 border-b border-border/80">
+                    <h2 className="text-base font-bold text-ink">
+                      Pengaturan Keamanan &amp; Akun
+                    </h2>
+                    <p className="text-xs text-ink-muted mt-0.5">
+                      Kelola otentikasi transaksi dan rekening pencairan
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex items-center justify-between">
+                      <div>
+                        <p className="text-xs font-bold text-ink">
+                          PIN Transaksi Escrow
+                        </p>
+                        <p className="text-[11px] text-ink-muted">
+                          Digunakan untuk menyetujui pencairan dana dan penarikan saldo
+                        </p>
+                      </div>
+                      <Button variant="outline" size="sm">
+                        Ubah PIN
+                      </Button>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex items-center justify-between">
+                      <div>
+                        <p className="text-xs font-bold text-ink">
+                          Verifikasi Kamera &amp; Izin Geotag
+                        </p>
+                        <p className="text-[11px] text-ink-muted">
+                          Status izin kamera browser: Aktif (Diizinkan)
+                        </p>
+                      </div>
+                      <span className="text-xs font-semibold text-[#16A34A] flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        Terverifikasi
+                      </span>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex items-center justify-between">
+                      <div>
+                        <p className="text-xs font-bold text-ink">
+                          Rekening Bank Pencairan
+                        </p>
+                        <p className="text-[11px] text-ink-muted">
+                          {profile.bankName} • {profile.accountNumber} ({profile.accountHolder})
+                        </p>
+                      </div>
+                      <Button variant="outline" size="sm">
+                        Ganti Rekening
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </section>
+          </div>
         </div>
       </main>
 
@@ -550,9 +549,9 @@ export default function ProfilePage({ onBack, onLogout }) {
               </button>
             </div>
 
-            <div className="p-4 rounded-2xl bg-surface-green/40 border border-primary/20 text-xs space-y-1">
+            <div className="p-4 rounded-xl bg-surface-green/40 border border-primary/20 text-xs space-y-1">
               <span className="text-ink-muted block">Saldo yang dapat ditarik:</span>
-              <p className="text-xl font-extrabold text-primary">
+              <p className="text-xl font-bold text-primary">
                 Rp {profile.activeBalance.toLocaleString("id-ID")}
               </p>
             </div>

@@ -11,14 +11,12 @@ import {
   SlidersHorizontal,
   MapPin,
   Calendar,
-  Truck,
   Store,
   Sprout,
   X,
   ArrowUpDown,
   RotateCcw,
   Check,
-  ChevronRight,
   Sparkles,
 } from "lucide-react";
 
@@ -126,7 +124,7 @@ export default function ExplorePage() {
         <button
           type="button"
           onClick={handleResetFilters}
-          className="text-xs text-ink-muted hover:text-primary flex items-center gap-1 font-medium transition-colors"
+          className="text-xs text-ink-muted hover:text-primary flex items-center gap-1 font-medium transition-colors cursor-pointer"
         >
           <RotateCcw className="w-3 h-3" />
           <span>Reset</span>
@@ -217,325 +215,327 @@ export default function ExplorePage() {
     <div className="min-h-screen bg-background text-ink flex flex-col justify-between selection:bg-primary-50 selection:text-primary">
       <Navbar activeNav="jelajahi" />
 
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 pb-28 md:pb-14">
-        <header className="space-y-4">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div>
-              <span className="text-xs font-bold text-primary uppercase tracking-wider block mb-1">
-                Pasar Komoditas Langsung
-              </span>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-ink tracking-tight">
-                Jelajahi Pasar Pertanian Lokal
-              </h1>
-              <p className="text-sm text-ink-secondary mt-1">
-                Pesan langsung dari kebun petani sekitar atau ikuti tender pengadaan usaha UMKM
-              </p>
-            </div>
-
-            <div className="bg-surface p-1 rounded-2xl border border-border flex items-center shrink-0">
-              <button
-                type="button"
-                onClick={() => setActiveTab("ETALASE")}
-                className={`py-2 px-4 rounded-xl text-xs font-bold transition-all duration-150 flex items-center gap-2 ${
-                  activeTab === "ETALASE"
-                    ? "bg-primary text-[#E6E4DA] shadow-xs"
-                    : "text-ink-secondary hover:text-ink"
-                }`}
-              >
-                <Sprout className="w-4 h-4" />
-                <span>Etalase Panen ({filteredCommodities.length})</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setActiveTab("TENDER")}
-                className={`py-2 px-4 rounded-xl text-xs font-bold transition-all duration-150 flex items-center gap-2 ${
-                  activeTab === "TENDER"
-                    ? "bg-primary text-[#E6E4DA] shadow-xs"
-                    : "text-ink-secondary hover:text-ink"
-                }`}
-              >
-                <Store className="w-4 h-4" />
-                <span>Tender Permintaan ({filteredTenders.length})</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="bg-surface p-3 sm:p-4 rounded-2xl border border-border flex flex-col sm:flex-row items-center gap-3">
-            <div className="relative flex-1 w-full">
-              <Search className="w-4 h-4 text-ink-muted absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-              <input
-                type="text"
-                placeholder={
-                  activeTab === "ETALASE"
-                    ? "Cari komoditas, kebun, atau nama petani..."
-                    : "Cari tender, jenis sayur, atau nama usaha..."
-                }
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-[#E6E4DA] border border-border rounded-xl pl-10 pr-4 py-2.5 text-xs text-ink placeholder:text-ink-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-
-            <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
-              <div className="flex items-center gap-1.5 bg-[#E6E4DA] border border-border rounded-xl px-3 py-2 text-xs">
-                <ArrowUpDown className="w-3.5 h-3.5 text-ink-muted shrink-0" />
-                <span className="text-[11px] text-ink-muted hidden md:inline">Urut:</span>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-transparent text-xs font-semibold text-ink focus:outline-none cursor-pointer"
-                >
-                  <option value="TERDEKAT">Jarak Terdekat</option>
-                  <option value="HARGA_TERENDAH">Harga Terendah</option>
-                  <option value="KUOTA_TERBANYAK">Kuota Terbesar</option>
-                </select>
+      <main className="w-full flex-1">
+        <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-8 md:py-10 space-y-8 pb-28 md:pb-14">
+          <header className="space-y-4">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div>
+                <span className="text-xs font-bold text-primary uppercase tracking-wider block mb-1">
+                  Pasar Komoditas Langsung
+                </span>
+                <h1 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight">
+                  Jelajahi Pasar Pertanian Lokal
+                </h1>
+                <p className="text-sm text-ink-secondary mt-1">
+                  Pesan langsung dari kebun petani sekitar atau ikuti tender pengadaan usaha UMKM
+                </p>
               </div>
 
-              <button
-                type="button"
-                onClick={() => setIsMobileFilterOpen(true)}
-                className="lg:hidden flex items-center gap-1.5 px-3 py-2 rounded-xl bg-primary text-[#E6E4DA] text-xs font-semibold shadow-xs"
-              >
-                <SlidersHorizontal className="w-3.5 h-3.5" />
-                <span>Filter</span>
-              </button>
+              <div className="bg-surface p-1 rounded-xl border border-border flex items-center shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("ETALASE")}
+                  className={`py-2 px-4 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+                    activeTab === "ETALASE"
+                      ? "bg-primary text-[#E6E4DA] shadow-xs"
+                      : "text-ink-secondary hover:text-ink"
+                  }`}
+                >
+                  <Sprout className="w-4 h-4" />
+                  <span>Etalase Panen ({filteredCommodities.length})</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("TENDER")}
+                  className={`py-2 px-4 rounded-lg text-xs font-bold transition-all flex items-center gap-2 cursor-pointer ${
+                    activeTab === "TENDER"
+                      ? "bg-primary text-[#E6E4DA] shadow-xs"
+                      : "text-ink-secondary hover:text-ink"
+                  }`}
+                >
+                  <Store className="w-4 h-4" />
+                  <span>Tender Permintaan ({filteredTenders.length})</span>
+                </button>
+              </div>
             </div>
-          </div>
-        </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
-          <aside className="hidden lg:block lg:col-span-1 bg-surface rounded-3xl p-6 border border-border sticky top-24">
-            {renderFilterPanel()}
-          </aside>
+            <div className="bg-surface p-3 sm:p-4 rounded-2xl border border-border flex flex-col sm:flex-row items-center gap-3">
+              <div className="relative flex-1 w-full">
+                <Search className="w-4 h-4 text-ink-muted absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder={
+                    activeTab === "ETALASE"
+                      ? "Cari komoditas, kebun, atau nama petani..."
+                      : "Cari tender, jenis sayur, atau nama usaha..."
+                  }
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-[#E6E4DA] border border-border rounded-xl pl-10 pr-4 py-2.5 text-xs text-ink placeholder:text-ink-muted focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink cursor-pointer"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
 
-          <section className="lg:col-span-3 space-y-6">
-            {activeTab === "ETALASE" ? (
-              filteredCommodities.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                  {filteredCommodities.map((item) => (
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
+                <div className="flex items-center gap-1.5 bg-[#E6E4DA] border border-border rounded-xl px-3 py-2 text-xs">
+                  <ArrowUpDown className="w-3.5 h-3.5 text-ink-muted shrink-0" />
+                  <span className="text-[11px] text-ink-muted hidden md:inline">Urut:</span>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="bg-transparent text-xs font-semibold text-ink focus:outline-none cursor-pointer"
+                  >
+                    <option value="TERDEKAT">Jarak Terdekat</option>
+                    <option value="HARGA_TERENDAH">Harga Terendah</option>
+                    <option value="KUOTA_TERBANYAK">Kuota Terbesar</option>
+                  </select>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsMobileFilterOpen(true)}
+                  className="lg:hidden flex items-center gap-1.5 px-3 py-2 rounded-xl bg-primary text-[#E6E4DA] text-xs font-semibold shadow-xs cursor-pointer"
+                >
+                  <SlidersHorizontal className="w-3.5 h-3.5" />
+                  <span>Filter</span>
+                </button>
+              </div>
+            </div>
+          </header>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <aside className="hidden lg:block lg:col-span-3 bg-surface rounded-2xl p-5 border border-border sticky top-24">
+              {renderFilterPanel()}
+            </aside>
+
+            <section className="lg:col-span-9 space-y-6">
+              {activeTab === "ETALASE" ? (
+                filteredCommodities.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                    {filteredCommodities.map((item) => (
+                      <article
+                        key={item.id}
+                        className="bg-surface rounded-2xl border border-border overflow-hidden hover:border-primary/50 transition-all flex flex-col justify-between"
+                      >
+                        <div>
+                          <div className="relative h-44 w-full bg-[#E6E4DA] overflow-hidden">
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              className="w-full h-full object-cover"
+                            />
+                            <div className="absolute top-3 left-3 flex items-center gap-1.5">
+                              <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#1A1A1A]/80 backdrop-blur-md text-[#E6E4DA]">
+                                {item.grade}
+                              </span>
+                              <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-surface-green text-primary border border-primary/20">
+                                {item.category}
+                              </span>
+                            </div>
+                            <div className="absolute bottom-3 right-3">
+                              <span className="px-2.5 py-1 rounded-lg text-xs font-extrabold bg-primary text-[#E6E4DA] shadow-xs">
+                                Rp {item.pricePerKg.toLocaleString("id-ID")}/kg
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="p-5 space-y-3">
+                            <div>
+                              <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary mb-1">
+                                <Calendar className="w-3 h-3" />
+                                <span>Panen: {item.harvestDate}</span>
+                              </div>
+                              <h3 className="text-base font-bold text-ink leading-tight">
+                                {item.name}
+                              </h3>
+                              <p className="text-xs text-ink-secondary line-clamp-2 mt-1">
+                                {item.description}
+                              </p>
+                            </div>
+
+                            <div className="p-3 rounded-xl bg-[#E6E4DA] border border-border/80 flex items-center justify-between text-xs">
+                              <div className="flex items-center gap-2">
+                                <img
+                                  src={item.farmer.avatar}
+                                  alt={item.farmer.name}
+                                  className="w-7 h-7 rounded-full object-cover border border-border"
+                                />
+                                <div>
+                                  <p className="font-semibold text-ink leading-tight">
+                                    {item.farmer.name}
+                                  </p>
+                                  <p className="text-[10px] text-ink-muted">
+                                    {item.farmer.farmName}
+                                  </p>
+                                </div>
+                              </div>
+
+                              <span className="text-[11px] font-medium text-ink flex items-center gap-1 shrink-0">
+                                <MapPin className="w-3 h-3 text-primary" />
+                                {item.farmer.distanceKm} km
+                              </span>
+                            </div>
+
+                            <div className="space-y-1 text-xs text-ink-secondary pt-1">
+                              <div className="flex items-center justify-between">
+                                <span>Tersedia:</span>
+                                <strong className="text-ink font-semibold">
+                                  {item.quotaKg} Kg (Min. {item.minOrderKg} Kg)
+                                </strong>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span>Logistik:</span>
+                                <span className="text-ink font-medium">
+                                  Ambil Rp0 • Kirim Rp {item.logistics.farmerDelivery.fixedFee.toLocaleString("id-ID")}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="p-5 pt-0">
+                          <Button variant="primary" fullWidth size="md">
+                            Pesan Langsung
+                          </Button>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-surface rounded-2xl p-12 text-center border border-border space-y-4">
+                    <div className="w-14 h-14 rounded-2xl bg-[#E6E4DA] text-ink-muted flex items-center justify-center mx-auto">
+                      <Sprout className="w-8 h-8" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-ink">
+                        Tidak Ada Komoditas yang Sesuai Filter
+                      </h3>
+                      <p className="text-xs text-ink-muted mt-1 max-w-md mx-auto">
+                        Coba perluas jarak jangkauan kilometer atau ubah kata kunci pencarian Anda.
+                      </p>
+                    </div>
+                    <Button variant="outline" size="sm" onClick={handleResetFilters}>
+                      Reset Seluruh Filter
+                    </Button>
+                  </div>
+                )
+              ) : filteredTenders.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {filteredTenders.map((tender) => (
                     <article
-                      key={item.id}
-                      className="bg-surface rounded-3xl border border-border overflow-hidden hover:border-primary/50 transition-all duration-200 flex flex-col justify-between group shadow-2xs"
+                      key={tender.id}
+                      className="bg-surface rounded-2xl p-6 border border-border hover:border-primary/50 transition-all flex flex-col justify-between"
                     >
-                      <div>
-                        <div className="relative h-44 w-full bg-[#E6E4DA] overflow-hidden">
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
-                          <div className="absolute top-3 left-3 flex items-center gap-1.5">
-                            <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#1A1A1A]/80 backdrop-blur-md text-[#E6E4DA]">
-                              {item.grade}
+                      <div className="space-y-4">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-bold text-primary">
+                                {tender.category}
+                              </span>
+                              <span className="text-xs text-ink-muted">•</span>
+                              <span className="text-xs text-ink-muted">
+                                Target {tender.requiredQuantityKg} Kg
+                              </span>
+                            </div>
+                            <h3 className="text-base font-bold text-ink leading-tight">
+                              {tender.title}
+                            </h3>
+                          </div>
+
+                          <StatusBadge status={tender.status} size="sm" showIcon />
+                        </div>
+
+                        <p className="text-xs text-ink-secondary leading-relaxed bg-[#E6E4DA] p-3 rounded-xl border border-border/80">
+                          "{tender.specifications}"
+                        </p>
+
+                        <div className="grid grid-cols-2 gap-3 text-xs pt-1">
+                          <div className="p-3 rounded-xl bg-surface border border-border/60">
+                            <span className="text-[10px] text-ink-muted block uppercase font-medium">
+                              Target Anggaran
                             </span>
-                            <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-surface-green text-primary border border-primary/20">
-                              {item.category}
+                            <strong className="text-sm font-bold text-primary mt-0.5 block">
+                              Rp {tender.targetPricePerKg.toLocaleString("id-ID")}/kg
+                            </strong>
+                            <span className="text-[10px] text-ink-muted">
+                              Total Rp {tender.totalBudget.toLocaleString("id-ID")}
                             </span>
                           </div>
-                          <div className="absolute bottom-3 right-3">
-                            <span className="px-2.5 py-1 rounded-xl text-xs font-extrabold bg-primary text-[#E6E4DA] shadow-xs">
-                              Rp {item.pricePerKg.toLocaleString("id-ID")}/kg
+
+                          <div className="p-3 rounded-xl bg-surface border border-border/60">
+                            <span className="text-[10px] text-ink-muted block uppercase font-medium">
+                              Pemohon UMKM
+                            </span>
+                            <strong className="text-xs font-semibold text-ink mt-0.5 block truncate">
+                              {tender.buyer.businessName}
+                            </strong>
+                            <span className="text-[10px] text-ink-muted flex items-center gap-1">
+                              <MapPin className="w-3 h-3 text-primary shrink-0" />
+                              {tender.buyer.distanceKm} km ({tender.buyer.businessType})
                             </span>
                           </div>
                         </div>
 
-                        <div className="p-5 space-y-3">
-                          <div>
-                            <div className="flex items-center gap-1.5 text-[10px] font-semibold text-primary mb-1">
-                              <Calendar className="w-3 h-3" />
-                              <span>Panen: {item.harvestDate}</span>
-                            </div>
-                            <h3 className="text-base font-bold text-ink leading-tight">
-                              {item.name}
-                            </h3>
-                            <p className="text-xs text-ink-secondary line-clamp-2 mt-1">
-                              {item.description}
-                            </p>
-                          </div>
-
-                          <div className="p-3 rounded-2xl bg-[#E6E4DA] border border-border/80 flex items-center justify-between text-xs">
-                            <div className="flex items-center gap-2">
-                              <img
-                                src={item.farmer.avatar}
-                                alt={item.farmer.name}
-                                className="w-7 h-7 rounded-full object-cover border border-border"
-                              />
-                              <div>
-                                <p className="font-semibold text-ink leading-tight">
-                                  {item.farmer.name}
-                                </p>
-                                <p className="text-[10px] text-ink-muted">
-                                  {item.farmer.farmName}
-                                </p>
-                              </div>
-                            </div>
-
-                            <span className="text-[11px] font-medium text-ink flex items-center gap-1 shrink-0">
-                              <MapPin className="w-3 h-3 text-primary" />
-                              {item.farmer.distanceKm} km
+                        <div className="space-y-1 text-xs text-ink-secondary">
+                          <div className="flex items-center justify-between">
+                            <span>Metode Serah Terima:</span>
+                            <span className="font-semibold text-ink">
+                              {tender.fulfillmentMethod === "SELF_PICKUP"
+                                ? "Ambil Sendiri (Rp0)"
+                                : `Kurir Petani (Rp ${tender.deliveryFee.toLocaleString("id-ID")})`}
                             </span>
                           </div>
-
-                          <div className="space-y-1 text-xs text-ink-secondary pt-1">
-                            <div className="flex items-center justify-between">
-                              <span>Tersedia:</span>
-                              <strong className="text-ink font-semibold">
-                                {item.quotaKg} Kg (Min. {item.minOrderKg} Kg)
-                              </strong>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span>Logistik:</span>
-                              <span className="text-ink font-medium">
-                                Ambil Rp0 • Kirim Rp {item.logistics.farmerDelivery.fixedFee.toLocaleString("id-ID")}
-                              </span>
-                            </div>
+                          <div className="flex items-center justify-between">
+                            <span>Batas Penawaran:</span>
+                            <span className="font-semibold text-ink">
+                              {tender.deadlineDate}
+                            </span>
                           </div>
                         </div>
                       </div>
 
-                      <div className="p-5 pt-0">
-                        <Button variant="primary" fullWidth size="md">
-                          Pesan Langsung
+                      <div className="pt-5 mt-4 border-t border-border/80 flex items-center justify-between gap-3">
+                        <span className="text-xs text-ink-muted">
+                          Penawaran masuk: <strong className="text-ink">{tender.bidsCount} Petani</strong>
+                        </span>
+
+                        <Button variant="primary" size="sm">
+                          Ajukan Penawaran
                         </Button>
                       </div>
                     </article>
                   ))}
                 </div>
               ) : (
-                <div className="bg-surface rounded-3xl p-12 text-center border border-border space-y-4">
+                <div className="bg-surface rounded-2xl p-12 text-center border border-border space-y-4">
                   <div className="w-14 h-14 rounded-2xl bg-[#E6E4DA] text-ink-muted flex items-center justify-center mx-auto">
-                    <Sprout className="w-8 h-8" />
+                    <Store className="w-8 h-8" />
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-ink">
-                      Tidak Ada Komoditas yang Sesuai Filter
+                      Tidak Ada Tender yang Sesuai Kriteria
                     </h3>
                     <p className="text-xs text-ink-muted mt-1 max-w-md mx-auto">
-                      Coba perluas jarak jangkauan kilometer atau ubah kata kunci pencarian Anda.
+                      Belum ada pengadaan UMKM dengan filter yang dipilih saat ini.
                     </p>
                   </div>
                   <Button variant="outline" size="sm" onClick={handleResetFilters}>
                     Reset Seluruh Filter
                   </Button>
                 </div>
-              )
-            ) : filteredTenders.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                {filteredTenders.map((tender) => (
-                  <article
-                    key={tender.id}
-                    className="bg-surface rounded-3xl p-6 border border-border hover:border-primary/50 transition-all duration-200 flex flex-col justify-between group shadow-2xs"
-                  >
-                    <div className="space-y-4">
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold text-primary">
-                              {tender.category}
-                            </span>
-                            <span className="text-xs text-ink-muted">•</span>
-                            <span className="text-xs text-ink-muted">
-                              Target {tender.requiredQuantityKg} Kg
-                            </span>
-                          </div>
-                          <h3 className="text-base font-bold text-ink leading-tight">
-                            {tender.title}
-                          </h3>
-                        </div>
-
-                        <StatusBadge status={tender.status} size="sm" showIcon />
-                      </div>
-
-                      <p className="text-xs text-ink-secondary leading-relaxed bg-[#E6E4DA] p-3 rounded-xl border border-border/80">
-                        "{tender.specifications}"
-                      </p>
-
-                      <div className="grid grid-cols-2 gap-3 text-xs pt-1">
-                        <div className="p-3 rounded-xl bg-surface border border-border/60">
-                          <span className="text-[10px] text-ink-muted block uppercase font-medium">
-                            Target Anggaran
-                          </span>
-                          <strong className="text-sm font-bold text-primary mt-0.5 block">
-                            Rp {tender.targetPricePerKg.toLocaleString("id-ID")}/kg
-                          </strong>
-                          <span className="text-[10px] text-ink-muted">
-                            Total Rp {tender.totalBudget.toLocaleString("id-ID")}
-                          </span>
-                        </div>
-
-                        <div className="p-3 rounded-xl bg-surface border border-border/60">
-                          <span className="text-[10px] text-ink-muted block uppercase font-medium">
-                            Pemohon UMKM
-                          </span>
-                          <strong className="text-xs font-semibold text-ink mt-0.5 block truncate">
-                            {tender.buyer.businessName}
-                          </strong>
-                          <span className="text-[10px] text-ink-muted flex items-center gap-1">
-                            <MapPin className="w-3 h-3 text-primary shrink-0" />
-                            {tender.buyer.distanceKm} km ({tender.buyer.businessType})
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="space-y-1 text-xs text-ink-secondary">
-                        <div className="flex items-center justify-between">
-                          <span>Metode Serah Terima:</span>
-                          <span className="font-semibold text-ink">
-                            {tender.fulfillmentMethod === "SELF_PICKUP"
-                              ? "Ambil Sendiri (Rp0)"
-                              : `Kurir Petani (Rp ${tender.deliveryFee.toLocaleString("id-ID")})`}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span>Batas Penawaran:</span>
-                          <span className="font-semibold text-ink">
-                            {tender.deadlineDate}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="pt-5 mt-4 border-t border-border/80 flex items-center justify-between gap-3">
-                      <span className="text-xs text-ink-muted">
-                        Penawaran masuk: <strong className="text-ink">{tender.bidsCount} Petani</strong>
-                      </span>
-
-                      <Button variant="primary" size="sm">
-                        Ajukan Penawaran
-                      </Button>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            ) : (
-              <div className="bg-surface rounded-3xl p-12 text-center border border-border space-y-4">
-                <div className="w-14 h-14 rounded-2xl bg-[#E6E4DA] text-ink-muted flex items-center justify-center mx-auto">
-                  <Store className="w-8 h-8" />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-ink">
-                    Tidak Ada Tender yang Sesuai Kriteria
-                  </h3>
-                  <p className="text-xs text-ink-muted mt-1 max-w-md mx-auto">
-                    Belum ada pengadaan UMKM dengan filter yang dipilih saat ini.
-                  </p>
-                </div>
-                <Button variant="outline" size="sm" onClick={handleResetFilters}>
-                  Reset Seluruh Filter
-                </Button>
-              </div>
-            )}
-          </section>
+              )}
+            </section>
+          </div>
         </div>
       </main>
 
@@ -552,7 +552,7 @@ export default function ExplorePage() {
               <button
                 type="button"
                 onClick={() => setIsMobileFilterOpen(false)}
-                className="p-1 rounded-full text-ink-muted hover:text-ink"
+                className="p-1 rounded-full text-ink-muted hover:text-ink cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
