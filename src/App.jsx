@@ -3,6 +3,7 @@ import HomePage from "./pages/HomePage";
 import ExplorePage from "./pages/ExplorePage";
 import TenderDetailPage from "./pages/TenderDetailPage";
 import CheckoutEscrowPage from "./pages/CheckoutEscrowPage";
+import HandoverPage from "./pages/HandoverPage";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState("home");
@@ -17,6 +18,10 @@ export default function App() {
 
   if (currentPage === "checkout-escrow") {
     return <CheckoutEscrowPage onBack={() => setCurrentPage("home")} />;
+  }
+
+  if (currentPage === "handover") {
+    return <HandoverPage onBack={() => setCurrentPage("home")} />;
   }
 
   return <HomePage />;
