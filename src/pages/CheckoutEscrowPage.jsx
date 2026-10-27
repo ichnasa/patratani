@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useApp } from "../context/AppContext";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -26,11 +27,14 @@ export default function CheckoutEscrowPage({
   onPaymentSuccess,
 }) {
   const navigate = useNavigate();
+  const { activeTransaction, payEscrow } = useApp();
   const [selectedMethod, setSelectedMethod] = useState("QRIS");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isPaidSuccess, setIsPaidSuccess] = useState(false);
+  const [isPaidSuccess, setIsPaidSuccess] = useState(
+    activeTransaction?.status === "PAID_HELD" || false
+  );
 
-  const dealData = {
+  const dealData = activeTransaction || {
     tenderId: "TND-2026-004",
     title: "Stok Pisang Kepok Kuning Tua 40 Kg",
     commodityName: "Pisang Kepok Kuning Super",
@@ -105,6 +109,9 @@ export default function CheckoutEscrowPage({
     setTimeout(() => {
       setIsProcessing(false);
       setIsPaidSuccess(true);
+      if (payEscrow) {
+        payEscrow();
+      }
       if (onPaymentSuccess) {
         onPaymentSuccess();
       }
@@ -218,7 +225,7 @@ export default function CheckoutEscrowPage({
                   Dana Berhasil Diamankan di Rekening Escrow!
                 </h2>
                 <p className="text-sm text-ink-secondary leading-relaxed">
-                  Pembayaran sebesar <strong>Rp {dealData.totalPayment.toLocaleString("id-ID")}</strong> telah masuk ke rekening penampung simulasi Patra Tani (ID Escrow: <code className="font-mono font-bold text-ink">ESC-20261027-8891</code>).
+                  Pembayaran sebesar <strong>Rp {(dealData.totalPayment || 585000).toLocaleString("id-ID")}</strong> telah masuk ke rekening penampung simulasi Patra Tani (ID Escrow: <code className="font-mono font-bold text-ink">{dealData.escrowId || "ESC-20261027-8891"}</code>).
                 </p>
               </div>
 
@@ -228,11 +235,11 @@ export default function CheckoutEscrowPage({
                   <span>Petani Segera Memulai Pengiriman</span>
                 </div>
                 <p className="text-ink-secondary leading-relaxed">
-                  {dealData.farmer.name} telah menerima notifikasi bahwa dana telah aman di escrow. Petani akan menyiapkan komoditas untuk diantar pada jadwal: <strong>{dealData.deliveryDate}</strong>.
+                  {dealData.farmer?.name || "Petani"} telah menerima notifikasi bahwa dana telah aman di escrow. Komoditas siap diantar pada jadwal: <strong>{dealData.deliveryDate || "2026-10-28"}</strong>.
                 </p>
                 <div className="pt-2 border-t border-border flex items-center justify-between text-ink font-medium">
                   <span>Penerima:</span>
-                  <span>{dealData.buyer.businessName} ({dealData.buyer.contactPerson})</span>
+                  <span>{dealData.buyer?.businessName} ({dealData.buyer?.contactPerson})</span>
                 </div>
               </div>
 
@@ -273,7 +280,7 @@ export default function CheckoutEscrowPage({
 
                   <div className="flex flex-col sm:flex-row items-start gap-4">
                     <img
-                      src={dealData.image}
+                      src={dealData.image || "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=600&auto=format&fit=crop&q=80"}
                       alt={dealData.commodityName}
                       className="w-full sm:w-28 h-28 rounded-xl object-cover border border-border shrink-0"
                     />
@@ -281,10 +288,10 @@ export default function CheckoutEscrowPage({
                     <div className="space-y-1.5 flex-1">
                       <div className="flex items-center gap-2">
                         <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#1A1A1A] text-[#E6E4DA]">
-                          {dealData.grade}
+                          {dealData.grade || "Grade Super"}
                         </span>
                         <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-surface-green text-primary border border-primary/20">
-                          {dealData.category}
+                          {dealData.category || "Komoditas Segar"}
                         </span>
                       </div>
 
@@ -292,17 +299,17 @@ export default function CheckoutEscrowPage({
                         {dealData.commodityName}
                       </h3>
                       <p className="text-xs text-ink-secondary">
-                        Tender: {dealData.title}
+                        Tender / Pesanan: {dealData.title}
                       </p>
 
                       <div className="pt-2 flex flex-wrap items-center gap-4 text-xs">
                         <div className="flex items-center gap-1.5 text-ink">
                           <Calendar className="w-3.5 h-3.5 text-primary" />
-                          <span>Serah Terima: <strong>{dealData.deliveryDate}</strong></span>
+                          <span>Serah Terima: <strong>{dealData.deliveryDate || "2026-10-28"}</strong></span>
                         </div>
                         <div className="flex items-center gap-1.5 text-ink">
                           <Truck className="w-3.5 h-3.5 text-primary" />
-                          <span>Metode: <strong>Kurir Petani Langsung</strong></span>
+                          <span>Metode: <strong>{dealData.fulfillmentMethod === "SELF_PICKUP" ? "Ambil Sendiri" : "Kurir Petani Langsung"}</strong></span>
                         </div>
                       </div>
                     </div>
@@ -315,21 +322,21 @@ export default function CheckoutEscrowPage({
                       </span>
                       <div className="flex items-center gap-3">
                         <img
-                          src={dealData.farmer.avatar}
-                          alt={dealData.farmer.name}
+                          src={dealData.farmer?.avatar}
+                          alt={dealData.farmer?.name}
                           className="w-8 h-8 rounded-full object-cover border border-border"
                         />
                         <div>
                           <p className="text-xs font-bold text-ink leading-tight">
-                            {dealData.farmer.name}
+                            {dealData.farmer?.name}
                           </p>
                           <p className="text-[10px] text-ink-muted">
-                            {dealData.farmer.farmName} • {dealData.farmer.distanceKm} km
+                            {dealData.farmer?.farmName} • {dealData.farmer?.distanceKm || 4.2} km
                           </p>
                         </div>
                       </div>
                       <p className="text-[11px] text-ink-secondary">
-                        {dealData.farmer.location}
+                        {dealData.farmer?.location}
                       </p>
                     </div>
 
@@ -341,15 +348,15 @@ export default function CheckoutEscrowPage({
                         <Store className="w-4 h-4 text-primary shrink-0" />
                         <div>
                           <p className="text-xs font-bold text-ink leading-tight">
-                            {dealData.buyer.businessName}
+                            {dealData.buyer?.businessName}
                           </p>
                           <p className="text-[10px] text-ink-muted">
-                            PIC: {dealData.buyer.contactPerson} ({dealData.buyer.phone})
+                            PIC: {dealData.buyer?.contactPerson} ({dealData.buyer?.phone})
                           </p>
                         </div>
                       </div>
                       <p className="text-[11px] text-ink-secondary">
-                        {dealData.buyer.deliveryAddress}
+                        {dealData.buyer?.deliveryAddress || dealData.buyer?.address}
                       </p>
                     </div>
                   </div>
@@ -444,9 +451,9 @@ export default function CheckoutEscrowPage({
 
                   <div className="space-y-3 text-xs">
                     <div className="flex items-center justify-between text-ink-secondary">
-                      <span>Subtotal Panen ({dealData.quantityKg} Kg × Rp {dealData.pricePerKg.toLocaleString("id-ID")}):</span>
+                      <span>Subtotal Panen ({dealData.quantityKg} Kg × Rp {(dealData.pricePerKg || 14000).toLocaleString("id-ID")}):</span>
                       <span className="font-semibold text-ink">
-                        Rp {dealData.subtotal.toLocaleString("id-ID")}
+                        Rp {(dealData.subtotal || 560000).toLocaleString("id-ID")}
                       </span>
                     </div>
 
@@ -455,7 +462,7 @@ export default function CheckoutEscrowPage({
                         <span>Ongkos Kirim Kurir Petani:</span>
                       </div>
                       <span className="font-semibold text-ink">
-                        Rp {dealData.deliveryFee.toLocaleString("id-ID")}
+                        Rp {(dealData.deliveryFee || 0).toLocaleString("id-ID")}
                       </span>
                     </div>
 
@@ -480,7 +487,7 @@ export default function CheckoutEscrowPage({
                         </span>
                       </div>
                       <strong className="text-xl font-bold text-primary">
-                        Rp {dealData.totalPayment.toLocaleString("id-ID")}
+                        Rp {(dealData.totalPayment || 585000).toLocaleString("id-ID")}
                       </strong>
                     </div>
                   </div>

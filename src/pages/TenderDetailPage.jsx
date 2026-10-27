@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useApp } from "../context/AppContext";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import StatusBadge from "../components/StatusBadge";
-import { mockTenders } from "../data/mockTenders";
+import { mockTenders } from "../data/mockData";
 import {
   ArrowLeft,
   Calendar,
@@ -27,7 +28,8 @@ export default function TenderDetailPage({
 }) {
   const navigate = useNavigate();
   const { id } = useParams();
-  const activeId = id || tenderId;
+  const { activeTransaction, startTransactionFromTender } = useApp();
+  const activeId = id || activeTransaction?.tenderId || tenderId;
 
   const tender =
     mockTenders.find((t) => t.id === activeId) || mockTenders[1];
@@ -57,9 +59,26 @@ export default function TenderDetailPage({
   const netFarmerTotal = netHarvestEarning + activeDeliveryFee;
   const totalBuyerPayment = harvestSubtotal + activeDeliveryFee;
 
+  const handleApplyOffer = () => {
+    startTransactionFromTender(tender, {
+      offeredPrice: parsedPrice,
+      offeredQuantity: parsedQuantity,
+      harvestDate,
+      deliveryMethod,
+      deliveryFee: activeDeliveryFee,
+      notes,
+    });
+  };
+
   const handleSubmitOffer = (e) => {
     e.preventDefault();
+    handleApplyOffer();
     setIsSubmitted(true);
+  };
+
+  const handleProceedToEscrow = () => {
+    handleApplyOffer();
+    navigate("/escrow");
   };
 
   return (
@@ -117,7 +136,7 @@ export default function TenderDetailPage({
                   </span>
                   <p className="text-base font-bold text-ink">{tender.deadlineDate}</p>
                   <p className="text-[11px] text-[#D97706] font-medium">
-                    Sisa {tender.daysRemaining} hari lagi
+                    Sisa {tender.daysRemaining || 3} hari lagi
                   </p>
                 </div>
 
@@ -147,7 +166,7 @@ export default function TenderDetailPage({
                   <p className="text-[11px] text-ink-muted">
                     {tender.fulfillmentMethod === "SELF_PICKUP"
                       ? "Diambil UMKM (Rp 0)"
-                      : `Ongkir Rp ${tender.deliveryFee.toLocaleString("id-ID")}`}
+                      : `Ongkir Rp ${(tender.deliveryFee || 15000).toLocaleString("id-ID")}`}
                   </p>
                 </div>
 
@@ -222,7 +241,7 @@ export default function TenderDetailPage({
                         Penawaran Berhasil Diajukan!
                       </h3>
                       <p className="text-xs text-[#166534] max-w-md mx-auto leading-relaxed">
-                        Tawaran Anda sebesar Rp {parsedPrice.toLocaleString("id-ID")}/kg untuk kuota {parsedQuantity} kg telah terkirim ke {tender.buyer.businessName}. Anda akan mendapatkan notifikasi jika penawaran Anda ditunjuk sebagai pemenang (*AWARDED*).
+                        Tawaran Anda sebesar Rp {parsedPrice.toLocaleString("id-ID")}/kg untuk kuota {parsedQuantity} kg telah tersimpan di transaksi aktif dan terkirim ke {tender.buyer.businessName}.
                       </p>
                     </div>
 
@@ -232,7 +251,7 @@ export default function TenderDetailPage({
                         size="md"
                         icon={ChevronRight}
                         iconPosition="right"
-                        onClick={() => navigate("/escrow")}
+                        onClick={handleProceedToEscrow}
                       >
                         Lanjutkan ke Setor Escrow
                       </Button>
@@ -350,7 +369,7 @@ export default function TenderDetailPage({
                     </h3>
                   </div>
                   <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#E6E4DA] text-ink-secondary">
-                    {tender.bids.length} Tawaran
+                    {(tender.bids || []).length} Tawaran
                   </span>
                 </div>
 
@@ -358,7 +377,7 @@ export default function TenderDetailPage({
                   <div className="space-y-3">
                     {tender.bids.map((bid) => (
                       <div
-                        key={bid.id}
+                        key={bid.bidId || bid.id}
                         className="p-4 rounded-xl border border-border/80 bg-[#EFEEE7] flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-primary/40 transition-all"
                       >
                         <div className="space-y-1">
@@ -368,7 +387,7 @@ export default function TenderDetailPage({
                             </span>
                             <span className="text-xs text-ink-muted">•</span>
                             <span className="text-xs text-ink-secondary">
-                              {bid.farmLocation}
+                              {bid.farmLocation || "Bandung"}
                             </span>
                           </div>
                           <span className="text-[11px] text-ink-muted flex items-center gap-1">
@@ -460,7 +479,7 @@ export default function TenderDetailPage({
                   fullWidth
                   size="md"
                   icon={ShieldCheck}
-                  onClick={() => navigate("/escrow")}
+                  onClick={handleProceedToEscrow}
                 >
                   Simulasikan Setor Escrow
                 </Button>

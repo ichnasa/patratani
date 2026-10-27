@@ -1,10 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useApp } from "../context/AppContext";
 import Button from "./Button";
 import { MapPin, Calendar } from "lucide-react";
 
 export default function EtalaseCard({ commodity, onOrder }) {
   const navigate = useNavigate();
+  const { startTransactionFromCommodity } = useApp();
 
   if (!commodity) return null;
 
@@ -13,8 +15,18 @@ export default function EtalaseCard({ commodity, onOrder }) {
     if (onOrder) {
       onOrder(commodity);
     } else {
+      if (startTransactionFromCommodity) {
+        startTransactionFromCommodity(commodity);
+      }
       navigate("/escrow");
     }
+  };
+
+  const handleCardClick = () => {
+    if (startTransactionFromCommodity) {
+      startTransactionFromCommodity(commodity);
+    }
+    navigate("/escrow");
   };
 
   const deliveryFee =
@@ -24,7 +36,7 @@ export default function EtalaseCard({ commodity, onOrder }) {
 
   return (
     <article
-      onClick={() => navigate("/escrow")}
+      onClick={handleCardClick}
       className="bg-surface rounded-2xl border border-border overflow-hidden hover:border-primary/50 transition-all flex flex-col justify-between group shadow-xs hover:shadow-md cursor-pointer"
     >
       <div>

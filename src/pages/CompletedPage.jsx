@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useApp } from "../context/AppContext";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -27,6 +28,7 @@ import {
 
 export default function CompletedPage({ onBack, onExploreMore }) {
   const navigate = useNavigate();
+  const { activeTransaction } = useApp();
   const [rating, setRating] = useState(5);
   const [hoverRating, setHoverRating] = useState(0);
   const [selectedTags, setSelectedTags] = useState([
@@ -34,11 +36,11 @@ export default function CompletedPage({ onBack, onExploreMore }) {
     "Timbangan Pas & Jujur",
   ]);
   const [reviewText, setReviewText] = useState(
-    "Tomat mawar sangat segar dan merah merata, tekstur padat tanpa ada yang bonyok. Pengantaran kurir petani tepat waktu sebelum jam buka warung."
+    "Hasil panen sangat segar dan berkualitas tinggi, tekstur padat tanpa ada yang cacat. Pengantaran kurir tepat waktu dan timbangan akurat."
   );
   const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
 
-  const transactionData = {
+  const transactionData = activeTransaction || {
     tenderId: "TND-2026-006",
     title: "Suplai Tomat & Sayur Sop Harian 15 Kg",
     commodityName: "Tomat Mawar Segar (Grade A)",
@@ -150,7 +152,7 @@ export default function CompletedPage({ onBack, onExploreMore }) {
                   <span className="text-[10px] uppercase font-bold text-ink-muted block">
                     ID Rekening Escrow
                   </span>
-                  <p className="font-mono font-bold text-ink">{transactionData.escrowId}</p>
+                  <p className="font-mono font-bold text-ink">{transactionData.escrowId || "ESC-20261027-8891"}</p>
                   <p className="text-[10px] text-ink-secondary">Enkripsi sandbox Patra Tani</p>
                 </div>
 
@@ -159,7 +161,7 @@ export default function CompletedPage({ onBack, onExploreMore }) {
                     Total Dana Bersih Petani
                   </span>
                   <p className="text-base font-bold text-[#166534]">
-                    Rp {transactionData.netFarmerPayment.toLocaleString("id-ID")}
+                    Rp {(transactionData.netFarmerPayment || 187800).toLocaleString("id-ID")}
                   </p>
                   <p className="text-[10px] text-[#166534]">Sudah diteruskan ke rekening</p>
                 </div>
@@ -168,7 +170,7 @@ export default function CompletedPage({ onBack, onExploreMore }) {
                   <span className="text-[10px] uppercase font-bold text-ink-muted block">
                     Waktu Pelepasan Dana
                   </span>
-                  <p className="font-bold text-ink">{transactionData.releaseTime}</p>
+                  <p className="font-bold text-ink">{transactionData.releaseTime || transactionData.timestamp}</p>
                   <p className="text-[10px] text-ink-secondary">Otomatisasi smart escrow</p>
                 </div>
 
@@ -176,7 +178,9 @@ export default function CompletedPage({ onBack, onExploreMore }) {
                   <span className="text-[10px] uppercase font-bold text-ink-muted block">
                     Metode Pengantaran
                   </span>
-                  <p className="font-bold text-ink">Kurir Petani Mandiri</p>
+                  <p className="font-bold text-ink">
+                    {transactionData.fulfillmentMethod === "SELF_PICKUP" ? "Ambil Sendiri di Kebun" : "Kurir Petani Mandiri"}
+                  </p>
                   <p className="text-[10px] text-primary font-medium">100% ongkir hak petani</p>
                 </div>
               </div>
@@ -200,29 +204,29 @@ export default function CompletedPage({ onBack, onExploreMore }) {
 
                 <div className="space-y-3 text-xs">
                   <div className="flex items-center justify-between text-ink-secondary">
-                    <span>Nilai Komoditas Panen ({transactionData.quantityKg} Kg × Rp {transactionData.pricePerKg.toLocaleString("id-ID")}):</span>
+                    <span>Nilai Komoditas Panen ({transactionData.quantityKg || 15} Kg × Rp {(transactionData.pricePerKg || 12000).toLocaleString("id-ID")}):</span>
                     <span className="font-semibold text-ink">
-                      Rp {transactionData.harvestSubtotal.toLocaleString("id-ID")}
+                      Rp {(transactionData.harvestSubtotal || transactionData.subtotal || 180000).toLocaleString("id-ID")}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between text-[#DC2626]">
                     <div className="flex items-center gap-1.5">
-                      <span>Potongan Komisi Platform ({transactionData.platformFeeRate}%):</span>
+                      <span>Potongan Komisi Platform ({transactionData.platformFeeRate || 3.5}%):</span>
                     </div>
                     <span className="font-semibold">
-                      - Rp {transactionData.platformFee.toLocaleString("id-ID")}
+                      - Rp {(transactionData.platformFee || 7200).toLocaleString("id-ID")}
                     </span>
                   </div>
 
                   <div className="text-[10px] text-ink-muted pl-2 border-l-2 border-primary/30 leading-relaxed">
-                    Komisi platform 4% digunakan untuk biaya operasional platform &amp; keamanan escrow tanpa gudang.
+                    Komisi platform digunakan untuk biaya operasional platform &amp; keamanan escrow tanpa gudang.
                   </div>
 
                   <div className="flex items-center justify-between text-ink-secondary">
                     <span>Hasil Bersih Komoditas Petani:</span>
                     <span className="font-semibold text-ink">
-                      Rp {transactionData.netHarvestValue.toLocaleString("id-ID")}
+                      Rp {((transactionData.harvestSubtotal || transactionData.subtotal || 180000) - (transactionData.platformFee || 7200)).toLocaleString("id-ID")}
                     </span>
                   </div>
 
@@ -231,7 +235,7 @@ export default function CompletedPage({ onBack, onExploreMore }) {
                       <span>Ongkos Kirim Kurir Petani (Utuh 100%):</span>
                     </div>
                     <span className="font-semibold text-primary">
-                      + Rp {transactionData.deliveryFee.toLocaleString("id-ID")}
+                      + Rp {(transactionData.deliveryFee || 0).toLocaleString("id-ID")}
                     </span>
                   </div>
 
@@ -241,11 +245,11 @@ export default function CompletedPage({ onBack, onExploreMore }) {
                         Total Bersih Diterima Petani
                       </span>
                       <span className="text-[10px] text-ink-muted">
-                        Dikirim ke rekening BRI: {transactionData.farmer.bankAccount}
+                        Dikirim ke rekening: {transactionData.farmer?.bankAccount || "BRI • Rekening Petani"}
                       </span>
                     </div>
                     <strong className="text-xl font-extrabold text-[#16A34A]">
-                      Rp {transactionData.netFarmerPayment.toLocaleString("id-ID")}
+                      Rp {(transactionData.netFarmerPayment || 187800).toLocaleString("id-ID")}
                     </strong>
                   </div>
                 </div>
@@ -253,16 +257,16 @@ export default function CompletedPage({ onBack, onExploreMore }) {
                 <div className="p-4 rounded-xl bg-[#EFEEE7] border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                   <div className="flex items-center gap-2.5">
                     <img
-                      src={transactionData.farmer.avatar}
-                      alt={transactionData.farmer.name}
+                      src={transactionData.farmer?.avatar}
+                      alt={transactionData.farmer?.name}
                       className="w-8 h-8 rounded-full object-cover border border-border"
                     />
                     <div>
                       <p className="font-bold text-ink leading-tight">
-                        {transactionData.farmer.name}
+                        {transactionData.farmer?.name}
                       </p>
                       <p className="text-[10px] text-ink-muted">
-                        {transactionData.farmer.farmName}
+                        {transactionData.farmer?.farmName}
                       </p>
                     </div>
                   </div>
@@ -295,7 +299,7 @@ export default function CompletedPage({ onBack, onExploreMore }) {
                       Terima Kasih atas Penilaian Anda!
                     </h4>
                     <p className="text-xs text-[#166534] max-w-md mx-auto leading-relaxed">
-                      Ulasan bintang {rating}.0 Anda telah dicatat ke profil publik {transactionData.farmer.name} untuk memperkuat kepercayaan rantai pasok agrikultur lokal.
+                      Ulasan bintang {rating}.0 Anda telah dicatat ke profil publik {transactionData.farmer?.name} untuk memperkuat kepercayaan rantai pasok agrikultur lokal.
                     </p>
                     <div className="flex justify-center pt-2">
                       <Button
@@ -408,7 +412,7 @@ export default function CompletedPage({ onBack, onExploreMore }) {
 
                 <div className="relative rounded-xl overflow-hidden border border-border bg-[#1A1A1A]">
                   <img
-                    src={transactionData.photoUrl}
+                    src={transactionData.photoUrl || transactionData.samplePhoto || transactionData.image || "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=800&auto=format&fit=crop&q=80"}
                     alt="Bukti Serah Terima Sah"
                     className="w-full h-48 object-cover"
                   />
@@ -420,12 +424,12 @@ export default function CompletedPage({ onBack, onExploreMore }) {
 
                   <div className="absolute bottom-3 left-3 right-3 bg-black/80 backdrop-blur-md rounded-xl p-2.5 border border-white/15 text-[10px] text-white/90 space-y-1">
                     <div className="flex items-center justify-between text-white/60 font-mono text-[9px]">
-                      <span>{transactionData.handoverTime}</span>
-                      <span>{transactionData.verificationHash}</span>
+                      <span>{transactionData.handoverTime || transactionData.timestamp}</span>
+                      <span>{transactionData.verificationHash || transactionData.hash || "HASH-VERIFIED-9912"}</span>
                     </div>
                     <div className="flex items-center gap-1 font-mono text-white/90">
                       <MapPin className="w-3 h-3 text-status-handover shrink-0" />
-                      <span className="truncate">{transactionData.geotag.coordinates} ({transactionData.geotag.accuracy})</span>
+                      <span className="truncate">{transactionData.geotag?.coordinates || "-6.8791° S, 107.5824° E"} ({transactionData.geotag?.accuracy || "Presisi Tinggi"})</span>
                     </div>
                   </div>
                 </div>
@@ -437,7 +441,7 @@ export default function CompletedPage({ onBack, onExploreMore }) {
                       Berat Timbangan Aktual:
                     </span>
                     <strong className="text-sm font-bold text-[#166534]">
-                      {transactionData.actualWeightKg} Kg (Target: {transactionData.quantityKg} Kg)
+                      {transactionData.actualWeightKg || transactionData.quantityKg || 15} Kg (Target: {transactionData.quantityKg || 15} Kg)
                     </strong>
                   </div>
 
@@ -447,7 +451,7 @@ export default function CompletedPage({ onBack, onExploreMore }) {
                       Waktu Serah Terima:
                     </span>
                     <span className="font-medium text-ink">
-                      {transactionData.handoverTime}
+                      {transactionData.handoverTime || transactionData.timestamp}
                     </span>
                   </div>
 
@@ -457,7 +461,7 @@ export default function CompletedPage({ onBack, onExploreMore }) {
                       Lokasi Fisik:
                     </span>
                     <span className="text-right text-[11px] text-ink max-w-[200px]">
-                      {transactionData.geotag.address}
+                      {transactionData.geotag?.address || "Bandung, Jawa Barat"}
                     </span>
                   </div>
                 </div>

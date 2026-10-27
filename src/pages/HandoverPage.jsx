@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useApp } from "../context/AppContext";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -22,8 +23,14 @@ import {
 
 export default function HandoverPage({ onBack, onComplete }) {
   const navigate = useNavigate();
+  const { activeTransaction, completeHandover, fileDispute } = useApp();
+
   const [isPhotoCaptured, setIsPhotoCaptured] = useState(false);
-  const [actualWeight, setActualWeight] = useState("25.2");
+  const [actualWeight, setActualWeight] = useState(
+    activeTransaction?.actualWeightKg
+      ? String(activeTransaction.actualWeightKg)
+      : "25.2"
+  );
   const [checklist, setChecklist] = useState({
     freshness: true,
     aroma: true,
@@ -31,12 +38,16 @@ export default function HandoverPage({ onBack, onComplete }) {
     packaging: true,
   });
   const [isReleasing, setIsReleasing] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(
+    activeTransaction?.status === "COMPLETED" || false
+  );
   const [isDisputeModalOpen, setIsDisputeModalOpen] = useState(false);
   const [disputeReason, setDisputeReason] = useState("");
-  const [isDisputed, setIsDisputed] = useState(false);
+  const [isDisputed, setIsDisputed] = useState(
+    activeTransaction?.status === "DISPUTED" || false
+  );
 
-  const handoverData = {
+  const handoverData = activeTransaction || {
     tenderId: "TND-2026-005",
     title: "Pre-order Bawang Merah Brebes 25 Kg",
     commodityName: "Bawang Merah Brebes Super",
@@ -73,9 +84,10 @@ export default function HandoverPage({ onBack, onComplete }) {
     },
   };
 
-  const parsedActualWeight = parseFloat(actualWeight) || 0;
-  const weightDiff = (parsedActualWeight - handoverData.targetQuantityKg).toFixed(1);
-  const isWeightValid = parsedActualWeight >= handoverData.targetQuantityKg;
+  const targetQty = handoverData.targetQuantityKg || handoverData.quantityKg || 25;
+  const parsedActualWeight = parseFloat(actualWeight) || targetQty;
+  const weightDiff = (parsedActualWeight - targetQty).toFixed(1);
+  const isWeightValid = parsedActualWeight >= targetQty;
 
   const allChecklistPassed =
     checklist.freshness &&
@@ -97,6 +109,9 @@ export default function HandoverPage({ onBack, onComplete }) {
     setTimeout(() => {
       setIsReleasing(false);
       setIsCompleted(true);
+      if (completeHandover) {
+        completeHandover(parsedActualWeight);
+      }
       if (onComplete) {
         onComplete();
       }
@@ -107,6 +122,9 @@ export default function HandoverPage({ onBack, onComplete }) {
     e.preventDefault();
     setIsDisputeModalOpen(false);
     setIsDisputed(true);
+    if (fileDispute) {
+      fileDispute(disputeReason);
+    }
   };
 
   return (
@@ -162,16 +180,16 @@ export default function HandoverPage({ onBack, onComplete }) {
                 <div className="flex items-center justify-between p-3 rounded-xl bg-[#EFEEE7] border border-border">
                   <div className="flex items-center gap-2.5">
                     <img
-                      src={handoverData.farmer.avatar}
-                      alt={handoverData.farmer.name}
+                      src={handoverData.farmer?.avatar}
+                      alt={handoverData.farmer?.name}
                       className="w-8 h-8 rounded-full object-cover border border-border"
                     />
                     <div>
                       <p className="font-bold text-ink leading-tight">
-                        {handoverData.farmer.name}
+                        {handoverData.farmer?.name}
                       </p>
                       <p className="text-[10px] text-ink-muted">
-                        Petani • {handoverData.farmer.farmName}
+                        Petani • {handoverData.farmer?.farmName}
                       </p>
                     </div>
                   </div>
@@ -188,10 +206,10 @@ export default function HandoverPage({ onBack, onComplete }) {
                     </div>
                     <div>
                       <p className="font-bold text-ink leading-tight">
-                        {handoverData.buyer.businessName}
+                        {handoverData.buyer?.businessName}
                       </p>
                       <p className="text-[10px] text-ink-muted">
-                        Penerima: {handoverData.buyer.contactPerson}
+                        Penerima: {handoverData.buyer?.contactPerson}
                       </p>
                     </div>
                   </div>
@@ -218,7 +236,7 @@ export default function HandoverPage({ onBack, onComplete }) {
                   Serah-Terima Selesai &amp; Dana Escrow Berhasil Dicairkan!
                 </h2>
                 <p className="text-sm text-ink-secondary leading-relaxed">
-                  Verifikasi geotag dan timbangan dinyatakan sah. Dana sebesar <strong>Rp {handoverData.netFarmerPayment.toLocaleString("id-ID")}</strong> telah diteruskan ke rekening {handoverData.farmer.name} (setelah potongan komisi platform 3,5% sebesar Rp {handoverData.platformFee.toLocaleString("id-ID")}).
+                  Verifikasi geotag dan timbangan dinyatakan sah ({parsedActualWeight} Kg). Dana sebesar <strong>Rp {(handoverData.netFarmerPayment || 562600).toLocaleString("id-ID")}</strong> telah diteruskan ke rekening {handoverData.farmer?.name}.
                 </p>
               </div>
 
@@ -229,7 +247,7 @@ export default function HandoverPage({ onBack, onComplete }) {
                 </div>
                 <div className="flex items-center justify-between font-medium text-ink">
                   <span>Lokasi Terverifikasi:</span>
-                  <span>{handoverData.geotag.address}</span>
+                  <span>{handoverData.geotag?.address}</span>
                 </div>
                 <div className="flex items-center justify-between font-medium text-ink">
                   <span>Kode Verifikasi Digital:</span>
@@ -309,7 +327,7 @@ export default function HandoverPage({ onBack, onComplete }) {
 
                   <div className="relative aspect-[4/3] w-full bg-[#262626] flex items-center justify-center overflow-hidden">
                     <img
-                      src={handoverData.samplePhoto}
+                      src={handoverData.samplePhoto || handoverData.image || "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=800&auto=format&fit=crop&q=80"}
                       alt="Pratinjau Serah Terima Kamera"
                       className={`w-full h-full object-cover transition-all duration-300 ${
                         isPhotoCaptured ? "brightness-95 contrast-105" : "brightness-75 blur-[0.5px]"
@@ -345,12 +363,12 @@ export default function HandoverPage({ onBack, onComplete }) {
                       <div className="flex items-center gap-1.5 text-white">
                         <MapPin className="w-3.5 h-3.5 text-[#60A5FA] shrink-0" />
                         <span className="truncate">
-                          {handoverData.geotag.latitude}, {handoverData.geotag.longitude} ({handoverData.geotag.accuracy})
+                          {handoverData.geotag?.latitude || "-6.860451° S"}, {handoverData.geotag?.longitude || "107.589923° E"} ({handoverData.geotag?.accuracy || "4 meter"})
                         </span>
                       </div>
 
                       <div className="text-[10px] text-white/60 truncate pt-0.5 border-t border-white/10">
-                        {handoverData.geotag.address}
+                        {handoverData.geotag?.address}
                       </div>
                     </div>
                   </div>
@@ -387,7 +405,7 @@ export default function HandoverPage({ onBack, onComplete }) {
                       </h3>
                     </div>
                     <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#E6E4DA] text-ink">
-                      Target: {handoverData.targetQuantityKg} Kg
+                      Target: {targetQty} Kg
                     </span>
                   </div>
 
@@ -454,14 +472,14 @@ export default function HandoverPage({ onBack, onComplete }) {
                       <span className="text-ink-secondary">Status Petani Mitra:</span>
                       <span className="font-bold text-[#16A34A] flex items-center gap-1">
                         <CheckCircle2 className="w-3.5 h-3.5" />
-                        Dikonfirmasi ({handoverData.farmer.confirmedTime})
+                        Dikonfirmasi ({handoverData.farmer?.confirmedTime || "11:45 WIB"})
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between p-3 rounded-xl bg-[#EFEEE7] border border-border">
                       <span className="text-ink-secondary">Total Nilai Escrow Tertahan:</span>
                       <span className="font-bold text-primary text-sm">
-                        Rp {handoverData.escrowAmount.toLocaleString("id-ID")}
+                        Rp {(handoverData.escrowAmount || handoverData.totalPayment || 800000).toLocaleString("id-ID")}
                       </span>
                     </div>
                   </div>
@@ -550,7 +568,7 @@ export default function HandoverPage({ onBack, onComplete }) {
                     <span>Kebijakan Pencairan Dana Otomatis</span>
                   </div>
                   <p className="leading-relaxed">
-                    Ketika Anda menekan tombol "Verifikasi &amp; Lepaskan Dana", simulasi smart contract escrow akan otomatis mentransfer Rp {handoverData.netFarmerPayment.toLocaleString("id-ID")} ke dompet petani tanpa penundaan.
+                    Ketika Anda menekan tombol "Verifikasi &amp; Lepaskan Dana", simulasi smart contract escrow akan otomatis mentransfer Rp {(handoverData.netFarmerPayment || 772000).toLocaleString("id-ID")} ke dompet petani tanpa penundaan.
                   </p>
                 </div>
               </aside>

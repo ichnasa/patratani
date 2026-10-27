@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useApp } from "../context/AppContext";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
 import StatusBadge from "../components/StatusBadge";
 import Chip from "../components/Chip";
-import { mockTenders } from "../data/mockTenders";
+import { mockTenders } from "../data/mockData";
 import {
   Star,
   Edit3,
@@ -30,27 +31,17 @@ import {
 
 export default function ProfilePage({ onBack, onLogout }) {
   const navigate = useNavigate();
+  const { currentUser, updateUserProfile } = useApp();
   const [activeMenu, setActiveMenu] = useState("TRANSAKSI");
   const [transactionFilter, setTransactionFilter] = useState("SEMUA");
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
-  const [profile, setProfile] = useState({
-    name: "Rizal Firmansyah",
-    role: "Petani Kecil & Pembeli UMKM",
-    avatar:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
-    email: "rizal.firmansyah@patratani.id",
-    phone: "+62 812-9988-7711",
-    location: "Lembang, Bandung Barat",
-    rating: 4.9,
-    reviewCount: 148,
-    activeBalance: 4250000,
-    escrowBalance: 1585000,
-    bankName: "Bank BRI",
-    accountNumber: "4410-01-028471-53-2",
-    accountHolder: "Rizal Firmansyah",
+  const [editForm, setEditForm] = useState({
+    name: currentUser.name || "Rizal Firmansyah",
+    phone: currentUser.phone || "+62 812-9988-7711",
+    location: currentUser.location || "Lembang, Bandung Barat",
   });
 
   const filterTabs = [
@@ -115,6 +106,19 @@ export default function ProfilePage({ onBack, onLogout }) {
     },
   ];
 
+  const handleSaveProfile = () => {
+    updateUserProfile(editForm);
+    setIsEditProfileOpen(false);
+  };
+
+  const handleConfirmWithdraw = () => {
+    updateUserProfile({
+      activeBalance: 0,
+    });
+    alert("Simulasi penarikan saldo berhasil diproses!");
+    setIsWithdrawModalOpen(false);
+  };
+
   return (
     <div className="min-h-screen bg-background text-ink flex flex-col justify-between selection:bg-primary-50 selection:text-primary">
       <Navbar activeNav="akun" />
@@ -126,8 +130,8 @@ export default function ProfilePage({ onBack, onLogout }) {
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
                 <div className="relative">
                   <img
-                    src={profile.avatar}
-                    alt={profile.name}
+                    src={currentUser.avatar}
+                    alt={currentUser.name}
                     className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-primary shadow-sm"
                   />
                   <span className="absolute bottom-1 right-1 p-1 rounded-full bg-primary text-[#E6E4DA] border-2 border-surface">
@@ -138,7 +142,7 @@ export default function ProfilePage({ onBack, onLogout }) {
                 <div className="space-y-1.5">
                   <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
                     <h1 className="text-xl sm:text-2xl font-bold text-ink">
-                      {profile.name}
+                      {currentUser.name}
                     </h1>
                     <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-surface-green text-primary border border-primary/20">
                       Akun Terverifikasi
@@ -146,21 +150,21 @@ export default function ProfilePage({ onBack, onLogout }) {
                   </div>
 
                   <p className="text-xs font-semibold text-primary">
-                    {profile.role}
+                    {currentUser.role}
                   </p>
 
                   <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3 text-xs text-ink-secondary pt-0.5">
                     <span className="flex items-center gap-1 font-semibold text-ink">
                       <Star className="w-3.5 h-3.5 fill-[#D97706] text-[#D97706]" />
-                      {profile.rating}
+                      {currentUser.rating}
                       <span className="text-ink-muted font-normal">
-                        ({profile.reviewCount} ulasan)
+                        ({currentUser.reviewCount} ulasan)
                       </span>
                     </span>
                     <span>•</span>
                     <span className="flex items-center gap-1">
                       <MapPin className="w-3.5 h-3.5 text-primary" />
-                      {profile.location}
+                      {currentUser.location}
                     </span>
                   </div>
                 </div>
@@ -171,7 +175,14 @@ export default function ProfilePage({ onBack, onLogout }) {
                   variant="outline"
                   size="md"
                   icon={Edit3}
-                  onClick={() => setIsEditProfileOpen(true)}
+                  onClick={() => {
+                    setEditForm({
+                      name: currentUser.name,
+                      phone: currentUser.phone,
+                      location: currentUser.location,
+                    });
+                    setIsEditProfileOpen(true);
+                  }}
                 >
                   Edit Profil
                 </Button>
@@ -210,7 +221,7 @@ export default function ProfilePage({ onBack, onLogout }) {
 
                 <div className="flex items-baseline justify-between pt-1">
                   <p className="text-2xl sm:text-3xl font-bold text-primary">
-                    Rp {profile.activeBalance.toLocaleString("id-ID")}
+                    Rp {currentUser.activeBalance.toLocaleString("id-ID")}
                   </p>
 
                   <Button
@@ -247,11 +258,11 @@ export default function ProfilePage({ onBack, onLogout }) {
 
                 <div className="flex items-baseline justify-between pt-1">
                   <p className="text-2xl sm:text-3xl font-bold text-[#D97706]">
-                    Rp {profile.escrowBalance.toLocaleString("id-ID")}
+                    Rp {currentUser.escrowBalance.toLocaleString("id-ID")}
                   </p>
 
                   <span className="text-xs text-ink-muted">
-                    3 Transaksi Berjalan
+                    Transaksi Escrow Aktif
                   </span>
                 </div>
               </div>
@@ -303,15 +314,15 @@ export default function ProfilePage({ onBack, onLogout }) {
                 <span className="font-bold text-ink block">Info Kontak Akun:</span>
                 <p className="text-ink-secondary flex items-center gap-2">
                   <Mail className="w-3.5 h-3.5 text-primary" />
-                  <span>{profile.email}</span>
+                  <span>{currentUser.email}</span>
                 </p>
                 <p className="text-ink-secondary flex items-center gap-2">
                   <Phone className="w-3.5 h-3.5 text-primary" />
-                  <span>{profile.phone}</span>
+                  <span>{currentUser.phone}</span>
                 </p>
                 <p className="text-ink-secondary flex items-center gap-2">
                   <Building2 className="w-3.5 h-3.5 text-primary" />
-                  <span>Rekening: {profile.bankName} ({profile.accountNumber})</span>
+                  <span>Rekening: {currentUser.bankName} ({currentUser.accountNumber})</span>
                 </p>
               </div>
             </aside>
@@ -524,7 +535,7 @@ export default function ProfilePage({ onBack, onLogout }) {
                           Rekening Bank Pencairan Utama
                         </span>
                         <span className="text-ink-muted">
-                          {profile.bankName} • {profile.accountNumber} ({profile.accountHolder})
+                          {currentUser.bankName} • {currentUser.accountNumber} ({currentUser.accountHolder})
                         </span>
                       </div>
                       <Button variant="outline" size="sm">
@@ -569,9 +580,9 @@ export default function ProfilePage({ onBack, onLogout }) {
                   Rekening Tujuan Pencairan
                 </span>
                 <p className="font-bold text-ink mt-0.5">
-                  {profile.bankName} - {profile.accountNumber}
+                  {currentUser.bankName} - {currentUser.accountNumber}
                 </p>
-                <p className="text-ink-secondary">a.n. {profile.accountHolder}</p>
+                <p className="text-ink-secondary">a.n. {currentUser.accountHolder}</p>
               </div>
 
               <div>
@@ -580,7 +591,7 @@ export default function ProfilePage({ onBack, onLogout }) {
                 </label>
                 <input
                   type="text"
-                  defaultValue="4.250.000"
+                  defaultValue={currentUser.activeBalance.toLocaleString("id-ID")}
                   className="w-full rounded-xl px-4 py-2.5 text-base font-bold text-primary bg-[#EFEEE7] border border-border focus:border-primary focus:outline-none"
                 />
                 <span className="text-[10px] text-ink-muted mt-1 block">
@@ -600,10 +611,7 @@ export default function ProfilePage({ onBack, onLogout }) {
               <Button
                 variant="primary"
                 size="md"
-                onClick={() => {
-                  alert("Simulasi penarikan dana berhasil diproses!");
-                  setIsWithdrawModalOpen(false);
-                }}
+                onClick={handleConfirmWithdraw}
               >
                 Konfirmasi Tarik Dana
               </Button>
@@ -638,9 +646,9 @@ export default function ProfilePage({ onBack, onLogout }) {
                 <label className="font-bold text-ink block mb-1">Nama Lengkap</label>
                 <input
                   type="text"
-                  value={profile.name}
+                  value={editForm.name}
                   onChange={(e) =>
-                    setProfile({ ...profile, name: e.target.value })
+                    setEditForm({ ...editForm, name: e.target.value })
                   }
                   className="w-full rounded-xl px-3.5 py-2 text-xs text-ink bg-[#EFEEE7] border border-border focus:border-primary focus:outline-none"
                 />
@@ -650,9 +658,9 @@ export default function ProfilePage({ onBack, onLogout }) {
                 <label className="font-bold text-ink block mb-1">Nomor Telepon</label>
                 <input
                   type="text"
-                  value={profile.phone}
+                  value={editForm.phone}
                   onChange={(e) =>
-                    setProfile({ ...profile, phone: e.target.value })
+                    setEditForm({ ...editForm, phone: e.target.value })
                   }
                   className="w-full rounded-xl px-3.5 py-2 text-xs text-ink bg-[#EFEEE7] border border-border focus:border-primary focus:outline-none"
                 />
@@ -662,9 +670,9 @@ export default function ProfilePage({ onBack, onLogout }) {
                 <label className="font-bold text-ink block mb-1">Lokasi Domisili / Kebun</label>
                 <input
                   type="text"
-                  value={profile.location}
+                  value={editForm.location}
                   onChange={(e) =>
-                    setProfile({ ...profile, location: e.target.value })
+                    setEditForm({ ...editForm, location: e.target.value })
                   }
                   className="w-full rounded-xl px-3.5 py-2 text-xs text-ink bg-[#EFEEE7] border border-border focus:border-primary focus:outline-none"
                 />
@@ -682,7 +690,7 @@ export default function ProfilePage({ onBack, onLogout }) {
               <Button
                 variant="primary"
                 size="md"
-                onClick={() => setIsEditProfileOpen(false)}
+                onClick={handleSaveProfile}
               >
                 Simpan Perubahan
               </Button>
