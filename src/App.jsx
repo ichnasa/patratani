@@ -4,6 +4,7 @@ import ExplorePage from "./pages/ExplorePage";
 import TenderDetailPage from "./pages/TenderDetailPage";
 import CheckoutEscrowPage from "./pages/CheckoutEscrowPage";
 import HandoverPage from "./pages/HandoverPage";
+import CompletedPage from "./pages/CompletedPage";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState("home");
@@ -22,6 +23,15 @@ export default function App() {
 
   if (currentPage === "handover") {
     return <HandoverPage onBack={() => setCurrentPage("home")} />;
+  }
+
+  if (currentPage === "completed") {
+    return (
+      <CompletedPage
+        onBack={() => setCurrentPage("home")}
+        onExploreMore={() => setCurrentPage("explore")}
+      />
+    );
   }
 
   return <HomePage />;
