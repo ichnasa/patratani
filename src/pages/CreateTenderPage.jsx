@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ChevronRight,
@@ -7,6 +7,7 @@ import {
   ShieldCheck,
   Clock,
   RefreshCw,
+  Upload,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import Navbar from "../components/Navbar";
@@ -16,8 +17,10 @@ import Button from "../components/Button";
 export default function CreateTenderPage() {
   const navigate = useNavigate();
   const { showToast, currentUser } = useApp();
+  const specFileInputRef = useRef(null);
 
   const [isLocating, setIsLocating] = useState(false);
+  const [specFileName, setSpecFileName] = useState("");
   const [formData, setFormData] = useState({
     title: "Cabai Rawit Merah Segar",
     category: "Bumbu & Rempah",
@@ -87,6 +90,23 @@ export default function CreateTenderPage() {
     } else {
       if (showToast) {
         showToast("Geolocation tidak didukung oleh peramban ini.", "warning");
+      }
+    }
+  };
+
+  const handleSpecFileChange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
+      if (!allowedTypes.includes(file.type)) {
+        if (showToast) {
+          showToast("Format berkas harus JPG, PNG, atau PDF.", "warning");
+        }
+        return;
+      }
+      setSpecFileName(file.name);
+      if (showToast) {
+        showToast(`Lampiran ${file.name} berhasil dimuat.`, "info");
       }
     }
   };
@@ -363,6 +383,35 @@ export default function CreateTenderPage() {
                     onChange={handleChange}
                     className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl p-3.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                   />
+
+                  <div>
+                    <input
+                      type="file"
+                      ref={specFileInputRef}
+                      accept="image/jpeg, image/png, application/pdf"
+                      onChange={handleSpecFileChange}
+                      className="hidden"
+                    />
+                    <div
+                      onClick={() => specFileInputRef.current && specFileInputRef.current.click()}
+                      className="p-3.5 rounded-xl border border-dashed border-border hover:border-primary/80 bg-[#E6E4DA]/20 flex items-center justify-between text-xs cursor-pointer transition-colors"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <Upload className="w-4 h-4 text-primary shrink-0" />
+                        <div>
+                          <span className="font-semibold text-ink block">
+                            {specFileName ? `Lampiran Aktif: ${specFileName}` : "Unggah Berkas Standar Mutu Dapur (Opsional)"}
+                          </span>
+                          <span className="text-[10px] text-ink-muted">
+                            Mendukung JPG, PNG, atau PDF (maks. 5MB)
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-surface border border-border text-ink-secondary shrink-0 shadow-xs">
+                        Pilih Berkas
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
 

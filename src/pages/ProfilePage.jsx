@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import Navbar from "../components/Navbar";
@@ -27,11 +27,14 @@ import {
   Building2,
   LayoutDashboard,
   Truck,
+  Camera,
 } from "lucide-react";
 
 export default function ProfilePage({ onBack, onLogout }) {
   const navigate = useNavigate();
-  const { currentUser, updateUserProfile, logout } = useApp();
+  const { currentUser, updateUserProfile, logout, showToast } = useApp();
+  const avatarInputRef = useRef(null);
+
   const [activeMenu, setActiveMenu] = useState("TRANSAKSI");
   const [transactionFilter, setTransactionFilter] = useState("SEMUA");
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
@@ -43,6 +46,24 @@ export default function ProfilePage({ onBack, onLogout }) {
     phone: currentUser?.phone || "+62 812-9988-7711",
     location: currentUser?.location || "Lembang, Bandung Barat",
   });
+
+  const handleAvatarChange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      const allowedTypes = ["image/jpeg", "image/png"];
+      if (!allowedTypes.includes(file.type)) {
+        if (showToast) {
+          showToast("Format berkas harus berupa JPG atau PNG.", "warning");
+        }
+        return;
+      }
+      const newAvatarUrl = URL.createObjectURL(file);
+      updateUserProfile({ avatar: newAvatarUrl });
+      if (showToast) {
+        showToast("Foto profil berhasil diperbarui!", "success");
+      }
+    }
+  };
 
   if (!currentUser) return null;
 
@@ -125,14 +146,29 @@ export default function ProfilePage({ onBack, onLogout }) {
           <section className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-xs">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-border/80">
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
-                <div className="relative">
+                <div
+                  className="relative group cursor-pointer"
+                  onClick={() => avatarInputRef.current && avatarInputRef.current.click()}
+                  title="Klik untuk mengubah foto profil"
+                >
+                  <input
+                    type="file"
+                    ref={avatarInputRef}
+                    accept="image/jpeg, image/png"
+                    onChange={handleAvatarChange}
+                    className="hidden"
+                  />
                   <img
                     src={currentUser.avatar}
                     alt={currentUser.name}
-                    className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-primary shadow-sm"
+                    className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-primary shadow-sm group-hover:brightness-75 transition-all"
                   />
-                  <span className="absolute bottom-1 right-1 p-1 rounded-full bg-primary text-[#E6E4DA] border-2 border-surface">
-                    <BadgeCheck className="w-4 h-4" />
+                  <div className="absolute inset-0 rounded-full flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 text-white">
+                    <Camera className="w-5 h-5 sm:w-6 sm:h-6" />
+                    <span className="text-[9px] font-bold mt-0.5">Ubah Foto</span>
+                  </div>
+                  <span className="absolute bottom-1 right-1 p-1 rounded-full bg-primary text-[#E6E4DA] border-2 border-surface shadow-xs">
+                    <Camera className="w-3.5 h-3.5" />
                   </span>
                 </div>
 
