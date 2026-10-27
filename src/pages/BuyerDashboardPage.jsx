@@ -7,19 +7,15 @@ import {
   ShieldCheck,
   CheckCircle2,
   Clock,
-  Camera,
   ChevronRight,
   Plus,
-  ArrowUpRight,
   PackageCheck,
-  MapPin,
-  Calendar,
   Wallet,
-  Settings,
   Users,
   Building2,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
+import { mockBuyerTenders, mockBuyerOrders } from "../data/mockData";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -29,53 +25,8 @@ export default function BuyerDashboardPage() {
   const { currentUser } = useApp();
   const [activeMenu, setActiveMenu] = useState("RINGKASAN");
 
-  const buyerTenders = [
-    {
-      id: "TND-8821",
-      badge: "BIDDING • 4 Penawaran",
-      title: "Kebutuhan Tomat Merah Segar (20 kg)",
-      meta: "Target: Rp 13.000/kg • Batas Waktu: 28 Okt 2026 • Penawaran termurah: Rp 12.800/kg",
-      note: "Ditinjau oleh Kang Rizal, Pak Hendra +2 lainnya",
-      actionText: "Pilih Petani & Kunci",
-      actionRoute: "/tender/pembeli/TND-8821",
-      isBidding: true,
-    },
-    {
-      id: "TND-8825",
-      badge: "OPEN • Baru Dibuat",
-      title: "Bawang Merah Brebes Grade Super (30 kg)",
-      meta: "Budget Maks: Rp 28.000/kg • Siap terima: 31 Okt 2026 • Menunggu respon petani",
-      note: "Belum ada penawaran masuk dari petani",
-      actionText: "Detail Tender",
-      actionRoute: "/tender",
-      isBidding: false,
-    },
-  ];
-
-  const buyerOrders = [
-    {
-      id: "#PT-2026-0842",
-      commodity: "Tomat Merah 20 kg",
-      farmerName: "Kang Rizal",
-      schedule: "29 Okt 07:00",
-      deliveryType: "Diantar Petani",
-      status: "HANDOVER",
-      depositAmount: 265000,
-      actionText: "Verifikasi Kamera In-App",
-      actionRoute: "/handover",
-    },
-    {
-      id: "#PT-2026-0815",
-      commodity: "Cabai Rawit 10 kg",
-      farmerName: "Pak Hendra",
-      schedule: "22 Okt 08:30",
-      deliveryType: "Self-Pickup Rp 0",
-      status: "COMPLETED",
-      depositAmount: 120000,
-      actionText: "Lihat Bukti & Rating",
-      actionRoute: "/completed",
-    },
-  ];
+  const buyerTenders = mockBuyerTenders;
+  const buyerOrders = mockBuyerOrders;
 
   const sidebarMenuItems = [
     { id: "RINGKASAN", label: "Ringkasan", icon: Building2 },

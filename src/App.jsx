@@ -16,6 +16,7 @@ import CompletedPage from "./pages/CompletedPage";
 import ProfilePage from "./pages/ProfilePage";
 import FarmerDashboardPage from "./pages/FarmerDashboardPage";
 import BuyerDashboardPage from "./pages/BuyerDashboardPage";
+import AdminDisputeDashboardPage from "./pages/AdminDisputeDashboardPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
@@ -124,6 +125,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <BuyerDashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/disputes"
+            element={
+              <ProtectedRoute>
+                <AdminDisputeDashboardPage />
               </ProtectedRoute>
             }
           />

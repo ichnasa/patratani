@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
-import { mockUserProfile, mockCommodities, mockTenders } from "../data/mockData";
+import { mockUserProfile } from "../data/mockData";
 
 const AppContext = createContext();
 

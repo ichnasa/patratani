@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
+import { mockDefaultCompletedTransaction } from "../data/mockData";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -9,18 +10,13 @@ import Chip from "../components/Chip";
 import {
   CheckCircle2,
   Star,
-  ShieldCheck,
   Camera,
   MapPin,
   Clock,
   Scale,
   Receipt,
   ArrowLeft,
-  Download,
-  Share2,
   Send,
-  Store,
-  Sprout,
   Check,
   FileCheck,
   ChevronRight,
@@ -40,43 +36,8 @@ export default function CompletedPage({ onBack, onExploreMore }) {
   );
   const [isReviewSubmitted, setIsReviewSubmitted] = useState(false);
 
-  const transactionData = activeTransaction || {
-    tenderId: "TND-2026-006",
-    title: "Suplai Tomat & Sayur Sop Harian 15 Kg",
-    commodityName: "Tomat Mawar Segar (Grade A)",
-    quantityKg: 15,
-    actualWeightKg: 15.2,
-    pricePerKg: 12000,
-    harvestSubtotal: 180000,
-    platformFeeRate: 4.0,
-    platformFee: 7200,
-    netHarvestValue: 172800,
-    deliveryFee: 15000,
-    netFarmerPayment: 187800,
-    escrowId: "ESC-20261024-1102",
-    releaseTime: "26 Okt 2026, 11:30:45 WIB",
-    handoverTime: "26 Okt 2026, 10:45:12 WIB",
-    geotag: {
-      coordinates: "-6.8791° S, 107.5824° E",
-      accuracy: "8 meter (Akurasi Tinggi)",
-      address: "Warteg Barokah Bahari, Jl. Surya Sumantri No. 12, Bandung",
-    },
-    verificationHash: "VERIFY-GEO-20261026-9014",
-    photoUrl:
-      "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=800&auto=format&fit=crop&q=80",
-    farmer: {
-      name: "Pak Mulyono",
-      farmName: "Kebun Berkah Lembang",
-      bankAccount: "BRI • 4410-01-xxxxxx-53",
-      avatar:
-        "https://images.unsplash.com/photo-1544717305-2782549b5136?w=150&auto=format&fit=crop&q=80",
-    },
-    buyer: {
-      businessName: "Warteg Barokah Bahari",
-      contactPerson: "Pak Slamet Riyadi",
-      businessType: "Warung Tegal Harian",
-    },
-  };
+  const transactionData =
+    activeTransaction || mockDefaultCompletedTransaction;
 
   const tagOptions = [
     "Panen Sangat Segar",

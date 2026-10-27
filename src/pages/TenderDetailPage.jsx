@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -9,7 +9,6 @@ import StatusBadge from "../components/StatusBadge";
 import { mockTenders } from "../data/mockData";
 import {
   ArrowLeft,
-  Calendar,
   Clock,
   MapPin,
   Truck,

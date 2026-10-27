@@ -1,19 +1,13 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Sprout,
   ShoppingBag,
   TrendingUp,
   ShieldCheck,
   CheckCircle2,
-  Clock,
-  Camera,
-  ChevronRight,
   Plus,
-  ArrowUpRight,
   PackageCheck,
-  MapPin,
-  Calendar,
   Wallet,
   Settings,
   UserCheck,

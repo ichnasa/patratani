@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
+import { mockDefaultHandover } from "../data/mockData";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
@@ -47,42 +48,7 @@ export default function HandoverPage({ onBack, onComplete }) {
     activeTransaction?.status === "DISPUTED" || false
   );
 
-  const handoverData = activeTransaction || {
-    tenderId: "TND-2026-005",
-    title: "Pre-order Bawang Merah Brebes 25 Kg",
-    commodityName: "Bawang Merah Brebes Super",
-    targetQuantityKg: 25.0,
-    agreedPricePerKg: 32000,
-    escrowAmount: 800000,
-    netFarmerPayment: 772000,
-    platformFee: 28000,
-    samplePhoto:
-      "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=800&auto=format&fit=crop&q=80",
-    geotag: {
-      latitude: "-6.860451° S",
-      longitude: "107.589923° E",
-      accuracy: "4 meter (Presisi Tinggi)",
-      address: "Jl. Gegerkalong Girang No. 34, Sukasari, Kota Bandung",
-    },
-    timestamp: "27 Okt 2026, 12:00:37 WIB",
-    hash: "GEO-VERIFY-882194",
-    farmer: {
-      name: "Pak H. Solihin",
-      farmName: "Sentra Tani Baros",
-      phone: "+62 813-9821-4451",
-      avatar:
-        "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80",
-      status: "CONFIRMED",
-      confirmedTime: "11:45 WIB",
-    },
-    buyer: {
-      businessName: "Resto Dapur Sunda Asli",
-      contactPerson: "Kang Asep Kurnia",
-      businessType: "Restoran Tradisional Sunda",
-      address: "Jl. Gegerkalong Girang No. 34, Bandung",
-      status: "CHECKING",
-    },
-  };
+  const handoverData = activeTransaction || mockDefaultHandover;
 
   const targetQty = handoverData.targetQuantityKg || handoverData.quantityKg || 25;
   const parsedActualWeight = parseFloat(actualWeight) || targetQty;

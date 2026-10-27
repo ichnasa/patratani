@@ -569,3 +569,193 @@ export const getCommodityById = (id) =>
 
 export const getTenderById = (id) =>
   mockTenders.find((item) => item.id === id);
+
+export const mockDefaultHandover = {
+  tenderId: "TND-2026-005",
+  title: "Pre-order Bawang Merah Brebes 25 Kg",
+  commodityName: "Bawang Merah Brebes Super",
+  targetQuantityKg: 25.0,
+  agreedPricePerKg: 32000,
+  escrowAmount: 800000,
+  netFarmerPayment: 772000,
+  platformFee: 28000,
+  samplePhoto:
+    "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=800&auto=format&fit=crop&q=80",
+  geotag: {
+    latitude: "-6.860451° S",
+    longitude: "107.589923° E",
+    accuracy: "4 meter (Presisi Tinggi)",
+    address: "Jl. Gegerkalong Girang No. 34, Sukasari, Kota Bandung",
+  },
+  timestamp: "27 Okt 2026, 12:00:37 WIB",
+  hash: "GEO-VERIFY-882194",
+  farmer: {
+    name: "Pak H. Solihin",
+    farmName: "Sentra Tani Baros",
+    phone: "+62 813-9821-4451",
+    avatar:
+      "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=150&auto=format&fit=crop&q=80",
+    status: "CONFIRMED",
+    confirmedTime: "11:45 WIB",
+  },
+  buyer: {
+    businessName: "Resto Dapur Sunda Asli",
+    contactPerson: "Kang Asep Kurnia",
+  },
+};
+
+export const mockDefaultCompletedTransaction = {
+  tenderId: "TND-2026-006",
+  title: "Suplai Tomat & Sayur Sop Harian 15 Kg",
+  commodityName: "Tomat Mawar Segar (Grade A)",
+  quantityKg: 15,
+  actualWeightKg: 15.2,
+  pricePerKg: 12000,
+  harvestSubtotal: 180000,
+  platformFeeRate: 4.0,
+  platformFee: 7200,
+  netHarvestValue: 172800,
+  deliveryFee: 15000,
+  netFarmerPayment: 187800,
+  escrowId: "ESC-20261024-1102",
+  releaseTime: "26 Okt 2026, 11:30:45 WIB",
+  handoverTime: "26 Okt 2026, 10:45:12 WIB",
+  geotag: {
+    coordinates: "-6.8791° S, 107.5824° E",
+    accuracy: "8 meter (Akurasi Tinggi)",
+    address: "Warteg Barokah Bahari, Jl. Surya Sumantri No. 12, Bandung",
+  },
+  verificationHash: "VERIFY-GEO-20261026-9014",
+  photoUrl:
+    "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=800&auto=format&fit=crop&q=80",
+  farmer: {
+    name: "Pak Mulyono",
+    farmName: "Kebun Berkah Lembang",
+    bankAccount: "BRI • 4410-01-xxxxxx-53",
+    avatar:
+      "https://images.unsplash.com/photo-1544717305-2782549b5136?w=150&auto=format&fit=crop&q=80",
+  },
+  buyer: {
+    businessName: "Warteg Barokah Bahari",
+    contactPerson: "Pak Slamet Riyadi",
+    businessType: "Warung Tegal Harian",
+  },
+};
+
+export const mockBuyerTenders = [
+  {
+    id: "TND-8821",
+    badge: "BIDDING • 4 Penawaran",
+    title: "Kebutuhan Tomat Merah Segar (20 kg)",
+    meta: "Target: Rp 13.000/kg • Batas Waktu: 28 Okt 2026 • Penawaran termurah: Rp 12.800/kg",
+    note: "Ditinjau oleh Kang Rizal, Pak Hendra +2 lainnya",
+    actionText: "Pilih Petani & Kunci",
+    actionRoute: "/tender/pembeli/TND-8821",
+    isBidding: true,
+  },
+  {
+    id: "TND-8825",
+    badge: "OPEN • Baru Dibuat",
+    title: "Bawang Merah Brebes Grade Super (30 kg)",
+    meta: "Budget Maks: Rp 28.000/kg • Siap terima: 31 Okt 2026 • Menunggu respon petani",
+    note: "Belum ada penawaran masuk dari petani",
+    actionText: "Detail Tender",
+    actionRoute: "/tender",
+    isBidding: false,
+  },
+];
+
+export const mockBuyerOrders = [
+  {
+    id: "#PT-2026-0842",
+    commodity: "Tomat Merah 20 kg",
+    farmerName: "Kang Rizal",
+    schedule: "29 Okt 07:00",
+    deliveryType: "Diantar Petani",
+    status: "HANDOVER",
+    depositAmount: 265000,
+    actionText: "Verifikasi Kamera In-App",
+    actionRoute: "/handover",
+  },
+  {
+    id: "#PT-2026-0815",
+    commodity: "Cabai Rawit 10 kg",
+    farmerName: "Pak Hendra",
+    schedule: "22 Okt 08:30",
+    deliveryType: "Self-Pickup Rp 0",
+    status: "COMPLETED",
+    depositAmount: 120000,
+    actionText: "Lihat Bukti & Rating",
+    actionRoute: "/completed",
+  },
+];
+
+export const mockProfileFaqs = [
+  {
+    q: "Bagaimana cara kerja rekening escrow simulasi Patra Tani?",
+    a: "Setelah pembeli menyetujui pemenang tender, dana ditahan di rekening penampung. Dana baru dicairkan ke petani setelah kedua pihak memverifikasi foto komoditas dengan kamera berstempel geotag.",
+  },
+  {
+    q: "Berapa potongan komisi untuk petani?",
+    a: "Komisi platform hanya 3% hingga 5% dari harga panen komoditas saja. Biaya pengiriman kurir petani 100% diterima penuh oleh petani tanpa potongan apa pun.",
+  },
+  {
+    q: "Apakah pengambilan mandiri (self-pickup) dikenakan biaya?",
+    a: "Tidak. Pengambilan mandiri langsung ke kebun atau gudang panen petani adalah gratis (Rp 0).",
+  },
+  {
+    q: "Apa yang terjadi jika komoditas yang diterima rusak atau timbangan kurang?",
+    a: "Pembeli dapat menekan tombol 'Laporkan Sengketa' di halaman serah-terima. Dana escrow akan ditahan secara otomatis sementara admin melakukan mediasi berdasarkan bukti foto kamera geotag.",
+  },
+];
+
+export const mockDisputesList = [
+  {
+    id: "SGK-2026-004",
+    badge: "DISPUTED",
+    orderId: "#PT-2026-0842",
+    commodity: "Tomat Merah 20 kg",
+    buyerName: "Bu Lina (Warung Sederhana)",
+    farmerName: "Kang Rizal (Kebun Pasirjambu)",
+    claimText: "Klaim: Timbangan kurang 5.3 kg & tomat bawah bonyok",
+    escrowAmount: 265000,
+    reportedAt: "29 Okt 07:45 WIB",
+    targetQuantityKg: 20.0,
+    farmerClaimKg: 20.2,
+    farmerStatement:
+      "Saya menimbang di timbangan digital kebun pas 20.2 kg sebelum berangkat subuh. Selama perjalanan Ciwidey ke Buahbatu ada getaran motor, tetapi tomat dalam keranjang bronjong aman.",
+    buyerClaimKg: 14.7,
+    buyerStatement:
+      "Saat tiba, kami timbang bersama di dapur warung hanya 14.7 kg yang utuh. Sekitar 5 kg di dasar keranjang bonyok berair karena ditumpuk terlalu padat tanpa sekat kardus.",
+    geotagProof: {
+      coordinates: "-6.924821, 107.618932",
+      radiusMatch:
+        "Koordinat GPS Cocok 100% dengan Alamat Warung Bu Lina (Radius 4m)",
+      timestamp: "29 Okt 2026, 07:14:22 WIB",
+      verifiedByCamera: true,
+      image:
+        "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=800&auto=format&fit=crop&q=80",
+      findings:
+        "Timbangan Fisik: Terbukti ada 5.3 kg tomat rusak karena pengemasan bronjong tanpa sekat.",
+    },
+    defaultDecision: {
+      adminNotes:
+        "Berdasarkan foto geotag valid dan timbangan fisik: 14.7 kg tomat diterima baik oleh pembeli. Petani berhak atas 15 kg panen (Rp 195.000) + ongkir utuh Rp 5.000 = Rp 200.000. Sisa deposit Rp 65.000 dikembalikan ke saldo Warung Bu Lina.",
+      farmerSplitAmount: 200000,
+      farmerSplitDesc: "15 kg tomat (Rp 195k) + Ongkir penuh (Rp 5k)",
+      buyerRefundAmount: 65000,
+      buyerRefundDesc: "Kompensasi 5 kg tomat rusak / kurang",
+    },
+  },
+  {
+    id: "SGK-2026-003",
+    badge: "RESOLVED (Bagi Sebagian)",
+    orderId: "#PT-2026-0790",
+    commodity: "Cabai Rawit 10 kg",
+    buyerName: "Resto Sunda",
+    farmerName: "Pak Hendra",
+    claimText: "Selesai: Petani Rp 150k • Pembeli Rp 50k",
+    escrowAmount: 200000,
+    reportedAt: "24 Okt 10:15 WIB",
+  },
+];

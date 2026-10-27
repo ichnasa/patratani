@@ -5,10 +5,6 @@ import {
   Store,
   MapPin,
   ShieldCheck,
-  Calendar,
-  AlertCircle,
-  Truck,
-  FileText,
   Clock,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";

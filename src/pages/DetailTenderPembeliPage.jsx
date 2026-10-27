@@ -7,11 +7,9 @@ import {
   CheckCircle2,
   MapPin,
   Clock,
-  ShieldCheck,
   Award,
   Sparkles,
   Truck,
-  Package,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import Navbar from "../components/Navbar";

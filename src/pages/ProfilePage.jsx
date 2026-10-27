@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
 import StatusBadge from "../components/StatusBadge";
 import Chip from "../components/Chip";
-import { mockTenders } from "../data/mockData";
+import { mockTenders, mockProfileFaqs } from "../data/mockData";
 import {
   Star,
   Edit3,
@@ -19,14 +19,12 @@ import {
   LogOut,
   ChevronRight,
   ArrowDownToLine,
-  CheckCircle2,
   MapPin,
   Phone,
   Mail,
   BadgeCheck,
   X,
   Building2,
-  ArrowLeft,
   LayoutDashboard,
 } from "lucide-react";
 
@@ -65,24 +63,7 @@ export default function ProfilePage({ onBack, onLogout }) {
     return true;
   });
 
-  const faqs = [
-    {
-      q: "Bagaimana cara kerja rekening escrow simulasi Patra Tani?",
-      a: "Setelah pembeli menyetujui pemenang tender, dana ditahan di rekening penampung. Dana baru dicairkan ke petani setelah kedua pihak memverifikasi foto komoditas dengan kamera berstempel geotag.",
-    },
-    {
-      q: "Berapa potongan komisi untuk petani?",
-      a: "Komisi platform hanya 3% hingga 5% dari harga panen komoditas saja. Biaya pengiriman kurir petani 100% diterima penuh oleh petani tanpa potongan apa pun.",
-    },
-    {
-      q: "Apakah pengambilan mandiri (self-pickup) dikenakan biaya?",
-      a: "Tidak. Pengambilan mandiri langsung ke kebun atau gudang panen petani adalah gratis (Rp 0).",
-    },
-    {
-      q: "Apa yang terjadi jika komoditas yang diterima rusak atau timbangan kurang?",
-      a: "Pembeli dapat menekan tombol 'Laporkan Sengketa' di halaman serah-terima. Dana escrow akan ditahan secara otomatis sementara admin melakukan mediasi berdasarkan bukti foto kamera geotag.",
-    },
-  ];
+  const faqs = mockProfileFaqs;
 
   const menuItems = [
     {

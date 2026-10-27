@@ -6,12 +6,6 @@ import {
   MapPin,
   ShieldCheck,
   CheckCircle2,
-  DollarSign,
-  Package,
-  Calendar,
-  AlertCircle,
-  Truck,
-  Sparkles,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import Navbar from "../components/Navbar";

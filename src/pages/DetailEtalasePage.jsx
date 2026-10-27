@@ -10,7 +10,6 @@ import {
   ShieldCheck,
   Plus,
   Minus,
-  Sparkles,
   Share2,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
