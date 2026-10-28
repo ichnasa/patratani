@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -34,6 +34,10 @@ export default function HomePage() {
   const { currentUser } = useApp();
   const roleLower = (currentUser?.role || "").toLowerCase();
   const isAdmin = roleLower.includes("admin");
+
+  if (isAdmin) {
+    return <Navigate replace to="/admin/disputes" />;
+  }
   const isFarmer = !isAdmin && (roleLower ? (roleLower.includes("petani") || roleLower.includes("mitra")) : true);
   const isBuyer = !isAdmin && (roleLower ? (roleLower.includes("pembeli") || roleLower.includes("umkm")) : false);
   const [role, setRole] = useState(isBuyer ? "PEMBELI" : "PETANI");
@@ -257,169 +261,173 @@ export default function HomePage() {
               </div>
             </section>
 
-            <section className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-base font-bold text-ink">Ringkasan Usaha</h3>
-                <span className="text-xs text-ink-muted">Pembaruan Real-Time</span>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-surface p-5 rounded-xl border border-border">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-ink-muted">Transaksi Aktif</span>
-                    <Clock className="w-4 h-4 text-ink-muted" />
-                  </div>
-                  <p className="text-2xl font-bold text-ink">4</p>
-                  <p className="text-[11px] text-ink-secondary mt-1">2 Bidding • 1 Handover</p>
+            {!isAdmin && (
+              <>
+                <section className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-base font-bold text-ink">Ringkasan Usaha</h3>
+                  <span className="text-xs text-ink-muted">Pembaruan Real-Time</span>
                 </div>
-
-                <div className="bg-surface p-5 rounded-xl border border-border">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-ink-muted">Dana di Escrow</span>
-                    <ShieldCheck className="w-4 h-4 text-[#0D9488]" />
+  
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="bg-surface p-5 rounded-xl border border-border">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-xs font-medium text-ink-muted">Transaksi Aktif</span>
+                      <Clock className="w-4 h-4 text-ink-muted" />
+                    </div>
+                    <p className="text-2xl font-bold text-ink">4</p>
+                    <p className="text-[11px] text-ink-secondary mt-1">2 Bidding • 1 Handover</p>
                   </div>
-                  <p className="text-2xl font-bold text-primary">Rp 1.585.000</p>
-                  <p className="text-[11px] text-[#0D9488] font-medium mt-1">Aman dalam sandbox</p>
-                </div>
-
-                <div className="bg-surface p-5 rounded-xl border border-border">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-ink-muted">Menunggu Serah-Terima</span>
-                    <Camera className="w-4 h-4 text-[#2563EB]" />
+  
+                  <div className="bg-surface p-5 rounded-xl border border-border">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-xs font-medium text-ink-muted">Dana di Escrow</span>
+                      <ShieldCheck className="w-4 h-4 text-[#0D9488]" />
+                    </div>
+                    <p className="text-2xl font-bold text-primary">Rp 1.585.000</p>
+                    <p className="text-[11px] text-[#0D9488] font-medium mt-1">Aman dalam sandbox</p>
                   </div>
-                  <p className="text-2xl font-bold text-ink">1 Pesanan</p>
-                  <p className="text-[11px] text-[#2563EB] font-medium mt-1">Verifikasi kamera geotag</p>
-                </div>
-
-                <div className="bg-surface p-5 rounded-xl border border-border">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-ink-muted">Pendapatan Bulan Ini</span>
-                    <TrendingUp className="w-4 h-4 text-[#16A34A]" />
+  
+                  <div className="bg-surface p-5 rounded-xl border border-border">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-xs font-medium text-ink-muted">Menunggu Serah-Terima</span>
+                      <Camera className="w-4 h-4 text-[#2563EB]" />
+                    </div>
+                    <p className="text-2xl font-bold text-ink">1 Pesanan</p>
+                    <p className="text-[11px] text-[#2563EB] font-medium mt-1">Verifikasi kamera geotag</p>
                   </div>
-                  <p className="text-2xl font-bold text-ink">Rp 4.820.000</p>
-                  <p className="text-[11px] text-ink-secondary mt-1">18 transaksi tuntas</p>
-                </div>
-              </div>
-            </section>
-
-            <section className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-base font-bold text-ink">Pesanan Aktif Berjalan</h3>
-                <span className="text-xs text-ink-muted">ID: TND-2026-005</span>
-              </div>
-
-              <div className="bg-surface rounded-2xl p-6 border border-border space-y-5 hover:border-primary/40 transition-all">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
-                  <div>
-                    <h4 className="text-base font-bold text-ink">
-                      Pre-order Bawang Merah Brebes 25 Kg
-                    </h4>
-                    <p className="text-xs text-ink-secondary mt-0.5">
-                      Mitra: Pak H. Solihin (Sentra Tani Baros) ↔ Resto Dapur Sunda Asli
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <StatusBadge status="HANDOVER" showIcon />
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      icon={Camera}
-                      onClick={() => navigate("/handover")}
-                    >
-                      Verifikasi Kamera
-                    </Button>
+  
+                  <div className="bg-surface p-5 rounded-xl border border-border">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-xs font-medium text-ink-muted">Pendapatan Bulan Ini</span>
+                      <TrendingUp className="w-4 h-4 text-[#16A34A]" />
+                    </div>
+                    <p className="text-2xl font-bold text-ink">Rp 4.820.000</p>
+                    <p className="text-[11px] text-ink-secondary mt-1">18 transaksi tuntas</p>
                   </div>
                 </div>
-
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                  {transactionSteps.map((step) => {
-                    const isCompleted = step.completed;
-                    const isCurrent = step.current;
-
-                    return (
-                      <div
-                        key={step.key}
-                        className={`p-3.5 rounded-xl border transition-all flex flex-col justify-between min-h-[90px] ${
-                          isCurrent
-                            ? "bg-[#DBEAFE] border-[#93C5FD]"
-                            : isCompleted
-                            ? "bg-[#DCFCE7] border-[#BBF7D0]"
-                            : "bg-[#F1F5F9] border-[#E2E8F0]"
-                        }`}
+              </section>
+  
+              <section className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-base font-bold text-ink">Pesanan Aktif Berjalan</h3>
+                  <span className="text-xs text-ink-muted">ID: TND-2026-005</span>
+                </div>
+  
+                <div className="bg-surface rounded-2xl p-6 border border-border space-y-5 hover:border-primary/40 transition-all">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border">
+                    <div>
+                      <h4 className="text-base font-bold text-ink">
+                        Pre-order Bawang Merah Brebes 25 Kg
+                      </h4>
+                      <p className="text-xs text-ink-secondary mt-0.5">
+                        Mitra: Pak H. Solihin (Sentra Tani Baros) ↔ Resto Dapur Sunda Asli
+                      </p>
+                    </div>
+  
+                    <div className="flex items-center gap-2">
+                      <StatusBadge status="HANDOVER" showIcon />
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        icon={Camera}
+                        onClick={() => navigate("/handover")}
                       >
-                        <div className="flex items-center justify-between">
-                          <span
-                            className={`text-[10px] font-bold uppercase tracking-wider ${
-                              isCurrent
-                                ? "text-[#1E40AF]"
-                                : isCompleted
-                                ? "text-[#15803D]"
-                                : "text-[#94A3B8]"
-                            }`}
-                          >
-                            0{step.step}
-                          </span>
-                          {isCompleted && (
-                            <CheckCircle2 className="w-3.5 h-3.5 text-[#16A34A]" />
-                          )}
-                        </div>
-
-                        <div>
-                          <p
-                            className={`text-xs font-bold leading-tight ${
-                              isCurrent
-                                ? "text-[#1E40AF]"
-                                : isCompleted
-                                ? "text-[#166534]"
-                                : "text-[#64748B]"
-                            }`}
-                          >
-                            {step.label}
-                          </p>
-                          <span
-                            className={`text-[10px] font-medium block mt-0.5 ${
-                              isCurrent
-                                ? "text-[#2563EB]"
-                                : isCompleted
-                                ? "text-[#15803D]"
-                                : "text-[#94A3B8]"
-                            }`}
-                          >
-                            {isCurrent
-                              ? "Tahap Ini"
+                        Verifikasi Kamera
+                      </Button>
+                    </div>
+                  </div>
+  
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                    {transactionSteps.map((step) => {
+                      const isCompleted = step.completed;
+                      const isCurrent = step.current;
+  
+                      return (
+                        <div
+                          key={step.key}
+                          className={`p-3.5 rounded-xl border transition-all flex flex-col justify-between min-h-[90px] ${
+                            isCurrent
+                              ? "bg-[#DBEAFE] border-[#93C5FD]"
                               : isCompleted
-                              ? "Tuntas"
-                              : "Menunggu"}
-                          </span>
+                              ? "bg-[#DCFCE7] border-[#BBF7D0]"
+                              : "bg-[#F1F5F9] border-[#E2E8F0]"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span
+                              className={`text-[10px] font-bold uppercase tracking-wider ${
+                                isCurrent
+                                  ? "text-[#1E40AF]"
+                                  : isCompleted
+                                  ? "text-[#15803D]"
+                                  : "text-[#94A3B8]"
+                              }`}
+                            >
+                              0{step.step}
+                            </span>
+                            {isCompleted && (
+                              <CheckCircle2 className="w-3.5 h-3.5 text-[#16A34A]" />
+                            )}
+                          </div>
+  
+                          <div>
+                            <p
+                              className={`text-xs font-bold leading-tight ${
+                                isCurrent
+                                  ? "text-[#1E40AF]"
+                                  : isCompleted
+                                  ? "text-[#166534]"
+                                  : "text-[#64748B]"
+                              }`}
+                            >
+                              {step.label}
+                            </p>
+                            <span
+                              className={`text-[10px] font-medium block mt-0.5 ${
+                                isCurrent
+                                  ? "text-[#2563EB]"
+                                  : isCompleted
+                                  ? "text-[#15803D]"
+                                  : "text-[#94A3B8]"
+                              }`}
+                            >
+                              {isCurrent
+                                ? "Tahap Ini"
+                                : isCompleted
+                                ? "Tuntas"
+                                : "Menunggu"}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-[#E6E4DA] border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-                  <div className="flex items-center gap-2 text-ink">
-                    <Truck className="w-4 h-4 text-primary shrink-0" />
-                    <span>
-                      Metode: <strong className="font-semibold">Self-Pickup (Rp 0)</strong> • Lokasi: Soreang, Kab. Bandung
-                    </span>
+                      );
+                    })}
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-ink-muted">
-                      Escrow: <strong className="text-ink font-semibold">Rp 800.000</strong>
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => navigate("/escrow")}
-                      className="font-bold text-primary hover:underline cursor-pointer"
-                    >
-                      Detail Escrow
-                    </button>
+  
+                  <div className="p-3.5 rounded-xl bg-[#E6E4DA] border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                    <div className="flex items-center gap-2 text-ink">
+                      <Truck className="w-4 h-4 text-primary shrink-0" />
+                      <span>
+                        Metode: <strong className="font-semibold">Self-Pickup (Rp 0)</strong> • Lokasi: Soreang, Kab. Bandung
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-ink-muted">
+                        Escrow: <strong className="text-ink font-semibold">Rp 800.000</strong>
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => navigate("/escrow")}
+                        className="font-bold text-primary hover:underline cursor-pointer"
+                      >
+                        Detail Escrow
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </section>
+              </section>
+              </>
+            )}
 
             <section className="space-y-5">
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

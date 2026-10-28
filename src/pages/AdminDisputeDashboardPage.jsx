@@ -29,15 +29,56 @@ export default function AdminDisputeDashboardPage() {
   const [selectedDispute, setSelectedDispute] = useState(mockDisputesList[0]);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [adminNotes, setAdminNotes] = useState(
-    selectedDispute.defaultDecision?.adminNotes || ""
+    selectedDispute?.defaultDecision?.adminNotes || ""
   );
   const [farmerAmount, setFarmerAmount] = useState(
-    selectedDispute.defaultDecision?.farmerSplitAmount || 200000
+    selectedDispute?.defaultDecision?.farmerSplitAmount || 200000
   );
   const [buyerAmount, setBuyerAmount] = useState(
-    selectedDispute.defaultDecision?.buyerRefundAmount || 65000
+    selectedDispute?.defaultDecision?.buyerRefundAmount || 65000
   );
   const [isResolved, setIsResolved] = useState(false);
+
+  const isDisputeResolved = (dispute) => {
+    if (isResolved && dispute.id === selectedDispute?.id) return true;
+    const status = String(dispute.status || "").toLowerCase();
+    const badge = String(dispute.badge || "").toLowerCase();
+    return (
+      status === "resolved" ||
+      status === "selesai" ||
+      badge.includes("resolved") ||
+      badge.includes("selesai")
+    );
+  };
+
+  const filteredDisputes = mockDisputesList.filter((dispute) => {
+    const resolved = isDisputeResolved(dispute);
+    if (activeTab === "RESOLVED") {
+      return resolved;
+    }
+    return !resolved;
+  });
+
+  const pendingCount = mockDisputesList.filter((dispute) => !isDisputeResolved(dispute)).length;
+  const resolvedCount = mockDisputesList.filter((dispute) => isDisputeResolved(dispute)).length;
+
+  const handleSelectDispute = (dispute) => {
+    setSelectedDispute(dispute);
+    setAdminNotes(dispute.defaultDecision?.adminNotes || "");
+    setFarmerAmount(dispute.defaultDecision?.farmerSplitAmount || 0);
+    setBuyerAmount(dispute.defaultDecision?.buyerRefundAmount || 0);
+  };
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    const list = mockDisputesList.filter((dispute) => {
+      const resolved = isDisputeResolved(dispute);
+      return tab === "RESOLVED" ? resolved : !resolved;
+    });
+    if (list.length > 0 && !list.some((d) => d.id === selectedDispute?.id)) {
+      handleSelectDispute(list[0]);
+    }
+  };
 
   const handle100Farmer = () => {
     setFarmerAmount(selectedDispute.escrowAmount);
@@ -103,77 +144,86 @@ export default function AdminDisputeDashboardPage() {
                 <div className="grid grid-cols-2 gap-2 bg-[#E6E4DA]/40 p-1 rounded-xl border border-border/60">
                   <button
                     type="button"
-                    onClick={() => setActiveTab("PENDING")}
-                    className={`py-2 px-3 rounded-lg text-xs font-bold transition-all ${
+                    onClick={() => handleTabChange("PENDING")}
+                    className={`py-2 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                       activeTab === "PENDING"
                         ? "bg-surface text-ink shadow-xs"
                         : "text-ink-secondary hover:text-ink"
                     }`}
                   >
-                    Perlu Mediasi (1)
+                    Perlu Mediasi ({pendingCount})
                   </button>
                   <button
                     type="button"
-                    onClick={() => setActiveTab("RESOLVED")}
-                    className={`py-2 px-3 rounded-lg text-xs font-bold transition-all ${
+                    onClick={() => handleTabChange("RESOLVED")}
+                    className={`py-2 px-3 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                       activeTab === "RESOLVED"
                         ? "bg-surface text-ink shadow-xs"
                         : "text-ink-secondary hover:text-ink"
                     }`}
                   >
-                    Selesai (14)
+                    Selesai ({resolvedCount})
                   </button>
                 </div>
 
                 <div className="space-y-3 pt-1">
-                  {mockDisputesList.map((dispute) => {
-                    const isSelected = selectedDispute.id === dispute.id;
-                    return (
-                      <div
-                        key={dispute.id}
-                        onClick={() => setSelectedDispute(dispute)}
-                        className={`p-4 rounded-xl border transition-all cursor-pointer space-y-2 ${
-                          isSelected
-                            ? "bg-background border-primary ring-1 ring-primary/20 shadow-xs"
-                            : "bg-surface hover:bg-[#E6E4DA]/30 border-border"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-ink">
-                            Sengketa #{dispute.id}
-                          </span>
-                          <span
-                            className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                              dispute.badge === "DISPUTED"
-                                ? "bg-status-disputed/15 text-status-disputed"
-                                : "bg-surface-green text-primary"
-                            }`}
-                          >
-                            {isResolved && dispute.id === selectedDispute.id
-                              ? "RESOLVED (Bagi Sebagian)"
-                              : dispute.badge}
-                          </span>
+                  {filteredDisputes.length === 0 ? (
+                    <div className="p-8 text-center text-xs text-ink-muted bg-[#E6E4DA]/20 rounded-xl border border-dashed border-border">
+                      {activeTab === "RESOLVED"
+                        ? "Tidak ada riwayat sengketa yang selesai"
+                        : "Tidak ada sengketa yang perlu mediasi"}
+                    </div>
+                  ) : (
+                    filteredDisputes.map((dispute) => {
+                      const isSelected = selectedDispute?.id === dispute.id;
+                      const disputeIsResolved = isDisputeResolved(dispute);
+                      return (
+                        <div
+                          key={dispute.id}
+                          onClick={() => handleSelectDispute(dispute)}
+                          className={`p-4 rounded-xl border transition-all cursor-pointer space-y-2 ${
+                            isSelected
+                              ? "bg-background border-primary ring-1 ring-primary/20 shadow-xs"
+                              : "bg-surface hover:bg-[#E6E4DA]/30 border-border"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs font-bold text-ink">
+                              Sengketa #{dispute.id}
+                            </span>
+                            <span
+                              className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                                disputeIsResolved
+                                  ? "bg-surface-green text-primary"
+                                  : "bg-status-disputed/15 text-status-disputed"
+                              }`}
+                            >
+                              {isResolved && dispute.id === selectedDispute?.id
+                                ? "RESOLVED (Bagi Sebagian)"
+                                : dispute.badge || dispute.status}
+                            </span>
+                          </div>
+
+                          <p className="text-xs font-semibold text-ink leading-tight">
+                            {dispute.orderId} • {dispute.commodity}
+                          </p>
+
+                          <p className="text-[11px] text-ink-secondary line-clamp-2">
+                            {dispute.claimText}
+                          </p>
+
+                          <div className="pt-2 border-t border-border/60 flex items-center justify-between text-[11px]">
+                            <span className="font-bold text-[#D97706]">
+                              Escrow: Rp {dispute.escrowAmount.toLocaleString("id-ID")}
+                            </span>
+                            <span className="text-ink-muted">
+                              {dispute.reportedAt}
+                            </span>
+                          </div>
                         </div>
-
-                        <p className="text-xs font-semibold text-ink leading-tight">
-                          {dispute.orderId} • {dispute.commodity}
-                        </p>
-
-                        <p className="text-[11px] text-ink-secondary line-clamp-2">
-                          {dispute.claimText}
-                        </p>
-
-                        <div className="pt-2 border-t border-border/60 flex items-center justify-between text-[11px]">
-                          <span className="font-bold text-[#D97706]">
-                            Escrow: Rp {dispute.escrowAmount.toLocaleString("id-ID")}
-                          </span>
-                          <span className="text-ink-muted">
-                            {dispute.reportedAt}
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })
+                  )}
                 </div>
               </div>
             </div>

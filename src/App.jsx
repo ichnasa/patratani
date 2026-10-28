@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AppProvider } from "./context/AppContext";
+import { AppProvider, useApp } from "./context/AppContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Toast from "./components/Toast";
 import HomePage from "./pages/HomePage";
@@ -19,6 +19,21 @@ import BuyerDashboardPage from "./pages/BuyerDashboardPage";
 import AdminDisputeDashboardPage from "./pages/AdminDisputeDashboardPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+
+function DashboardRedirect() {
+  const { currentUser } = useApp();
+  const roleLower = (currentUser?.role || "").toLowerCase();
+  if (roleLower.includes("admin")) {
+    return <Navigate replace to="/admin/disputes" />;
+  }
+  if (roleLower.includes("buyer") || roleLower.includes("pembeli") || roleLower.includes("umkm")) {
+    return <Navigate replace to="/dashboard/buyer" />;
+  }
+  if (roleLower.includes("farmer") || roleLower.includes("petani") || roleLower.includes("mitra")) {
+    return <Navigate replace to="/dashboard/farmer" />;
+  }
+  return <Navigate replace to="/login" />;
+}
 
 export default function App() {
   return (
@@ -111,6 +126,10 @@ export default function App() {
                 <CompletedPage />
               </ProtectedRoute>
             }
+          />
+          <Route
+            path="/dashboard"
+            element={<DashboardRedirect />}
           />
           <Route
             path="/dashboard/farmer"

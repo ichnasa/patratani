@@ -201,76 +201,78 @@ export default function ProfilePage({ onLogout }) {
               </div>
             </div>
 
-            <div className="pt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-5 rounded-xl bg-surface-green/40 border border-primary/20 flex flex-col justify-between space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="p-2 rounded-xl bg-primary text-[#E6E4DA]">
-                      <Wallet className="w-5 h-5" />
+            {currentUser.role !== "admin" && !currentUser.role?.toLowerCase().includes("admin") && (
+              <div className="pt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="p-5 rounded-xl bg-surface-green/40 border border-primary/20 flex flex-col justify-between space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="p-2 rounded-xl bg-primary text-[#E6E4DA]">
+                        <Wallet className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className="text-xs font-bold text-ink block">
+                          Saldo Kas Aktif (Bisa Ditarik)
+                        </span>
+                        <span className="text-[10px] text-ink-muted">
+                          Pencairan instan ke rekening terdaftar
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-xs font-bold text-ink block">
-                        Saldo Kas Aktif (Bisa Ditarik)
-                      </span>
-                      <span className="text-[10px] text-ink-muted">
-                        Pencairan instan ke rekening terdaftar
-                      </span>
-                    </div>
+
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-status-confirmed/20 text-primary">
+                      Terverifikasi
+                    </span>
                   </div>
 
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-status-confirmed/20 text-primary">
-                    Terverifikasi
-                  </span>
+                  <div className="flex items-baseline justify-between pt-1">
+                    <p className="text-2xl sm:text-3xl font-bold text-primary">
+                      Rp {currentUser.activeBalance.toLocaleString("id-ID")}
+                    </p>
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      icon={ArrowDownToLine}
+                      onClick={() => setIsWithdrawModalOpen(true)}
+                    >
+                      Tarik Saldo
+                    </Button>
+                  </div>
                 </div>
 
-                <div className="flex items-baseline justify-between pt-1">
-                  <p className="text-2xl sm:text-3xl font-bold text-primary">
-                    Rp {currentUser.activeBalance.toLocaleString("id-ID")}
-                  </p>
-
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    icon={ArrowDownToLine}
-                    onClick={() => setIsWithdrawModalOpen(true)}
-                  >
-                    Tarik Saldo
-                  </Button>
-                </div>
-              </div>
-
-              <div className="p-5 rounded-xl bg-[#FEF3C7]/40 border border-[#FDE68A] flex flex-col justify-between space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <div className="p-2 rounded-xl bg-[#D97706] text-[#E6E4DA]">
-                      <ShieldCheck className="w-5 h-5" />
+                <div className="p-5 rounded-xl bg-[#FEF3C7]/40 border border-[#FDE68A] flex flex-col justify-between space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="p-2 rounded-xl bg-[#D97706] text-[#E6E4DA]">
+                        <ShieldCheck className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className="text-xs font-bold text-ink block">
+                          Dana Tertahan di Escrow
+                        </span>
+                        <span className="text-[10px] text-ink-muted">
+                          Aman di rekening penampung sandbox
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-xs font-bold text-ink block">
-                        Dana Tertahan di Escrow
-                      </span>
-                      <span className="text-[10px] text-ink-muted">
-                        Aman di rekening penampung sandbox
-                      </span>
-                    </div>
+
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#D97706]/10 text-[#D97706]">
+                      Sedang Bertransaksi
+                    </span>
                   </div>
 
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#D97706]/10 text-[#D97706]">
-                    Sedang Bertransaksi
-                  </span>
-                </div>
+                  <div className="flex items-baseline justify-between pt-1">
+                    <p className="text-2xl sm:text-3xl font-bold text-[#D97706]">
+                      Rp {currentUser.escrowBalance.toLocaleString("id-ID")}
+                    </p>
 
-                <div className="flex items-baseline justify-between pt-1">
-                  <p className="text-2xl sm:text-3xl font-bold text-[#D97706]">
-                    Rp {currentUser.escrowBalance.toLocaleString("id-ID")}
-                  </p>
-
-                  <span className="text-xs text-ink-muted">
-                    Transaksi Escrow Aktif
-                  </span>
+                    <span className="text-xs text-ink-muted">
+                      Transaksi Escrow Aktif
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </section>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
