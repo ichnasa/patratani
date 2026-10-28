@@ -67,6 +67,14 @@ export default function CreateTenderPage() {
     }));
   };
 
+  const handleQuantityChange = (e) => {
+    const rawDigits = e.target.value.replace(/\D/g, "");
+    setFormData((prev) => ({
+      ...prev,
+      requiredQuantityKg: rawDigits === "" ? "" : parseInt(rawDigits, 10),
+    }));
+  };
+
   const handleBudgetChange = (e) => {
     const rawDigits = e.target.value.replace(/\D/g, "");
     setFormData((prev) => ({
@@ -281,11 +289,12 @@ export default function CreateTenderPage() {
                       </label>
                       <div className="relative">
                         <input
-                          type="number"
+                          type="text"
+                          inputMode="numeric"
                           name="requiredQuantityKg"
                           value={formData.requiredQuantityKg}
-                          onChange={handleChange}
-                          min={10}
+                          onChange={handleQuantityChange}
+                          placeholder="Contoh: 15"
                           required
                           className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors pr-10"
                         />
@@ -294,7 +303,7 @@ export default function CreateTenderPage() {
                         </span>
                       </div>
                       <p className="text-[11px] text-ink-muted mt-1">
-                        Patra Tani fokus pada pesanan usaha mikro 10–20+ kg
+                        Masukkan jumlah kebutuhan bahan baku dalam satuan kilogram bulat
                       </p>
                     </div>
                   </div>

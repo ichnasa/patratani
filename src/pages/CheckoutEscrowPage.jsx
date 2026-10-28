@@ -178,9 +178,7 @@ export default function CheckoutEscrowPage({
                         {st.isDone && (
                           <CheckCircle2 className="w-4 h-4 text-[#16A34A]" />
                         )}
-                        {st.isActive && (
-                          <span className="w-2.5 h-2.5 rounded-full bg-[#D97706] animate-pulse" />
-                        )}
+
                       </div>
 
                       <div>

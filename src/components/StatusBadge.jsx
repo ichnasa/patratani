@@ -84,7 +84,7 @@ const normalizeStatusKey = (status) => {
 export default function StatusBadge({
   status = "OPEN",
   size = "md",
-  showDot = true,
+  showDot = false,
   showIcon = false,
   customLabel,
   className = "",
@@ -99,12 +99,6 @@ export default function StatusBadge({
     sm: "px-2 py-0.5 text-xs gap-1 rounded-md",
     md: "px-2.5 py-1 text-xs font-medium gap-1.5 rounded-lg",
     lg: "px-3 py-1.5 text-sm font-medium gap-2 rounded-xl",
-  };
-
-  const dotSizeClasses = {
-    sm: "w-1.5 h-1.5",
-    md: "w-2 h-2",
-    lg: "w-2.5 h-2.5",
   };
 
   const iconSizeClasses = {
@@ -125,16 +119,6 @@ export default function StatusBadge({
       )}
       title={config.description}
     >
-      {showDot && (
-        <span
-          className={clsx(
-            "rounded-full shrink-0",
-            config.dotColor,
-            dotSizeClasses[size] || dotSizeClasses.md
-          )}
-        />
-      )}
-
       {showIcon && IconComp && (
         <IconComp
           className={clsx("shrink-0", iconSizeClasses[size] || iconSizeClasses.md)}

@@ -44,8 +44,7 @@ export default function Footer() {
             </div>
 
             <div>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium bg-white/5 text-[#D5D8CC] border border-white/10">
-                <span className="w-1.5 h-1.5 rounded-full bg-status-completed" />
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-medium bg-white/5 text-[#D5D8CC] border border-white/10">
                 Sistem Terdesentralisasi Tanpa Gudang Perantara
               </span>
             </div>

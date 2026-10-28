@@ -71,8 +71,7 @@ export default function HomePage() {
           <section className="py-8 md:py-10 px-6 lg:px-16 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10">
             <div className="flex flex-col gap-4 max-w-xl text-center lg:text-left">
               <div className="inline-flex items-center justify-center lg:justify-start gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-green text-primary text-xs font-semibold border border-primary/20">
-                  <span className="w-2 h-2 rounded-full bg-primary" />
+                <span className="inline-flex items-center px-3 py-1 rounded-full bg-surface-green text-primary text-xs font-semibold border border-primary/20">
                   Agritech Terdesentralisasi • Tanpa Gudang
                 </span>
               </div>
@@ -184,10 +183,10 @@ export default function HomePage() {
                   <button
                     type="button"
                     onClick={() => navigate("/etalase/create")}
-                    className="text-xs font-bold text-ink hover:text-primary flex items-center gap-1 transition-colors cursor-pointer group"
+                    className="px-4 py-2 bg-primary hover:bg-primary-hover text-[#E6E4DA] text-xs font-bold rounded-xl transition-all shadow-xs cursor-pointer inline-flex items-center gap-1.5"
                   >
                     <span>Buka Etalase</span>
-                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                    <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -217,10 +216,10 @@ export default function HomePage() {
                   <button
                     type="button"
                     onClick={() => navigate("/tender/create")}
-                    className="text-xs font-bold text-ink hover:text-primary flex items-center gap-1 transition-colors cursor-pointer group"
+                    className="px-4 py-2 bg-primary hover:bg-primary-hover text-[#E6E4DA] text-xs font-bold rounded-xl transition-all shadow-xs cursor-pointer inline-flex items-center gap-1.5"
                   >
                     <span>Buka Tender</span>
-                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                    <ChevronRight className="w-4 h-4" />
                   </button>
                 </div>
               </div>
@@ -233,48 +232,36 @@ export default function HomePage() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div
-                  onClick={() => navigate("/profile")}
-                  className="bg-surface p-5 rounded-xl border border-border hover:border-primary/40 transition-all cursor-pointer group"
-                >
+                <div className="bg-surface p-5 rounded-xl border border-border">
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-ink-muted group-hover:text-primary transition-colors">Transaksi Aktif</span>
-                    <Clock className="w-4 h-4 text-ink-muted group-hover:text-primary transition-colors" />
+                    <span className="text-xs font-medium text-ink-muted">Transaksi Aktif</span>
+                    <Clock className="w-4 h-4 text-ink-muted" />
                   </div>
                   <p className="text-2xl font-bold text-ink">4</p>
                   <p className="text-[11px] text-ink-secondary mt-1">2 Bidding • 1 Handover</p>
                 </div>
 
-                <div
-                  onClick={() => navigate("/profile")}
-                  className="bg-surface p-5 rounded-xl border border-border hover:border-primary/40 transition-all cursor-pointer group"
-                >
+                <div className="bg-surface p-5 rounded-xl border border-border">
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-ink-muted group-hover:text-primary transition-colors">Dana di Escrow</span>
+                    <span className="text-xs font-medium text-ink-muted">Dana di Escrow</span>
                     <ShieldCheck className="w-4 h-4 text-[#0D9488]" />
                   </div>
                   <p className="text-2xl font-bold text-primary">Rp 1.585.000</p>
                   <p className="text-[11px] text-[#0D9488] font-medium mt-1">Aman dalam sandbox</p>
                 </div>
 
-                <div
-                  onClick={() => navigate("/handover")}
-                  className="bg-surface p-5 rounded-xl border border-border hover:border-primary/40 transition-all cursor-pointer group"
-                >
+                <div className="bg-surface p-5 rounded-xl border border-border">
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-ink-muted group-hover:text-primary transition-colors">Menunggu Serah-Terima</span>
+                    <span className="text-xs font-medium text-ink-muted">Menunggu Serah-Terima</span>
                     <Camera className="w-4 h-4 text-[#2563EB]" />
                   </div>
                   <p className="text-2xl font-bold text-ink">1 Pesanan</p>
                   <p className="text-[11px] text-[#2563EB] font-medium mt-1">Verifikasi kamera geotag</p>
                 </div>
 
-                <div
-                  onClick={() => navigate("/profile")}
-                  className="bg-surface p-5 rounded-xl border border-border hover:border-primary/40 transition-all cursor-pointer group"
-                >
+                <div className="bg-surface p-5 rounded-xl border border-border">
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-medium text-ink-muted group-hover:text-primary transition-colors">Pendapatan Bulan Ini</span>
+                    <span className="text-xs font-medium text-ink-muted">Pendapatan Bulan Ini</span>
                     <TrendingUp className="w-4 h-4 text-[#16A34A]" />
                   </div>
                   <p className="text-2xl font-bold text-ink">Rp 4.820.000</p>
@@ -301,7 +288,7 @@ export default function HomePage() {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <StatusBadge status="HANDOVER" showIcon showDot />
+                    <StatusBadge status="HANDOVER" showIcon />
                     <Button
                       variant="primary"
                       size="sm"
@@ -321,45 +308,52 @@ export default function HomePage() {
                     return (
                       <div
                         key={step.key}
-                        onClick={() => {
-                          if (step.key === "HANDOVER") navigate("/handover");
-                          else if (step.key === "PAID_HELD") navigate("/escrow");
-                          else if (step.key === "COMPLETED") navigate("/completed");
-                          else navigate("/tender");
-                        }}
-                        className={`p-3 rounded-xl border transition-all flex flex-col justify-between min-h-[85px] cursor-pointer hover:scale-[1.02] ${
+                        className={`p-3.5 rounded-xl border transition-all flex flex-col justify-between min-h-[90px] ${
                           isCurrent
-                            ? "bg-[#DBEAFE] border-[#BFDBFE] ring-2 ring-[#2563EB]/20"
+                            ? "bg-[#DBEAFE] border-[#93C5FD]"
                             : isCompleted
-                            ? "bg-[#DCFCE7]/70 border-[#BBF7D0]"
-                            : "bg-[#E6E4DA]/50 border-border opacity-60"
+                            ? "bg-[#DCFCE7] border-[#BBF7D0]"
+                            : "bg-[#F1F5F9] border-[#E2E8F0]"
                         }`}
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-ink-muted">
+                          <span
+                            className={`text-[10px] font-bold uppercase tracking-wider ${
+                              isCurrent
+                                ? "text-[#1E40AF]"
+                                : isCompleted
+                                ? "text-[#15803D]"
+                                : "text-[#94A3B8]"
+                            }`}
+                          >
                             0{step.step}
                           </span>
                           {isCompleted && (
                             <CheckCircle2 className="w-3.5 h-3.5 text-[#16A34A]" />
                           )}
-                          {isCurrent && (
-                            <span className="w-2 h-2 rounded-full bg-[#2563EB] animate-pulse" />
-                          )}
                         </div>
 
                         <div>
                           <p
-                            className={`text-xs font-bold ${
+                            className={`text-xs font-bold leading-tight ${
                               isCurrent
                                 ? "text-[#1E40AF]"
                                 : isCompleted
                                 ? "text-[#166534]"
-                                : "text-ink-secondary"
+                                : "text-[#64748B]"
                             }`}
                           >
                             {step.label}
                           </p>
-                          <span className="text-[10px] text-ink-muted">
+                          <span
+                            className={`text-[10px] font-medium block mt-0.5 ${
+                              isCurrent
+                                ? "text-[#2563EB]"
+                                : isCompleted
+                                ? "text-[#15803D]"
+                                : "text-[#94A3B8]"
+                            }`}
+                          >
                             {isCurrent
                               ? "Tahap Ini"
                               : isCompleted
