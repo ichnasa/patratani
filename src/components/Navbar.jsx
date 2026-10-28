@@ -31,6 +31,9 @@ export default function Navbar({
   const showUserDashboard = Boolean(
     currentUser && !isAdmin && (isFarmer || isBuyer),
   );
+  const isTransactionalUser = Boolean(
+    currentUser && !isAdmin && (isFarmer || isBuyer),
+  );
   const dashboardRoute = isBuyer ? "/dashboard/buyer" : "/dashboard/farmer";
 
   const [internalSearch, setInternalSearch] = useState(searchValue || "");
@@ -117,23 +120,25 @@ export default function Navbar({
               >
                 Jelajahi
               </Link>
-              <Link
-                to="/handover"
-                className={clsx(
-                  "text-sm font-medium transition-colors duration-150 py-1 relative",
-                  isNavActive("/handover") ||
-                    isNavActive("/tender") ||
-                    isNavActive("/escrow") ||
-                    isNavActive("/completed")
-                    ? "text-primary font-bold border-b-2 border-primary"
-                    : "text-ink-secondary hover:text-primary",
-                )}
-              >
-                <span>Transaksi</span>
-                <span className="ml-1.5 px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-primary text-[#E6E4DA]">
-                  1
-                </span>
-              </Link>
+              {isTransactionalUser && (
+                <Link
+                  to="/handover"
+                  className={clsx(
+                    "text-sm font-medium transition-colors duration-150 py-1 relative",
+                    isNavActive("/handover") ||
+                      isNavActive("/tender") ||
+                      isNavActive("/escrow") ||
+                      isNavActive("/completed")
+                      ? "text-primary font-bold border-b-2 border-primary"
+                      : "text-ink-secondary hover:text-primary",
+                  )}
+                >
+                  <span>Transaksi</span>
+                  <span className="ml-1.5 px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-primary text-[#E6E4DA]">
+                    1
+                  </span>
+                </Link>
+              )}
               {isAdmin && (
                 <Link
                   to="/admin/disputes"
@@ -164,16 +169,18 @@ export default function Navbar({
               />
             </div>
 
-            <Link
-              to="/handover"
-              aria-label="Pemberitahuan"
-              className="relative w-10 h-10 rounded-full flex items-center justify-center text-ink-secondary hover:text-ink hover:bg-surface-green/60 transition-colors"
-            >
-              <Bell className="w-5 h-5" />
-              {notificationCount > 0 && (
-                <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-status-disputed" />
-              )}
-            </Link>
+            {isTransactionalUser && (
+              <Link
+                to="/handover"
+                aria-label="Pemberitahuan Transaksi"
+                className="relative w-10 h-10 rounded-full flex items-center justify-center text-ink-secondary hover:text-ink hover:bg-surface-green/60 transition-colors"
+              >
+                <Bell className="w-5 h-5" />
+                {notificationCount > 0 && (
+                  <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-status-disputed" />
+                )}
+              </Link>
+            )}
 
             {currentUser ? (
               <Link
@@ -245,22 +252,24 @@ export default function Navbar({
           <span className="text-[10px]">Jelajahi</span>
         </Link>
 
-        <Link
-          to="/handover"
-          className={clsx(
-            "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg relative",
-            isNavActive("/handover") ||
-              isNavActive("/tender") ||
-              isNavActive("/escrow") ||
-              isNavActive("/completed")
-              ? "text-primary font-bold"
-              : "text-ink-secondary hover:text-ink",
-          )}
-        >
-          <ClipboardList className="w-5 h-5" />
-          <span className="text-[10px]">Transaksi</span>
-          <span className="absolute top-1 right-2 w-1.5 h-1.5 rounded-full bg-primary" />
-        </Link>
+        {isTransactionalUser && (
+          <Link
+            to="/handover"
+            className={clsx(
+              "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg relative",
+              isNavActive("/handover") ||
+                isNavActive("/tender") ||
+                isNavActive("/escrow") ||
+                isNavActive("/completed")
+                ? "text-primary font-bold"
+                : "text-ink-secondary hover:text-ink",
+            )}
+          >
+            <ClipboardList className="w-5 h-5" />
+            <span className="text-[10px]">Transaksi</span>
+            <span className="absolute top-1 right-2 w-1.5 h-1.5 rounded-full bg-primary" />
+          </Link>
+        )}
 
         {isAdmin && (
           <Link

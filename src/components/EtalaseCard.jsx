@@ -6,9 +6,11 @@ import { MapPin, Calendar } from "lucide-react";
 
 export default function EtalaseCard({ commodity, onOrder }) {
   const navigate = useNavigate();
-  const { startTransactionFromCommodity } = useApp();
+  const { startTransactionFromCommodity, currentUser } = useApp();
 
   if (!commodity) return null;
+
+  const isAdmin = currentUser?.role?.toLowerCase().includes("admin");
 
   const handleOrder = (e) => {
     e.stopPropagation();
@@ -118,14 +120,25 @@ export default function EtalaseCard({ commodity, onOrder }) {
       </div>
 
       <div className="p-3.5 sm:p-4 pt-0">
-        <Button
-          variant="primary"
-          fullWidth
-          size="sm"
-          onClick={handleOrder}
-        >
-          Pesan Langsung
-        </Button>
+        {isAdmin ? (
+          <Button
+            variant="outline"
+            fullWidth
+            size="sm"
+            onClick={handleCardClick}
+          >
+            Lihat Detail Panen
+          </Button>
+        ) : (
+          <Button
+            variant="primary"
+            fullWidth
+            size="sm"
+            onClick={handleOrder}
+          >
+            Pesan Langsung
+          </Button>
+        )}
       </div>
     </article>
   );

@@ -77,13 +77,15 @@ export default function DetailEtalasePage() {
 
   const commodity = foundItem || fallbackCommodity;
 
-  const isFarmerRole = (currentUser?.role || "").toLowerCase().includes("petani");
+  const roleLower = (currentUser?.role || "").toLowerCase();
+  const isAdminRole = roleLower.includes("admin");
+  const isFarmerRole = roleLower.includes("petani");
   const isOwnCommodity = Boolean(
     currentUser?.name &&
       commodity.farmer?.name &&
       currentUser.name.trim().toLowerCase() === commodity.farmer.name.trim().toLowerCase()
   );
-  const isSelfPurchaseBlocked = isFarmerRole || isOwnCommodity;
+  const isSelfPurchaseBlocked = isFarmerRole || isOwnCommodity || isAdminRole;
 
   const galleryImages =
     Array.isArray(commodity.images) && commodity.images.length > 0
@@ -156,6 +158,12 @@ export default function DetailEtalasePage() {
   };
 
   const handleProceedEscrow = () => {
+    if (isAdminRole) {
+      if (showToast) {
+        showToast("Akun Admin Pengawas tidak dapat melakukan transaksi pemesanan.", "warning");
+      }
+      return;
+    }
     if (isSelfPurchaseBlocked) {
       if (showToast) {
         showToast("Akun Petani tidak dapat membeli komoditas. Masuk sebagai Pembeli UMKM untuk melakukan checkout.", "warning");
@@ -541,7 +549,9 @@ export default function DetailEtalasePage() {
                       Beli / Pesan Dinonaktifkan
                     </Button>
                     <p className="text-[11px] text-center text-[#DC2626] font-medium">
-                      {isOwnCommodity
+                      {isAdminRole
+                        ? "Akun Admin Pengawas tidak dapat melakukan transaksi pemesanan komoditas."
+                        : isOwnCommodity
                         ? "Anda tidak dapat membeli komoditas milik sendiri."
                         : "Akun Mitra Petani tidak dapat membeli komoditas. Masuk sebagai Pembeli UMKM untuk checkout."}
                     </p>
