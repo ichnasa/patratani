@@ -96,7 +96,7 @@ export default function Navbar() {
         <div className="max-w-[1440px] mx-auto h-16 px-4 sm:px-6 lg:px-16 flex items-center justify-between gap-4">
           <div className="flex items-center gap-6 shrink-0">
             <Link
-              to="/"
+              to={isAdmin ? "/admin/disputes" : "/"}
               className="flex items-center gap-2 select-none group transition-transform duration-150 hover:scale-[1.02]"
             >
               <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-[#E6E4DA] transition-colors group-hover:bg-primary-hover">
@@ -108,61 +108,7 @@ export default function Navbar() {
             </Link>
 
             <nav className="hidden md:flex items-center gap-6">
-              <Link
-                to="/"
-                className={clsx(
-                  "text-sm font-medium transition-colors duration-150 py-1",
-                  isNavActive("/")
-                    ? "text-primary font-bold border-b-2 border-primary"
-                    : "text-ink-secondary hover:text-primary",
-                )}
-              >
-                Beranda
-              </Link>
-              {showUserDashboard && (
-                <Link
-                  to={dashboardRoute}
-                  className={clsx(
-                    "text-sm font-medium transition-colors duration-150 py-1",
-                    isNavActive("/dashboard")
-                      ? "text-primary font-bold border-b-2 border-primary"
-                      : "text-ink-secondary hover:text-primary",
-                  )}
-                >
-                  Dashboard
-                </Link>
-              )}
-              <Link
-                to="/explore"
-                className={clsx(
-                  "text-sm font-medium transition-colors duration-150 py-1",
-                  isNavActive("/explore")
-                    ? "text-primary font-bold border-b-2 border-primary"
-                    : "text-ink-secondary hover:text-primary",
-                )}
-              >
-                Jelajahi
-              </Link>
-              {isTransactionalUser && (
-                <Link
-                  to="/handover"
-                  className={clsx(
-                    "text-sm font-medium transition-colors duration-150 py-1 relative",
-                    isNavActive("/handover") ||
-                      isNavActive("/tender") ||
-                      isNavActive("/escrow") ||
-                      isNavActive("/completed")
-                      ? "text-primary font-bold border-b-2 border-primary"
-                      : "text-ink-secondary hover:text-primary",
-                  )}
-                >
-                  <span>Transaksi</span>
-                  <span className="ml-1.5 px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-primary text-[#E6E4DA]">
-                    1
-                  </span>
-                </Link>
-              )}
-              {isAdmin && (
+              {isAdmin ? (
                 <Link
                   to="/admin/disputes"
                   className={clsx(
@@ -175,6 +121,63 @@ export default function Navbar() {
                   <Scale className="w-4 h-4 text-amber-600" />
                   <span>Portal Admin</span>
                 </Link>
+              ) : (
+                <>
+                  <Link
+                    to="/"
+                    className={clsx(
+                      "text-sm font-medium transition-colors duration-150 py-1",
+                      isNavActive("/")
+                        ? "text-primary font-bold border-b-2 border-primary"
+                        : "text-ink-secondary hover:text-primary",
+                    )}
+                  >
+                    Beranda
+                  </Link>
+                  {showUserDashboard && (
+                    <Link
+                      to={dashboardRoute}
+                      className={clsx(
+                        "text-sm font-medium transition-colors duration-150 py-1",
+                        isNavActive("/dashboard")
+                          ? "text-primary font-bold border-b-2 border-primary"
+                          : "text-ink-secondary hover:text-primary",
+                      )}
+                    >
+                      Dashboard
+                    </Link>
+                  )}
+                  <Link
+                    to="/explore"
+                    className={clsx(
+                      "text-sm font-medium transition-colors duration-150 py-1",
+                      isNavActive("/explore")
+                        ? "text-primary font-bold border-b-2 border-primary"
+                        : "text-ink-secondary hover:text-primary",
+                    )}
+                  >
+                    Jelajahi
+                  </Link>
+                  {isTransactionalUser && (
+                    <Link
+                      to="/handover"
+                      className={clsx(
+                        "text-sm font-medium transition-colors duration-150 py-1 relative",
+                        isNavActive("/handover") ||
+                          isNavActive("/tender") ||
+                          isNavActive("/escrow") ||
+                          isNavActive("/completed")
+                          ? "text-primary font-bold border-b-2 border-primary"
+                          : "text-ink-secondary hover:text-primary",
+                      )}
+                    >
+                      <span>Transaksi</span>
+                      <span className="ml-1.5 px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-primary text-[#E6E4DA]">
+                        1
+                      </span>
+                    </Link>
+                  )}
+                </>
               )}
             </nav>
           </div>
@@ -310,69 +313,7 @@ export default function Navbar() {
       </header>
 
       <nav className="fixed bottom-0 left-0 right-0 z-40 bg-surface/95 backdrop-blur-md border-t border-border px-6 py-2.5 flex items-center justify-around md:hidden shadow-lg">
-        <Link
-          to="/"
-          className={clsx(
-            "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
-            isNavActive("/")
-              ? "text-primary font-bold"
-              : "text-ink-secondary hover:text-ink",
-          )}
-        >
-          <Home className="w-5 h-5" />
-          <span className="text-[10px]">Beranda</span>
-        </Link>
-
-        <Link
-          to="/explore"
-          className={clsx(
-            "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
-            isNavActive("/explore")
-              ? "text-primary font-bold"
-              : "text-ink-secondary hover:text-ink",
-          )}
-        >
-          <Compass className="w-5 h-5" />
-          <span className="text-[10px]">Jelajahi</span>
-        </Link>
-
-        {isBuyer && (
-          <Link
-            to="/escrow"
-            className={clsx(
-              "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
-              isNavActive("/escrow")
-                ? "text-primary font-bold"
-                : "text-ink-secondary hover:text-ink",
-            )}
-          >
-            <ShoppingCart className="w-5 h-5" />
-            <span className="text-[10px]">Keranjang</span>
-          </Link>
-        )}
-
-        {isTransactionalUser && (
-          <Link
-            to="/handover"
-            className={clsx(
-              "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg relative",
-              isNavActive("/handover") ||
-                isNavActive("/tender") ||
-                isNavActive("/escrow") ||
-                isNavActive("/completed")
-                ? "text-primary font-bold"
-                : "text-ink-secondary hover:text-ink",
-            )}
-          >
-            <ClipboardList className="w-5 h-5" />
-            <span className="text-[10px]">Transaksi</span>
-            <span className="ml-1 px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-primary text-[#E6E4DA]">
-              1
-            </span>
-          </Link>
-        )}
-
-        {isAdmin && (
+        {isAdmin ? (
           <Link
             to="/admin/disputes"
             className={clsx(
@@ -383,8 +324,72 @@ export default function Navbar() {
             )}
           >
             <Scale className="w-5 h-5 text-amber-600" />
-            <span className="text-[10px] font-semibold">Admin</span>
+            <span className="text-[10px] font-semibold">Portal Admin</span>
           </Link>
+        ) : (
+          <>
+            <Link
+              to="/"
+              className={clsx(
+                "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
+                isNavActive("/")
+                  ? "text-primary font-bold"
+                  : "text-ink-secondary hover:text-ink",
+              )}
+            >
+              <Home className="w-5 h-5" />
+              <span className="text-[10px]">Beranda</span>
+            </Link>
+
+            <Link
+              to="/explore"
+              className={clsx(
+                "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
+                isNavActive("/explore")
+                  ? "text-primary font-bold"
+                  : "text-ink-secondary hover:text-ink",
+              )}
+            >
+              <Compass className="w-5 h-5" />
+              <span className="text-[10px]">Jelajahi</span>
+            </Link>
+
+            {isBuyer && (
+              <Link
+                to="/escrow"
+                className={clsx(
+                  "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
+                  isNavActive("/escrow")
+                    ? "text-primary font-bold"
+                    : "text-ink-secondary hover:text-ink",
+                )}
+              >
+                <ShoppingCart className="w-5 h-5" />
+                <span className="text-[10px]">Keranjang</span>
+              </Link>
+            )}
+
+            {isTransactionalUser && (
+              <Link
+                to="/handover"
+                className={clsx(
+                  "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg relative",
+                  isNavActive("/handover") ||
+                    isNavActive("/tender") ||
+                    isNavActive("/escrow") ||
+                    isNavActive("/completed")
+                    ? "text-primary font-bold"
+                    : "text-ink-secondary hover:text-ink",
+                )}
+              >
+                <ClipboardList className="w-5 h-5" />
+                <span className="text-[10px]">Transaksi</span>
+                <span className="ml-1 px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-primary text-[#E6E4DA]">
+                  1
+                </span>
+              </Link>
+            )}
+          </>
         )}
 
         <Link
