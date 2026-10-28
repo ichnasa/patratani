@@ -407,10 +407,10 @@ export default function HandoverPage({ onBack, onComplete }) {
                       />
                     ) : cameraStatus === "STREAMING" ? (
                       <video
-                        ref={videoRef}
                         autoPlay
                         playsInline
                         muted
+                        ref={videoRef}
                         className="w-full h-full object-cover"
                       />
                     ) : (
