@@ -40,6 +40,19 @@ export default function TenderDetailPage({
     mockTenders.find((t) => t.id === activeId) ||
     mockTenders[1];
 
+  const hasBids = Boolean(tender.bids && tender.bids.length > 0);
+  const hasWinner = Boolean(
+    tender.winner ||
+    tender.awardedFarmer ||
+    tender.status === "AWARDED" ||
+    tender.status === "PAID_HELD" ||
+    tender.status === "HANDOVER" ||
+    tender.status === "COMPLETED"
+  );
+  const canDepositEscrow = isBuyer && hasBids && hasWinner;
+
+
+
   const [offeredPrice, setOfferedPrice] = useState(tender.targetPricePerKg);
   const [offeredQuantity, setOfferedQuantity] = useState(
     tender.requiredQuantityKg
@@ -495,7 +508,7 @@ export default function TenderDetailPage({
                   </div>
                 </div>
 
-                {isBuyer && (
+                {canDepositEscrow && (
                   <Button
                     variant="primary"
                     fullWidth

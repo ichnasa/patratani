@@ -43,9 +43,7 @@ export default function HandoverPage({ onBack, onComplete }) {
   );
   const [checklist, setChecklist] = useState({
     freshness: true,
-    aroma: true,
-    sorting: true,
-    packaging: true,
+    weightVerification: true,
   });
   const [isReleasing, setIsReleasing] = useState(false);
   const [isCompleted, setIsCompleted] = useState(
@@ -126,9 +124,7 @@ export default function HandoverPage({ onBack, onComplete }) {
 
   const allChecklistPassed =
     checklist.freshness &&
-    checklist.aroma &&
-    checklist.sorting &&
-    checklist.packaging &&
+    checklist.weightVerification &&
     isWeightValid;
 
   const toggleChecklist = (key) => {
@@ -395,7 +391,7 @@ export default function HandoverPage({ onBack, onComplete }) {
                     <div className="flex items-center gap-2">
                       <span className={`w-2.5 h-2.5 rounded-full ${cameraStatus === "STREAMING" ? "bg-[#22C55E] animate-pulse" : "bg-[#DC2626]"}`} />
                       <span className="text-xs font-bold tracking-wider uppercase text-white">
-                        {cameraStatus === "STREAMING" ? "Live Camera Viewfinder" : "Simulasi Kamera Viewfinder"}
+                        {cameraStatus === "STREAMING" ? "Live Camera Viewfinder" : "Kamera Pratinjau Viewfinder"}
                       </span>
                     </div>
 
@@ -439,22 +435,7 @@ export default function HandoverPage({ onBack, onComplete }) {
                       />
                     )}
 
-                    <div className="absolute inset-0 pointer-events-none p-6 flex flex-col justify-between">
-                      <div className="flex justify-between items-start">
-                        <div className="w-8 h-8 border-t-2 border-l-2 border-white/80" />
-                        <div className="w-8 h-8 border-t-2 border-r-2 border-white/80" />
-                      </div>
-                      <div className="flex justify-between items-end">
-                        <div className="w-8 h-8 border-b-2 border-l-2 border-white/80" />
-                        <div className="w-8 h-8 border-b-2 border-r-2 border-white/80" />
-                      </div>
-                    </div>
 
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                      <div className="w-12 h-12 border border-white/40 rounded-full flex items-center justify-center">
-                        <div className="w-2 h-2 bg-primary rounded-full shadow-xs" />
-                      </div>
-                    </div>
 
                     <div className="absolute bottom-3 left-3 right-3 bg-black/80 backdrop-blur-md rounded-xl p-3 border border-white/15 text-[11px] font-mono space-y-1 shadow-md">
                       <div className="flex items-center justify-between text-white/70 text-[10px]">
@@ -632,19 +613,11 @@ export default function HandoverPage({ onBack, onComplete }) {
                     {[
                       {
                         id: "freshness",
-                        label: "Tekstur umbi padat, kering, bebas bonyok lembek",
+                        label: "Kualitas komoditas segar, bersih, dan sesuai standar pesanan",
                       },
                       {
-                        id: "aroma",
-                        label: "Aroma tajam segar khas panen baru (bebas bau busuk)",
-                      },
-                      {
-                        id: "sorting",
-                        label: "Sortasi Grade A bersih tanpa jamur hitam atau ulat",
-                      },
-                      {
-                        id: "packaging",
-                        label: "Penimbangan disaksikan langsung oleh kedua pihak",
+                        id: "weightVerification",
+                        label: "Hasil penimbangan fisik telah diverifikasi bersama secara akurat",
                       },
                     ].map((item) => (
                       <label
@@ -710,13 +683,13 @@ export default function HandoverPage({ onBack, onComplete }) {
 
                     {!isPetani && !farmerConfirmed && (
                       <p className="text-[11px] text-[#D97706] text-center font-medium">
-                        * Menunggu petani mengonfirmasi penyerahan komoditas terlebih dahulu.
+                        • Menunggu petani mengonfirmasi penyerahan komoditas terlebih dahulu.
                       </p>
                     )}
 
                     {!isPhotoCaptured && (
                       <p className="text-[11px] text-[#D97706] text-center font-medium">
-                        * Silakan ambil foto bukti melalui kamera di sebelah kiri terlebih dahulu.
+                        • Silakan ambil foto bukti melalui kamera di sebelah kiri terlebih dahulu.
                       </p>
                     )}
 

@@ -57,7 +57,9 @@ export default function FarmerDashboardPage() {
     fixedDeliveryFee: 5000,
     maxRadiusKm: 15,
     vehicleType: "Motor + Keranjang Bronjong",
-    operatingHours: "06:00 - 10:00 WIB (Sesuai Jam Panen Pagi)",
+    operatingHours: "06:00 - 10:00",
+    operatingHoursStart: "06:00",
+    operatingHoursEnd: "10:00",
   });
 
   const handleSaveDelivery = (e) => {
@@ -120,7 +122,7 @@ export default function FarmerDashboardPage() {
             <th className="pb-3 font-semibold">Komoditas &amp; Pembeli</th>
             <th className="pb-3 font-semibold">Jadwal &amp; Pengiriman</th>
             <th className="pb-3 font-semibold">Status Escrow</th>
-            <th className="pb-3 font-semibold">Total Bersih</th>
+            <th className="pb-3 font-semibold">Total Pendapatan Bersih</th>
             <th className="pb-3 font-semibold text-right">Tindakan</th>
           </tr>
         </thead>
@@ -156,17 +158,17 @@ export default function FarmerDashboardPage() {
                 <td className="py-4 whitespace-nowrap">
                   {order.status === "HANDOVER" && (
                     <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#FEF3C7] text-[#D97706]">
-                      HANDOVER
+                      Serah Terima
                     </span>
                   )}
                   {order.status === "PAID_HELD" && (
                     <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-primary-50 text-primary">
-                      PAID_HELD
+                      Dana Tertahan
                     </span>
                   )}
                   {order.status === "COMPLETED" && (
                     <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-surface-green text-primary">
-                      COMPLETED
+                      Selesai
                     </span>
                   )}
                 </td>
@@ -558,17 +560,33 @@ export default function FarmerDashboardPage() {
                         <label className="text-xs font-bold text-ink uppercase tracking-wider block">
                           Jadwal / Jam Operasional Antar
                         </label>
-                        <input
-                          type="text"
-                          value={deliverySettings.operatingHours}
-                          onChange={(e) =>
-                            setDeliverySettings((prev) => ({
-                              ...prev,
-                              operatingHours: e.target.value,
-                            }))
-                          }
-                          className="w-full bg-[#E6E4DA]/30 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary"
-                        />
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="time"
+                            value={deliverySettings.operatingHoursStart || "06:00"}
+                            onChange={(e) =>
+                              setDeliverySettings((prev) => ({
+                                ...prev,
+                                operatingHoursStart: e.target.value,
+                                operatingHours: `${e.target.value} - ${prev.operatingHoursEnd || "10:00"}`,
+                              }))
+                            }
+                            className="w-full bg-[#E6E4DA]/30 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-ink focus:outline-none focus:border-primary"
+                          />
+                          <span className="text-xs text-ink-muted font-bold">s/d</span>
+                          <input
+                            type="time"
+                            value={deliverySettings.operatingHoursEnd || "10:00"}
+                            onChange={(e) =>
+                              setDeliverySettings((prev) => ({
+                                ...prev,
+                                operatingHoursEnd: e.target.value,
+                                operatingHours: `${prev.operatingHoursStart || "06:00"} - ${e.target.value}`,
+                              }))
+                            }
+                            className="w-full bg-[#E6E4DA]/30 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-ink focus:outline-none focus:border-primary"
+                          />
+                        </div>
                       </div>
                     </div>
 

@@ -28,6 +28,7 @@ export default function CheckoutEscrowPage({
   const { activeTransaction, payEscrow } = useApp();
   const [selectedMethod, setSelectedMethod] = useState("QRIS");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [fulfillmentMethod, setFulfillmentMethod] = useState("DELIVERY");
   const [isPaidSuccess, setIsPaidSuccess] = useState(
     activeTransaction?.status === "PAID_HELD" || false
   );
@@ -165,27 +166,29 @@ export default function CheckoutEscrowPage({
                       }}
                       className={`p-3.5 rounded-xl border transition-all flex flex-col justify-between min-h-[85px] cursor-pointer hover:scale-[1.01] ${
                         st.isActive
-                          ? "bg-[#FEF3C7] border-[#FDE68A] ring-2 ring-[#D97706]/20"
+                          ? "bg-primary text-white border-primary shadow-sm ring-2 ring-primary/30"
                           : st.isDone
                           ? "bg-[#DCFCE7] border-[#BBF7D0]"
                           : "bg-[#E6E4DA]/50 border-border opacity-60"
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-ink-muted">
+                        <span className={`text-[10px] font-bold uppercase tracking-wider ${st.isActive ? "text-white/80" : "text-ink-muted"}`}>
                           0{idx + 1}
                         </span>
                         {st.isDone && (
                           <CheckCircle2 className="w-4 h-4 text-[#16A34A]" />
                         )}
-
+                        {st.isActive && (
+                          <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                        )}
                       </div>
 
                       <div>
                         <p
                           className={`text-xs font-bold ${
                             st.isActive
-                              ? "text-[#B45309]"
+                              ? "text-white"
                               : st.isDone
                               ? "text-[#166534]"
                               : "text-ink-secondary"
@@ -193,7 +196,7 @@ export default function CheckoutEscrowPage({
                         >
                           {st.label}
                         </p>
-                        <span className="text-[10px] text-ink-muted">
+                        <span className={`text-[10px] ${st.isActive ? "text-white/80" : "text-ink-muted"}`}>
                           {st.isDone
                             ? "Selesai"
                             : st.isActive
@@ -371,9 +374,66 @@ export default function CheckoutEscrowPage({
                         </div>
                         <div className="flex items-center gap-1.5 text-ink">
                           <Truck className="w-3.5 h-3.5 text-primary" />
-                          <span>Metode: <strong>{dealData.fulfillmentMethod === "SELF_PICKUP" ? "Ambil Sendiri" : "Kurir Petani Langsung"}</strong></span>
+                          <span>Metode: <strong>{fulfillmentMethod === "PICKUP" ? "Ambil Sendiri di Kebun" : "Diantar Petani"}</strong></span>
                         </div>
                       </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-3 border-t border-border/80 space-y-2">
+                    <label className="text-xs font-bold text-ink block">
+                      Metode Pengambilan / Kirim
+                    </label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <label
+                        onClick={() => setFulfillmentMethod("PICKUP")}
+                        className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${
+                          fulfillmentMethod === "PICKUP"
+                            ? "border-primary bg-surface-green/60 ring-1 ring-primary/20 shadow-xs"
+                            : "border-border bg-[#EFEEE7]/60 hover:bg-[#E6E4DA]/40"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <input
+                            type="radio"
+                            name="checkoutFulfillment"
+                            value="PICKUP"
+                            checked={fulfillmentMethod === "PICKUP"}
+                            onChange={() => setFulfillmentMethod("PICKUP")}
+                            className="text-primary focus:ring-primary cursor-pointer"
+                          />
+                          <span className="text-xs font-semibold text-ink">
+                            Ambil Sendiri di Kebun
+                          </span>
+                        </div>
+                        <span className="text-xs font-bold text-primary">Rp 0</span>
+                      </label>
+
+                      <label
+                        onClick={() => setFulfillmentMethod("DELIVERY")}
+                        className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${
+                          fulfillmentMethod === "DELIVERY"
+                            ? "border-primary bg-surface-green/60 ring-1 ring-primary/20 shadow-xs"
+                            : "border-border bg-[#EFEEE7]/60 hover:bg-[#E6E4DA]/40"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <input
+                            type="radio"
+                            name="checkoutFulfillment"
+                            value="DELIVERY"
+                            checked={fulfillmentMethod === "DELIVERY"}
+                            onChange={() => setFulfillmentMethod("DELIVERY")}
+                            className="text-primary focus:ring-primary cursor-pointer"
+                          />
+                          <span className="text-xs font-semibold text-ink">
+                            Diantar Petani
+                          </span>
+                        </div>
+                        <span className="text-xs font-bold text-ink">
+                          + Rp {(Number(dealData.deliveryFee) || 15000).toLocaleString("id-ID")}
+                        </span>
+                      </label>
                     </div>
                   </div>
 
