@@ -27,11 +27,14 @@ export default function TenderDetailPage({
 }) {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { activeTransaction, startTransactionFromTender } = useApp();
+  const { activeTransaction, startTransactionFromTender, tenders } = useApp();
   const activeId = id || activeTransaction?.tenderId || tenderId;
 
+  const tenderList = tenders && tenders.length > 0 ? tenders : mockTenders;
   const tender =
-    mockTenders.find((t) => t.id === activeId) || mockTenders[1];
+    tenderList.find((t) => t.id === activeId) ||
+    mockTenders.find((t) => t.id === activeId) ||
+    mockTenders[1];
 
   const [offeredPrice, setOfferedPrice] = useState(tender.targetPricePerKg);
   const [offeredQuantity, setOfferedQuantity] = useState(

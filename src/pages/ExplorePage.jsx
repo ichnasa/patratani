@@ -22,8 +22,9 @@ import {
 
 export default function ExplorePage() {
   const navigate = useNavigate();
-  const { commodities } = useApp();
+  const { commodities, tenders } = useApp();
   const commodityList = commodities && commodities.length > 0 ? commodities : mockCommodities;
+  const tenderList = tenders && tenders.length > 0 ? tenders : mockTenders;
   const [activeTab, setActiveTab] = useState("ETALASE");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
@@ -94,7 +95,7 @@ export default function ExplorePage() {
   }, [commodityList, searchQuery, selectedCategory, maxDistance, maxPrice, deliveryOption, sortBy]);
 
   const filteredTenders = useMemo(() => {
-    let result = mockTenders.filter((tender) => {
+    let result = tenderList.filter((tender) => {
       const matchesSearch =
         searchQuery === "" ||
         tender.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -134,7 +135,7 @@ export default function ExplorePage() {
     }
 
     return result;
-  }, [searchQuery, selectedCategory, maxDistance, maxPrice, deliveryOption, sortBy]);
+  }, [tenderList, searchQuery, selectedCategory, maxDistance, maxPrice, deliveryOption, sortBy]);
 
   const renderFilterPanel = () => (
     <div className="space-y-6">

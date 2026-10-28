@@ -10,13 +10,14 @@ import {
   Upload,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
+import { mockTenders } from "../data/mockData";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
 
 export default function CreateTenderPage() {
   const navigate = useNavigate();
-  const { showToast, currentUser } = useApp();
+  const { showToast, currentUser, addTender } = useApp();
   const specFileInputRef = useRef(null);
 
   const [isLocating, setIsLocating] = useState(false);
@@ -45,10 +46,12 @@ export default function CreateTenderPage() {
     "Padi & Palawija",
   ];
 
-  const maxMaterialBudget = formData.requiredQuantityKg * formData.maxBudgetPerKg;
+  const numericBudget = Number(formData.maxBudgetPerKg) || 0;
+  const numericQuantity = Number(formData.requiredQuantityKg) || 0;
+  const maxMaterialBudget = numericQuantity * numericBudget;
   const platformFee = 0;
   const totalEscrowDeposit =
-    maxMaterialBudget + (formData.allowDelivery ? formData.deliveryFee : 0);
+    maxMaterialBudget + (formData.allowDelivery ? (Number(formData.deliveryFee) || 0) : 0);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -56,18 +59,19 @@ export default function CreateTenderPage() {
     if (type === "checkbox") {
       finalValue = checked;
     } else if (type === "number") {
-      const num = Number(value);
-      if (name === "requiredQuantityKg") {
-        finalValue = Math.max(10, num);
-      } else if (name === "maxBudgetPerKg") {
-        finalValue = Math.max(100, num);
-      } else {
-        finalValue = Math.max(0, num);
-      }
+      finalValue = value === "" ? "" : Number(value);
     }
     setFormData((prev) => ({
       ...prev,
       [name]: finalValue,
+    }));
+  };
+
+  const handleBudgetChange = (e) => {
+    const rawDigits = e.target.value.replace(/\D/g, "");
+    setFormData((prev) => ({
+      ...prev,
+      maxBudgetPerKg: rawDigits === "" ? "" : Number(rawDigits),
     }));
   };
 
@@ -121,16 +125,71 @@ export default function CreateTenderPage() {
 
   const handlePublish = (e) => {
     e.preventDefault();
+    const budgetNum = Number(formData.maxBudgetPerKg);
+    if (!budgetNum || budgetNum < 100) {
+      if (showToast) {
+        showToast("Anggaran per kg harus diisi minimal Rp 100.", "warning");
+      }
+      return;
+    }
+    const quantityNum = Number(formData.requiredQuantityKg);
+    if (!quantityNum || quantityNum < 1) {
+      if (showToast) {
+        showToast("Jumlah kebutuhan harus diisi.", "warning");
+      }
+      return;
+    }
+
+    const totalBudget = quantityNum * budgetNum;
+    const formattedDate = formData.requiredDate
+      ? formData.requiredDate.split("T")[0]
+      : "2026-10-30";
+
+    const newTender = {
+      id: `TND-${new Date().getFullYear()}-${Date.now().toString().slice(-4)}`,
+      title: formData.title.trim(),
+      commodityName: formData.title.trim(),
+      category: formData.category,
+      requiredQuantityKg: quantityNum,
+      targetPricePerKg: budgetNum,
+      maxBudgetPerKg: budgetNum,
+      totalBudget: totalBudget,
+      deadlineDate: formattedDate,
+      deliveryDate: formattedDate,
+      status: "OPEN",
+      buyer: {
+        id: currentUser?.id || "BUYER-01",
+        businessName: currentUser?.farmName || currentUser?.name || "Warung Sederhana Bu Lina",
+        contactPerson: currentUser?.name || "Ibu Lina Marlina",
+        businessType: "Warung Makan / Kuliner Lokal",
+        address: formData.kitchenAddress || currentUser?.location || "Jl. Terusan Buahbatu No. 42, Bandung",
+        distanceKm: 2.5,
+        verified: true,
+        rating: currentUser?.rating || 4.9,
+      },
+      fulfillmentMethod: formData.allowDelivery ? "FARMER_DELIVERY" : "SELF_PICKUP",
+      deliveryFee: formData.allowDelivery ? (Number(formData.deliveryFee) || 5000) : 0,
+      specifications: formData.qualitySpecs || "Bahan baku segar sesuai spesifikasi standar mutu dapur usaha.",
+      bidsCount: 0,
+      bids: [],
+      escrow: {
+        status: "UNPAID",
+        amountHeld: 0,
+        feePlatform: 0,
+        netFarmerPayment: 0,
+      },
+    };
+
+    if (addTender) {
+      addTender(newTender);
+    } else {
+      mockTenders.unshift(newTender);
+    }
+
     if (showToast) {
       showToast("Tender Permintaan berhasil dipublikasikan!", "success");
     }
     navigate("/explore");
-  };
-
-  const handleSaveDraft = () => {
-    if (showToast) {
-      showToast("Draf tender permintaan tersimpan di perangkat.", "info");
-    }
   };
 
   return (
@@ -218,7 +277,7 @@ export default function CreateTenderPage() {
 
                     <div>
                       <label className="block text-xs font-semibold text-ink mb-1.5">
-                        Jumlah Kebutuhan (Min. 10 kg) <span className="text-red-500">*</span>
+                        Jumlah Kebutuhan (kg) <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
                         <input
@@ -259,16 +318,16 @@ export default function CreateTenderPage() {
                         Anggaran Maksimal per kg <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3.5 top-2.5 text-xs font-bold text-ink-muted">
+                        <span className="absolute left-3.5 top-2.5 text-xs font-bold text-ink-muted pointer-events-none select-none">
                           Rp
                         </span>
                         <input
-                          type="number"
+                          type="text"
+                          inputMode="numeric"
                           name="maxBudgetPerKg"
-                          value={formData.maxBudgetPerKg}
-                          onChange={handleChange}
-                          min={1000}
-                          step={500}
+                          value={formData.maxBudgetPerKg === "" ? "" : Number(formData.maxBudgetPerKg).toLocaleString("id-ID")}
+                          onChange={handleBudgetChange}
+                          placeholder="0"
                           required
                           className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                         />
@@ -426,15 +485,7 @@ export default function CreateTenderPage() {
                 </div>
               </div>
 
-              <div className="pt-4 flex flex-col sm:flex-row items-center justify-end gap-3 border-t border-border">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleSaveDraft}
-                  className="w-full sm:w-auto"
-                >
-                  Simpan Draf
-                </Button>
+              <div className="pt-4 flex items-center justify-end border-t border-border">
                 <Button
                   type="submit"
                   variant="primary"
@@ -481,7 +532,7 @@ export default function CreateTenderPage() {
                   <div className="pt-2 border-t border-border flex items-center justify-between">
                     <span className="text-[11px] text-ink-muted">Batas Anggaran:</span>
                     <span className="text-xs font-bold text-primary">
-                      Rp {formData.maxBudgetPerKg.toLocaleString("id-ID")}/kg
+                      Rp {(Number(formData.maxBudgetPerKg) || 0).toLocaleString("id-ID")}/kg
                     </span>
                   </div>
 

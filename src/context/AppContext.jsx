@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { mockUserProfile, mockCommodities } from "../data/mockData";
+import { mockUserProfile, mockCommodities, mockTenders } from "../data/mockData";
 
 const AppContext = createContext();
 
@@ -44,6 +44,29 @@ export function AppProvider({ children }) {
     setCommodities((prev) => [newCommodity, ...prev]);
     if (!mockCommodities.some((c) => c.id === newCommodity.id)) {
       mockCommodities.unshift(newCommodity);
+    }
+  };
+
+  const [tenders, setTenders] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem("patratani_tenders");
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {}
+    return mockTenders;
+  });
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem("patratani_tenders", JSON.stringify(tenders));
+    } catch (e) {}
+  }, [tenders]);
+
+  const addTender = (newTender) => {
+    setTenders((prev) => [newTender, ...prev]);
+    if (!mockTenders.some((t) => t.id === newTender.id)) {
+      mockTenders.unshift(newTender);
     }
   };
 
@@ -394,6 +417,8 @@ export function AppProvider({ children }) {
     setCurrentUser,
     commodities,
     addCommodity,
+    tenders,
+    addTender,
     login,
     logout,
     register,

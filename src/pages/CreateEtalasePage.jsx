@@ -29,7 +29,6 @@ export default function CreateEtalasePage() {
     harvestDate: "2026-10-30",
     totalQuotaKg: 50,
     pricePerKg: 12000,
-    minOrderKg: 10,
     farmAddress: "Kp. Sukatani RT 02/04, Desa Pasirjambu, Ciwidey, Bandung",
     geotag: "-7.0984, 107.4921",
     gpsAccuracy: "8m",
@@ -169,7 +168,6 @@ export default function CreateEtalasePage() {
       quotaKg: quotaNum,
       totalQuotaKg: quotaNum,
       availableQuotaKg: quotaNum,
-      minOrderKg: Number(formData.minOrderKg) || 10,
       pricePerKg: priceNum,
       harvestDate: formData.harvestDate || "2026-10-30",
       image: formData.image || "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80",
@@ -205,11 +203,7 @@ export default function CreateEtalasePage() {
     navigate("/explore");
   };
 
-  const handleSaveDraft = () => {
-    if (showToast) {
-      showToast("Draf etalase panen tersimpan di perangkat.", "info");
-    }
-  };
+
 
   return (
     <div className="min-h-screen bg-background text-ink flex flex-col justify-between selection:bg-primary-50 selection:text-primary">
@@ -430,26 +424,7 @@ export default function CreateEtalasePage() {
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-semibold text-ink mb-1.5">
-                      Minimal Pemesanan per Pembeli <span className="text-red-500">*</span>
-                    </label>
-                    <div className="relative max-w-xs">
-                      <input
-                        type="number"
-                        name="minOrderKg"
-                        value={formData.minOrderKg}
-                        onChange={handleChange}
-                        min={10}
-                        max={formData.totalQuotaKg}
-                        required
-                        className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors pr-10"
-                      />
-                      <span className="absolute right-3.5 top-2.5 text-xs font-bold text-ink-muted">
-                        kg
-                      </span>
-                    </div>
-                  </div>
+
                 </div>
               </div>
 
@@ -579,15 +554,7 @@ export default function CreateEtalasePage() {
                 </div>
               </div>
 
-              <div className="pt-4 flex flex-col sm:flex-row items-center justify-end gap-3 border-t border-border">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleSaveDraft}
-                  className="w-full sm:w-auto"
-                >
-                  Simpan Draf
-                </Button>
+              <div className="pt-4 flex items-center justify-end border-t border-border">
                 <Button
                   type="submit"
                   variant="primary"
