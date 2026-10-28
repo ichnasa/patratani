@@ -70,10 +70,10 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-ink flex flex-col justify-between selection:bg-primary-50 selection:text-primary">
+    <div className="min-h-screen bg-background text-ink flex flex-col selection:bg-primary-50 selection:text-primary">
       <Navbar />
 
-      <main className="w-full flex-1">
+      <main className="w-full flex-1 flex-grow">
         <div className="max-w-[1440px] mx-auto w-full">
           <section className="py-8 md:py-10 px-6 lg:px-16 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10">
             <div className="flex flex-col gap-4 max-w-xl text-center lg:text-left">
@@ -315,36 +315,32 @@ export default function HomePage() {
                           key={step.key}
                           className={`p-3.5 rounded-xl border transition-all flex flex-col justify-between min-h-[90px] ${
                             isCurrent
-                              ? "bg-[#DBEAFE] border-[#93C5FD]"
+                              ? "bg-[#1E3A8A] border-[#1E3A8A] shadow-xs"
                               : isCompleted
-                              ? "bg-[#DCFCE7] border-[#BBF7D0]"
+                              ? "bg-[#15803D] border-[#15803D] shadow-xs"
                               : "bg-[#F1F5F9] border-[#E2E8F0]"
                           }`}
                         >
                           <div className="flex items-center justify-between">
                             <span
                               className={`text-[10px] font-bold uppercase tracking-wider ${
-                                isCurrent
-                                  ? "text-[#1E40AF]"
-                                  : isCompleted
-                                  ? "text-[#15803D]"
+                                isCurrent || isCompleted
+                                  ? "text-white/80"
                                   : "text-[#94A3B8]"
                               }`}
                             >
                               0{step.step}
                             </span>
                             {isCompleted && (
-                              <CheckCircle2 className="w-3.5 h-3.5 text-[#16A34A]" />
+                              <CheckCircle2 className="w-3.5 h-3.5 text-white" />
                             )}
                           </div>
   
                           <div>
                             <p
                               className={`text-xs font-bold leading-tight ${
-                                isCurrent
-                                  ? "text-[#1E40AF]"
-                                  : isCompleted
-                                  ? "text-[#166534]"
+                                isCurrent || isCompleted
+                                  ? "text-white"
                                   : "text-[#64748B]"
                               }`}
                             >
@@ -352,10 +348,8 @@ export default function HomePage() {
                             </p>
                             <span
                               className={`text-[10px] font-medium block mt-0.5 ${
-                                isCurrent
-                                  ? "text-[#2563EB]"
-                                  : isCompleted
-                                  ? "text-[#15803D]"
+                                isCurrent || isCompleted
+                                  ? "text-white/90"
                                   : "text-[#94A3B8]"
                               }`}
                             >

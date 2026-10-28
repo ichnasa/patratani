@@ -39,8 +39,10 @@ export default function App() {
   return (
     <AppProvider>
       <BrowserRouter>
-        <Toast />
-        <Routes>
+        <div className="min-h-screen flex flex-col bg-background text-ink">
+          <Toast />
+          <div className="flex-1 flex flex-col">
+            <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/explore" element={<ExplorePage />} />
           <Route path="/etalase" element={<DetailEtalasePage />} />
@@ -167,7 +169,9 @@ export default function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </BrowserRouter>
-    </AppProvider>
+      </div>
+    </div>
+  </BrowserRouter>
+</AppProvider>
   );
 }

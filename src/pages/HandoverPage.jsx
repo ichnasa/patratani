@@ -14,7 +14,6 @@ import {
   AlertTriangle,
   Scale,
   ShieldCheck,
-  Check,
   ArrowLeft,
   Store,
   X,
@@ -41,10 +40,6 @@ export default function HandoverPage({ onBack, onComplete }) {
       ? String(activeTransaction.actualWeightKg)
       : "25.2"
   );
-  const [checklist, setChecklist] = useState({
-    freshness: true,
-    weightVerification: true,
-  });
   const [isReleasing, setIsReleasing] = useState(false);
   const [isCompleted, setIsCompleted] = useState(
     activeTransaction?.status === "COMPLETED" || false
@@ -122,15 +117,6 @@ export default function HandoverPage({ onBack, onComplete }) {
   const weightDiff = (parsedActualWeight - targetQty).toFixed(1);
   const isWeightValid = parsedActualWeight >= targetQty;
 
-  const allChecklistPassed =
-    checklist.freshness &&
-    checklist.weightVerification &&
-    isWeightValid;
-
-  const toggleChecklist = (key) => {
-    setChecklist((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
-
   const handleCapturePhoto = () => {
     if (isPhotoCaptured) {
       setCapturedPhotoUrl(null);
@@ -172,9 +158,9 @@ export default function HandoverPage({ onBack, onComplete }) {
   };
 
   const handleBuyerRelease = () => {
-    if (!farmerConfirmed || !isPhotoCaptured || !allChecklistPassed) {
+    if (!farmerConfirmed || !isPhotoCaptured) {
       if (showToast) {
-        showToast("Harap lengkapi verifikasi foto, checklist mutu, dan konfirmasi petani terlebih dahulu.", "warning");
+        showToast("Harap lengkapi verifikasi foto dan konfirmasi petani terlebih dahulu.", "warning");
       }
       return;
     }
@@ -597,50 +583,12 @@ export default function HandoverPage({ onBack, onComplete }) {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between p-3 rounded-xl bg-[#EFEEE7] border border-border">
+                    <div className="flex items-center justify-between p-3.5 rounded-xl bg-[#EFEEE7] border border-border">
                       <span className="text-ink-secondary">Total Nilai Escrow Tertahan:</span>
-                      <span className="font-bold text-primary text-sm">
+                      <span className="font-bold text-primary text-2xl sm:text-3xl">
                         Rp {(handoverData.escrowAmount || handoverData.totalPayment || 800000).toLocaleString("id-ID")}
                       </span>
                     </div>
-                  </div>
-
-                  <div className="space-y-2.5">
-                    <span className="text-xs font-bold text-ink uppercase tracking-wider block">
-                      Checklist Kesegaran &amp; Mutu Panen
-                    </span>
-
-                    {[
-                      {
-                        id: "freshness",
-                        label: "Kualitas komoditas segar, bersih, dan sesuai standar pesanan",
-                      },
-                      {
-                        id: "weightVerification",
-                        label: "Hasil penimbangan fisik telah diverifikasi bersama secara akurat",
-                      },
-                    ].map((item) => (
-                      <label
-                        key={item.id}
-                        onClick={() => toggleChecklist(item.id)}
-                        className={`flex items-start gap-2.5 p-3 rounded-xl border text-xs cursor-pointer transition-all ${
-                          checklist[item.id]
-                            ? "bg-surface-green/60 border-primary/40 text-ink"
-                            : "bg-surface border-border text-ink-muted hover:bg-surface/80"
-                        }`}
-                      >
-                        <div
-                          className={`w-4 h-4 rounded-md border flex items-center justify-center shrink-0 mt-0.5 ${
-                            checklist[item.id]
-                              ? "bg-primary border-primary text-[#E6E4DA]"
-                              : "border-border bg-surface"
-                          }`}
-                        >
-                          {checklist[item.id] && <Check className="w-3 h-3" />}
-                        </div>
-                        <span className="leading-tight">{item.label}</span>
-                      </label>
-                    ))}
                   </div>
 
                   <div className="pt-2 space-y-3">
@@ -674,10 +622,10 @@ export default function HandoverPage({ onBack, onComplete }) {
                         fullWidth
                         icon={ShieldCheck}
                         isLoading={isReleasing}
-                        disabled={!allChecklistPassed || !isPhotoCaptured || !farmerConfirmed}
+                        disabled={!isPhotoCaptured || !farmerConfirmed}
                         onClick={handleBuyerRelease}
                       >
-                        Konfirmasi Penerimaan &amp; Cairkan Escrow
+                        Konfirmasi Penerimaan
                       </Button>
                     )}
 

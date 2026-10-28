@@ -109,10 +109,10 @@ export default function ProfilePage({ onLogout }) {
   };
 
   return (
-    <div className="min-h-screen bg-background text-ink flex flex-col justify-between selection:bg-primary-50 selection:text-primary">
+    <div className="min-h-screen bg-background text-ink flex flex-col selection:bg-primary-50 selection:text-primary">
       <Navbar />
 
-      <main className="w-full flex-1">
+      <main className="w-full flex-1 flex-grow">
         <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-8 md:py-10 space-y-8 pb-28 md:pb-14">
           <section className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-xs">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-border/80">
@@ -225,7 +225,7 @@ export default function ProfilePage({ onLogout }) {
                   </div>
 
                   <div className="flex items-baseline justify-between pt-1">
-                    <p className="text-2xl sm:text-3xl font-bold text-primary">
+                    <p className="text-3xl sm:text-4xl font-bold text-primary">
                       Rp {currentUser.activeBalance.toLocaleString("id-ID")}
                     </p>
 
@@ -262,7 +262,7 @@ export default function ProfilePage({ onLogout }) {
                   </div>
 
                   <div className="flex items-baseline justify-between pt-1">
-                    <p className="text-2xl sm:text-3xl font-bold text-[#D97706]">
+                    <p className="text-3xl sm:text-4xl font-bold text-[#D97706]">
                       Rp {currentUser.escrowBalance.toLocaleString("id-ID")}
                     </p>
 

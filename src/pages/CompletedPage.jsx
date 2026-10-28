@@ -60,10 +60,10 @@ export default function CompletedPage({ onBack, onExploreMore }) {
   };
 
   return (
-    <div className="min-h-screen bg-background text-ink flex flex-col justify-between selection:bg-primary-50 selection:text-primary">
+    <div className="min-h-screen bg-background text-ink flex flex-col selection:bg-primary-50 selection:text-primary">
       <Navbar activeNav="transaksi" />
 
-      <main className="w-full flex-1">
+      <main className="w-full flex-1 flex-grow">
         <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-8 md:py-10 space-y-8 pb-28 md:pb-14">
           <div>
             <button
@@ -121,7 +121,7 @@ export default function CompletedPage({ onBack, onExploreMore }) {
                   <span className="text-[10px] uppercase font-bold text-ink-muted block">
                     Total Dana Bersih Petani
                   </span>
-                  <p className="text-base font-bold text-[#166534]">
+                  <p className="text-2xl sm:text-3xl font-bold text-[#166534]">
                     Rp {(transactionData.netFarmerPayment || 187800).toLocaleString("id-ID")}
                   </p>
                   <p className="text-[10px] text-[#166534]">Sudah diteruskan ke rekening</p>
@@ -209,7 +209,7 @@ export default function CompletedPage({ onBack, onExploreMore }) {
                         Dikirim ke rekening: {transactionData.farmer?.bankAccount || "BRI • Rekening Petani"}
                       </span>
                     </div>
-                    <strong className="text-xl font-extrabold text-[#16A34A]">
+                    <strong className="text-3xl sm:text-4xl font-extrabold text-[#16A34A]">
                       Rp {(transactionData.netFarmerPayment || 187800).toLocaleString("id-ID")}
                     </strong>
                   </div>

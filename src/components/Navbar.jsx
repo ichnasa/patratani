@@ -312,18 +312,27 @@ export default function Navbar() {
         </div>
       </header>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-surface/95 backdrop-blur-md border-t border-border px-6 py-2.5 flex items-center justify-around md:hidden shadow-lg">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-surface/95 backdrop-blur-md border-t border-border px-4 py-2 flex items-center justify-around md:hidden shadow-lg">
         {isAdmin ? (
           <Link
             to="/admin/disputes"
             className={clsx(
-              "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
+              "flex flex-col items-center gap-1 transition-all py-1 px-3 rounded-xl",
               isNavActive("/admin")
                 ? "text-primary font-bold"
-                : "text-amber-700 hover:text-amber-800",
+                : "text-gray-400 hover:text-gray-600",
             )}
           >
-            <Scale className="w-5 h-5 text-amber-600" />
+            <div
+              className={clsx(
+                "p-1.5 px-3 rounded-full transition-all",
+                isNavActive("/admin")
+                  ? "bg-primary/15 text-primary"
+                  : "text-gray-400",
+              )}
+            >
+              <Scale className="w-5 h-5 text-amber-600" />
+            </div>
             <span className="text-[10px] font-semibold">Portal Admin</span>
           </Link>
         ) : (
@@ -331,26 +340,44 @@ export default function Navbar() {
             <Link
               to="/"
               className={clsx(
-                "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
+                "flex flex-col items-center gap-1 transition-all py-1 px-2.5 rounded-xl",
                 isNavActive("/")
-                  ? "text-primary font-bold"
-                  : "text-ink-secondary hover:text-ink",
+                  ? "text-[#16A34A] font-bold"
+                  : "text-gray-400 hover:text-gray-600",
               )}
             >
-              <Home className="w-5 h-5" />
+              <div
+                className={clsx(
+                  "p-1.5 px-3 rounded-full transition-all",
+                  isNavActive("/")
+                    ? "bg-[#DCFCE7] text-[#16A34A]"
+                    : "text-gray-400",
+                )}
+              >
+                <Home className="w-5 h-5" />
+              </div>
               <span className="text-[10px]">Beranda</span>
             </Link>
 
             <Link
               to="/explore"
               className={clsx(
-                "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
+                "flex flex-col items-center gap-1 transition-all py-1 px-2.5 rounded-xl",
                 isNavActive("/explore")
-                  ? "text-primary font-bold"
-                  : "text-ink-secondary hover:text-ink",
+                  ? "text-[#16A34A] font-bold"
+                  : "text-gray-400 hover:text-gray-600",
               )}
             >
-              <Compass className="w-5 h-5" />
+              <div
+                className={clsx(
+                  "p-1.5 px-3 rounded-full transition-all",
+                  isNavActive("/explore")
+                    ? "bg-[#DCFCE7] text-[#16A34A]"
+                    : "text-gray-400",
+                )}
+              >
+                <Compass className="w-5 h-5" />
+              </div>
               <span className="text-[10px]">Jelajahi</span>
             </Link>
 
@@ -358,13 +385,22 @@ export default function Navbar() {
               <Link
                 to="/escrow"
                 className={clsx(
-                  "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
+                  "flex flex-col items-center gap-1 transition-all py-1 px-2.5 rounded-xl",
                   isNavActive("/escrow")
-                    ? "text-primary font-bold"
-                    : "text-ink-secondary hover:text-ink",
+                    ? "text-[#16A34A] font-bold"
+                    : "text-gray-400 hover:text-gray-600",
                 )}
               >
-                <ShoppingCart className="w-5 h-5" />
+                <div
+                  className={clsx(
+                    "p-1.5 px-3 rounded-full transition-all",
+                    isNavActive("/escrow")
+                      ? "bg-[#DCFCE7] text-[#16A34A]"
+                      : "text-gray-400",
+                  )}
+                >
+                  <ShoppingCart className="w-5 h-5" />
+                </div>
                 <span className="text-[10px]">Keranjang</span>
               </Link>
             )}
@@ -373,20 +409,32 @@ export default function Navbar() {
               <Link
                 to="/handover"
                 className={clsx(
-                  "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg relative",
+                  "flex flex-col items-center gap-1 transition-all py-1 px-2.5 rounded-xl relative",
                   isNavActive("/handover") ||
                     isNavActive("/tender") ||
                     isNavActive("/escrow") ||
                     isNavActive("/completed")
-                    ? "text-primary font-bold"
-                    : "text-ink-secondary hover:text-ink",
+                    ? "text-[#16A34A] font-bold"
+                    : "text-gray-400 hover:text-gray-600",
                 )}
               >
-                <ClipboardList className="w-5 h-5" />
+                <div
+                  className={clsx(
+                    "p-1.5 px-3 rounded-full transition-all relative",
+                    isNavActive("/handover") ||
+                      isNavActive("/tender") ||
+                      isNavActive("/escrow") ||
+                      isNavActive("/completed")
+                      ? "bg-[#DCFCE7] text-[#16A34A]"
+                      : "text-gray-400",
+                  )}
+                >
+                  <ClipboardList className="w-5 h-5" />
+                  <span className="absolute -top-1 -right-0.5 px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-[#16A34A] text-white">
+                    1
+                  </span>
+                </div>
                 <span className="text-[10px]">Transaksi</span>
-                <span className="ml-1 px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-primary text-[#E6E4DA]">
-                  1
-                </span>
               </Link>
             )}
           </>
@@ -395,13 +443,22 @@ export default function Navbar() {
         <Link
           to={currentUser ? "/profile" : "/login"}
           className={clsx(
-            "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
+            "flex flex-col items-center gap-1 transition-all py-1 px-2.5 rounded-xl",
             isNavActive("/profile") || isNavActive("/login")
-              ? "text-primary font-bold"
-              : "text-ink-secondary hover:text-ink",
+              ? "text-[#16A34A] font-bold"
+              : "text-gray-400 hover:text-gray-600",
           )}
         >
-          <User className="w-5 h-5" />
+          <div
+            className={clsx(
+              "p-1.5 px-3 rounded-full transition-all",
+              isNavActive("/profile") || isNavActive("/login")
+                ? "bg-[#DCFCE7] text-[#16A34A]"
+                : "text-gray-400",
+            )}
+          >
+            <User className="w-5 h-5" />
+          </div>
           <span className="text-[10px]">{currentUser ? "Akun" : "Masuk"}</span>
         </Link>
       </nav>

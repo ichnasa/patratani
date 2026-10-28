@@ -15,6 +15,8 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
 
+const ENABLE_QUALITY_DOCUMENT = false;
+
 export default function CreateTenderPage() {
   const navigate = useNavigate();
   const { showToast, currentUser, addTender } = useApp();
@@ -463,10 +465,11 @@ export default function CreateTenderPage() {
                     className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl p-3.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                   />
 
-                  <div>
-                    <input
-                      type="file"
-                      ref={specFileInputRef}
+                  {ENABLE_QUALITY_DOCUMENT && (
+                    <div>
+                      <input
+                        type="file"
+                        ref={specFileInputRef}
                       accept="image/jpeg, image/png, application/pdf"
                       onChange={handleSpecFileChange}
                       className="hidden"
@@ -491,7 +494,8 @@ export default function CreateTenderPage() {
                       </span>
                     </div>
                   </div>
-                </div>
+                )}
+              </div>
               </div>
 
               <div className="pt-4 flex items-center justify-end border-t border-border">

@@ -119,10 +119,10 @@ export default function CheckoutEscrowPage({
   };
 
   return (
-    <div className="min-h-screen bg-background text-ink flex flex-col justify-between selection:bg-primary-50 selection:text-primary">
+    <div className="min-h-screen bg-background text-ink flex flex-col selection:bg-primary-50 selection:text-primary">
       <Navbar activeNav="transaksi" />
 
-      <main className="w-full flex-1">
+      <main className="w-full flex-1 flex-grow">
         <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-8 md:py-10 space-y-8 pb-28 md:pb-14">
           <div>
             <button
@@ -224,8 +224,13 @@ export default function CheckoutEscrowPage({
                 <h2 className="text-2xl font-bold text-ink">
                   Dana Berhasil Diamankan di Rekening Escrow!
                 </h2>
+                <div className="py-2">
+                  <span className="text-3xl sm:text-4xl font-bold text-[#166534] block">
+                    Rp {(dealData.totalPayment || 585000).toLocaleString("id-ID")}
+                  </span>
+                </div>
                 <p className="text-sm text-ink-secondary leading-relaxed">
-                  Pembayaran sebesar <strong>Rp {(dealData.totalPayment || 585000).toLocaleString("id-ID")}</strong> telah masuk ke rekening penampung simulasi Patra Tani (ID Escrow: <code className="font-mono font-bold text-ink">{dealData.escrowId || "ESC-20261027-8891"}</code>).
+                  Pembayaran sebesar <strong>Rp {(dealData.totalPayment || 585000).toLocaleString("id-ID")}</strong> telah masuk ke rekening bersama (escrow) Patra Tani (ID Escrow: <code className="font-mono font-bold text-ink">{dealData.escrowId || "ESC-20261027-8891"}</code>).
                 </p>
               </div>
 
@@ -608,7 +613,7 @@ export default function CheckoutEscrowPage({
                           Diamankan di rekening sandbox
                         </span>
                       </div>
-                      <strong className="text-xl font-bold text-primary">
+                      <strong className="text-2xl sm:text-3xl font-bold text-primary">
                         Rp {(dealData.totalPayment || 585000).toLocaleString("id-ID")}
                       </strong>
                     </div>

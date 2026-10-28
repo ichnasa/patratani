@@ -110,13 +110,18 @@ export default function BuyerDashboardPage() {
                 </td>
                 <td className="py-4 whitespace-nowrap">
                   {order.status === "HANDOVER" && (
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#FEF3C7] text-[#D97706]">
-                      HANDOVER
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#B45309] text-white shadow-xs">
+                      Serah Terima
+                    </span>
+                  )}
+                  {order.status === "PAID_HELD" && (
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#1E40AF] text-white shadow-xs">
+                      Dana Tertahan
                     </span>
                   )}
                   {order.status === "COMPLETED" && (
-                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-surface-green text-primary">
-                      COMPLETED
+                    <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#15803D] text-white shadow-xs">
+                      Selesai
                     </span>
                   )}
                 </td>
@@ -197,10 +202,10 @@ export default function BuyerDashboardPage() {
   );
 
   return (
-    <div className="min-h-screen bg-background text-ink flex flex-col justify-between selection:bg-primary-50 selection:text-primary">
+    <div className="min-h-screen bg-background text-ink flex flex-col selection:bg-primary-50 selection:text-primary">
       <Navbar activeNav="akun" />
 
-      <main className="w-full flex-1">
+      <main className="w-full flex-1 flex-grow">
         <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-8 md:py-10 space-y-8 pb-28 md:pb-14">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <aside className="lg:col-span-3 space-y-4">
