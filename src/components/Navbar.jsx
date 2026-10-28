@@ -1,23 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import {
   Sprout,
-  Search,
   Bell,
   Home,
   Compass,
   ClipboardList,
   User,
   Scale,
+  ChevronRight,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 
-export default function Navbar({
-  searchValue,
-  onSearchChange,
-  notificationCount = 2,
-}) {
+export default function Navbar() {
   const { currentUser } = useApp();
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,27 +32,54 @@ export default function Navbar({
   );
   const dashboardRoute = isBuyer ? "/dashboard/buyer" : "/dashboard/farmer";
 
-  const [internalSearch, setInternalSearch] = useState(searchValue || "");
+  const [showNotif, setShowNotif] = useState(false);
+  const notifRef = useRef(null);
 
   useEffect(() => {
-    if (searchValue !== undefined && searchValue !== null) {
-      setInternalSearch(searchValue);
+    const handleClickOutside = (e) => {
+      if (notifRef.current && !notifRef.current.contains(e.target)) {
+        setShowNotif(false);
+      }
+    };
+    if (showNotif) {
+      document.addEventListener("mousedown", handleClickOutside);
     }
-  }, [searchValue]);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showNotif]);
 
-  const handleInputChange = (e) => {
-    const val = e.target.value;
-    setInternalSearch(val);
-    if (onSearchChange) {
-      onSearchChange(e);
-    }
-  };
+  const notifications = [
+    {
+      id: "notif-1",
+      title: "Dana Escrow Diamankan",
+      description:
+        "Dana Rp 1.585.000 untuk transaksi Tomat Mawar telah diamankan di rekening escrow.",
+      time: "10 mnt lalu",
+      link: "/escrow",
+      unread: true,
+    },
+    {
+      id: "notif-2",
+      title: "Penawaran Tender Masuk",
+      description:
+        "Pak Wayan mengajukan penawaran Rp 46.000/kg untuk Tender Cabai Rawit.",
+      time: "1 jam lalu",
+      link: "/tender",
+      unread: true,
+    },
+    {
+      id: "notif-3",
+      title: "Verifikasi Serah-Terima Kebun",
+      description:
+        "Pesanan Bawang Merah siap diperiksa dengan foto kamera geotag lokasi.",
+      time: "3 jam lalu",
+      link: "/handover",
+      unread: false,
+    },
+  ];
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      navigate(`/explore?search=${encodeURIComponent(internalSearch)}`);
-    }
-  };
+  const unreadCount = notifications.filter((n) => n.unread).length;
 
   const isNavActive = (path) => {
     if (path === "/" && currentPath === "/") return true;
@@ -64,13 +87,10 @@ export default function Navbar({
     return false;
   };
 
-  const activeSearchVal =
-    onSearchChange && searchValue !== undefined ? searchValue : internalSearch;
-
   return (
     <>
       <header className="sticky top-0 z-40 w-full bg-surface border-b border-border transition-colors">
-        <div className="max-w-[1440px] mx-auto h-16 px-4 sm:px-6 lg:px-16 flex items-center justify-between gap-2 sm:gap-4">
+        <div className="max-w-[1440px] mx-auto h-16 px-4 sm:px-6 lg:px-16 flex items-center justify-between gap-4">
           <div className="flex items-center gap-6 shrink-0">
             <Link
               to="/"
@@ -157,29 +177,94 @@ export default function Navbar({
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="hidden lg:flex items-center w-60 rounded-md border border-border px-3 py-2 gap-2 bg-[#E6E4DA]/40 transition-colors focus-within:border-primary focus-within:bg-surface">
-              <Search className="w-4 h-4 text-ink-muted shrink-0 pointer-events-none" />
-              <input
-                type="text"
-                placeholder="Cari panen atau tender..."
-                value={activeSearchVal}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-                className="w-full bg-transparent text-[13px] text-ink placeholder:text-ink-muted focus:outline-none"
-              />
-            </div>
-
             {isTransactionalUser && (
-              <Link
-                to="/handover"
-                aria-label="Pemberitahuan Transaksi"
-                className="relative w-10 h-10 rounded-full flex items-center justify-center text-ink-secondary hover:text-ink hover:bg-surface-green/60 transition-colors"
-              >
-                <Bell className="w-5 h-5" />
-                {notificationCount > 0 && (
-                  <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-status-disputed" />
+              <div className="relative" ref={notifRef}>
+                <button
+                  type="button"
+                  onClick={() => setShowNotif((prev) => !prev)}
+                  aria-label="Pemberitahuan Notifikasi"
+                  className={clsx(
+                    "relative w-10 h-10 rounded-full flex items-center justify-center text-ink-secondary hover:text-ink hover:bg-surface-green/60 transition-colors cursor-pointer",
+                    showNotif && "bg-surface-green/60 text-primary",
+                  )}
+                >
+                  <Bell className="w-5 h-5" />
+                  {unreadCount > 0 && (
+                    <span className="absolute top-1 right-1 min-w-4 h-4 px-1 rounded-full bg-status-disputed text-white text-[10px] font-bold flex items-center justify-center leading-none">
+                      {unreadCount}
+                    </span>
+                  )}
+                </button>
+
+                {showNotif && (
+                  <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-surface rounded-2xl border border-border shadow-xl z-50 overflow-hidden animate-in fade-in duration-150">
+                    <div className="px-4 py-3 border-b border-border flex items-center justify-between bg-[#E6E4DA]/20">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-ink">
+                          Notifikasi
+                        </span>
+                        <span className="px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold text-[10px]">
+                          {unreadCount} Baru
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setShowNotif(false)}
+                        className="text-[11px] font-semibold text-primary hover:underline cursor-pointer"
+                      >
+                        Tutup
+                      </button>
+                    </div>
+
+                    <div className="divide-y divide-border/60 max-h-80 overflow-y-auto">
+                      {notifications.map((item) => (
+                        <div
+                          key={item.id}
+                          onClick={() => {
+                            setShowNotif(false);
+                            navigate(item.link);
+                          }}
+                          className={clsx(
+                            "p-3.5 hover:bg-surface-green/30 transition-colors cursor-pointer flex items-start gap-3 text-left",
+                            item.unread && "bg-[#E6E4DA]/10",
+                          )}
+                        >
+                          <div className="w-8 h-8 rounded-xl bg-surface-green text-primary flex items-center justify-center shrink-0 mt-0.5">
+                            <Bell className="w-4 h-4" />
+                          </div>
+                          <div className="flex-1 min-w-0 space-y-0.5">
+                            <div className="flex items-center justify-between gap-2">
+                              <p className="text-xs font-bold text-ink truncate">
+                                {item.title}
+                              </p>
+                              <span className="text-[10px] text-ink-muted shrink-0">
+                                {item.time}
+                              </span>
+                            </div>
+                            <p className="text-[11px] text-ink-secondary leading-snug line-clamp-2">
+                              {item.description}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="p-2.5 border-t border-border bg-[#E6E4DA]/20 text-center">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setShowNotif(false);
+                          navigate("/handover");
+                        }}
+                        className="text-xs font-bold text-primary hover:underline cursor-pointer inline-flex items-center gap-1"
+                      >
+                        <span>Lihat Semua Transaksi</span>
+                        <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
                 )}
-              </Link>
+              </div>
             )}
 
             {currentUser ? (
@@ -207,20 +292,6 @@ export default function Navbar({
                 Masuk
               </Link>
             )}
-          </div>
-        </div>
-
-        <div className="px-4 sm:px-6 pb-3 lg:hidden">
-          <div className="flex items-center w-full rounded-md border border-border px-3 py-2 gap-2 bg-[#E6E4DA]/40 focus-within:border-primary focus-within:bg-surface transition-colors">
-            <Search className="w-4 h-4 text-ink-muted shrink-0 pointer-events-none" />
-            <input
-              type="text"
-              placeholder="Cari panen atau tender..."
-              value={activeSearchVal}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-              className="w-full bg-transparent text-[13px] text-ink placeholder:text-ink-muted focus:outline-none"
-            />
           </div>
         </div>
       </header>
@@ -267,7 +338,9 @@ export default function Navbar({
           >
             <ClipboardList className="w-5 h-5" />
             <span className="text-[10px]">Transaksi</span>
-            <span className="absolute top-1 right-2 w-1.5 h-1.5 rounded-full bg-primary" />
+            <span className="ml-1 px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-primary text-[#E6E4DA]">
+              1
+            </span>
           </Link>
         )}
 
