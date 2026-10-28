@@ -4,16 +4,12 @@ import { useApp } from "../context/AppContext";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
-import StatusBadge from "../components/StatusBadge";
-import Chip from "../components/Chip";
-import { mockTenders, mockProfileFaqs } from "../data/mockData";
+import { mockProfileFaqs } from "../data/mockData";
 import {
   Star,
   Edit3,
   Wallet,
   ShieldCheck,
-  FileText,
-  History,
   HelpCircle,
   Shield,
   LogOut,
@@ -22,21 +18,18 @@ import {
   MapPin,
   Phone,
   Mail,
-  BadgeCheck,
   X,
   Building2,
-  LayoutDashboard,
-  Truck,
   Camera,
+  CheckCircle2,
 } from "lucide-react";
 
-export default function ProfilePage({ onBack, onLogout }) {
+export default function ProfilePage({ onLogout }) {
   const navigate = useNavigate();
   const { currentUser, updateUserProfile, logout, showToast } = useApp();
   const avatarInputRef = useRef(null);
 
-  const [activeMenu, setActiveMenu] = useState("TRANSAKSI");
-  const [transactionFilter, setTransactionFilter] = useState("SEMUA");
+  const [activeMenu, setActiveMenu] = useState("EDIT_PROFIL");
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
   const [isEditProfileOpen, setIsEditProfileOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -67,79 +60,57 @@ export default function ProfilePage({ onBack, onLogout }) {
 
   if (!currentUser) return null;
 
-  const filterTabs = [
-    { id: "SEMUA", label: "Semua" },
-    { id: "MENUNGGU", label: "Menunggu" },
-    { id: "DIKIRIM", label: "Dikirim / Serah Terima" },
-    { id: "SELESAI", label: "Selesai" },
-    { id: "SENGKETA", label: "Sengketa" },
-  ];
-
-  const filteredTenders = mockTenders.filter((item) => {
-    if (transactionFilter === "SEMUA") return true;
-    if (transactionFilter === "MENUNGGU")
-      return ["OPEN", "BIDDING", "AWARDED", "PAID_HELD"].includes(item.status);
-    if (transactionFilter === "DIKIRIM") return item.status === "HANDOVER";
-    if (transactionFilter === "SELESAI") return item.status === "COMPLETED";
-    if (transactionFilter === "SENGKETA") return item.status === "DISPUTED";
-    return true;
-  });
-
   const faqs = mockProfileFaqs;
 
   const menuItems = [
     {
-      id: "DASHBOARD",
-      label: "Dashboard Operasional",
-      icon: LayoutDashboard,
-      isDashboardLink: true,
+      id: "EDIT_PROFIL",
+      label: "Edit Informasi Profil",
+      icon: Edit3,
     },
     {
-      id: "TRANSAKSI",
-      label: "Riwayat Transaksi",
-      icon: History,
-      badge: mockTenders.length,
-    },
-    {
-      id: "TENDER_SAYA",
-      label: "Daftar Tender Saya",
-      icon: FileText,
-      badge: 2,
-    },
-    {
-      id: "DELIVERY",
-      label: "Pengaturan Delivery Mandiri",
-      icon: Truck,
-      isDeliveryLink: true,
+      id: "KEAMANAN",
+      label: "Pengaturan Akun & Keamanan",
+      icon: Shield,
     },
     {
       id: "BANTUAN",
       label: "Pusat Bantuan & Edukasi Escrow",
       icon: HelpCircle,
     },
-    {
-      id: "KEAMANAN",
-      label: "Pengaturan Keamanan & Akun",
-      icon: Shield,
-    },
   ];
 
   const handleSaveProfile = () => {
     updateUserProfile(editForm);
     setIsEditProfileOpen(false);
+    if (showToast) {
+      showToast("Informasi profil berhasil diperbarui!", "success");
+    }
+  };
+
+  const handleInlineSaveProfile = (e) => {
+    e.preventDefault();
+    updateUserProfile(editForm);
+    if (showToast) {
+      showToast("Informasi profil berhasil disimpan!", "success");
+    }
   };
 
   const handleConfirmWithdraw = () => {
     updateUserProfile({
       activeBalance: 0,
     });
-    alert("Simulasi penarikan saldo berhasil diproses!");
+    if (showToast) {
+      showToast("Simulasi penarikan saldo berhasil diproses!", "success");
+    } else {
+      alert("Simulasi penarikan saldo berhasil diproses!");
+    }
     setIsWithdrawModalOpen(false);
   };
 
   return (
     <div className="min-h-screen bg-background text-ink flex flex-col justify-between selection:bg-primary-50 selection:text-primary">
-      <Navbar activeNav="akun" />
+      <Navbar />
 
       <main className="w-full flex-1">
         <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-8 md:py-10 space-y-8 pb-28 md:pb-14">
@@ -205,23 +176,6 @@ export default function ProfilePage({ onBack, onLogout }) {
 
               <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2.5">
                 <Button
-                  variant="primary"
-                  size="md"
-                  icon={LayoutDashboard}
-                  onClick={() => {
-                    const roleLower = (currentUser.role || "").toLowerCase();
-                    if (roleLower.includes("admin")) {
-                      navigate("/admin/disputes");
-                    } else if (roleLower.includes("pembeli") || roleLower.includes("umkm")) {
-                      navigate("/dashboard/buyer");
-                    } else {
-                      navigate("/dashboard/farmer");
-                    }
-                  }}
-                >
-                  Lihat Dashboard
-                </Button>
-                <Button
                   variant="outline"
                   size="md"
                   icon={Edit3}
@@ -259,13 +213,13 @@ export default function ProfilePage({ onBack, onLogout }) {
                         Saldo Kas Aktif (Bisa Ditarik)
                       </span>
                       <span className="text-[10px] text-ink-muted">
-                        Hasil panen tuntas &amp; ongkir 100% utuh
+                        Pencairan instan ke rekening terdaftar
                       </span>
                     </div>
                   </div>
 
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary">
-                    Siap Cair
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-status-confirmed/20 text-primary">
+                    Terverifikasi
                   </span>
                 </div>
 
@@ -275,7 +229,7 @@ export default function ProfilePage({ onBack, onLogout }) {
                   </p>
 
                   <Button
-                    variant="primary"
+                    variant="outline"
                     size="sm"
                     icon={ArrowDownToLine}
                     onClick={() => setIsWithdrawModalOpen(true)}
@@ -288,7 +242,7 @@ export default function ProfilePage({ onBack, onLogout }) {
               <div className="p-5 rounded-xl bg-[#FEF3C7]/40 border border-[#FDE68A] flex flex-col justify-between space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className="p-2 rounded-xl bg-[#D97706] text-white">
+                    <div className="p-2 rounded-xl bg-[#D97706] text-[#E6E4DA]">
                       <ShieldCheck className="w-5 h-5" />
                     </div>
                     <div>
@@ -329,29 +283,7 @@ export default function ProfilePage({ onBack, onLogout }) {
                     <button
                       key={item.id}
                       type="button"
-                      onClick={() => {
-                        if (item.isDashboardLink) {
-                          const roleLower = (
-                            currentUser.role || ""
-                          ).toLowerCase();
-                          if (roleLower.includes("admin")) {
-                            navigate("/admin/disputes");
-                          } else if (
-                            roleLower.includes("pembeli") ||
-                            roleLower.includes("umkm")
-                          ) {
-                            navigate("/dashboard/buyer");
-                          } else {
-                            navigate("/dashboard/farmer");
-                          }
-                        } else if (item.isDeliveryLink) {
-                          navigate("/dashboard/farmer", {
-                            state: { menu: "DELIVERY" },
-                          });
-                        } else {
-                          setActiveMenu(item.id);
-                        }
-                      }}
+                      onClick={() => setActiveMenu(item.id)}
                       className={`w-full p-3.5 rounded-xl text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
                         isActive
                           ? "bg-primary text-[#E6E4DA] shadow-xs"
@@ -363,23 +295,22 @@ export default function ProfilePage({ onBack, onLogout }) {
                         <span>{item.label}</span>
                       </div>
 
-                      <div className="flex items-center gap-1.5">
-                        {item.badge !== undefined && (
-                          <span
-                            className={`text-[10px] font-bold px-2 py-0.2 rounded-full ${
-                              isActive
-                                ? "bg-[#E6E4DA] text-primary"
-                                : "bg-border text-ink"
-                            }`}
-                          >
-                            {item.badge}
-                          </span>
-                        )}
-                        <ChevronRight className="w-3.5 h-3.5 opacity-60" />
-                      </div>
+                      <ChevronRight className="w-3.5 h-3.5 opacity-60" />
                     </button>
                   );
                 })}
+
+                <button
+                  type="button"
+                  onClick={() => setIsLogoutModalOpen(true)}
+                  className="w-full p-3.5 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 transition-all flex items-center justify-between cursor-pointer mt-1"
+                >
+                  <div className="flex items-center gap-3">
+                    <LogOut className="w-4 h-4 shrink-0" />
+                    <span>Keluar / Logout</span>
+                  </div>
+                  <ChevronRight className="w-3.5 h-3.5 opacity-60" />
+                </button>
               </div>
 
               <div className="p-4 rounded-2xl bg-[#E6E4DA] border border-border text-xs space-y-2">
@@ -400,142 +331,149 @@ export default function ProfilePage({ onBack, onLogout }) {
             </aside>
 
             <section className="lg:col-span-8 space-y-6">
-              {activeMenu === "TRANSAKSI" && (
+              {activeMenu === "EDIT_PROFIL" && (
                 <div className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-6">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-border/80">
-                    <div>
-                      <h2 className="text-base font-bold text-ink">
-                        Riwayat Seluruh Transaksi
-                      </h2>
-                      <p className="text-xs text-ink-muted">
-                        Pantau transaksi aktif, serah-terima kamera, hingga pesanan tuntas
-                      </p>
+                  <div className="pb-4 border-b border-border/80">
+                    <h2 className="text-base font-bold text-ink">
+                      Informasi Profil Pengguna
+                    </h2>
+                    <p className="text-xs text-ink-muted mt-0.5">
+                      Kelola identitas akun, nomor kontak WhatsApp, dan lokasi domisili usaha Anda
+                    </p>
+                  </div>
+
+                  <form onSubmit={handleInlineSaveProfile} className="space-y-4 text-xs">
+                    <div className="space-y-1.5">
+                      <label className="font-bold text-ink block">Nama Lengkap</label>
+                      <input
+                        type="text"
+                        value={editForm.name}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, name: e.target.value })
+                        }
+                        className="w-full rounded-xl px-3.5 py-2.5 text-xs text-ink bg-[#EFEEE7] border border-border focus:border-primary focus:outline-none"
+                        required
+                      />
                     </div>
 
-                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-surface-green text-primary self-start sm:self-auto">
-                      {filteredTenders.length} Transaksi Ditemukan
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-                    {filterTabs.map((tab) => (
-                      <Chip
-                        key={tab.id}
-                        label={tab.label}
-                        size="sm"
-                        active={transactionFilter === tab.id}
-                        onClick={() => setTransactionFilter(tab.id)}
+                    <div className="space-y-1.5">
+                      <label className="font-bold text-ink block">Nomor Telepon / WhatsApp</label>
+                      <input
+                        type="text"
+                        value={editForm.phone}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, phone: e.target.value })
+                        }
+                        className="w-full rounded-xl px-3.5 py-2.5 text-xs text-ink bg-[#EFEEE7] border border-border focus:border-primary focus:outline-none"
+                        required
                       />
-                    ))}
-                  </div>
+                    </div>
 
-                  <div className="space-y-3.5">
-                    {filteredTenders.length === 0 ? (
-                      <div className="py-12 px-4 rounded-xl border border-dashed border-border bg-[#E6E4DA]/40 text-center space-y-2">
-                        <History className="w-8 h-8 text-ink-muted mx-auto" />
-                        <p className="text-sm font-semibold text-ink">Tidak ada transaksi ditemukan</p>
-                        <p className="text-xs text-ink-muted">Belum ada riwayat transaksi pada filter status ini.</p>
+                    <div className="space-y-1.5">
+                      <label className="font-bold text-ink block">Lokasi Domisili / Kebun / Usaha</label>
+                      <input
+                        type="text"
+                        value={editForm.location}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, location: e.target.value })
+                        }
+                        className="w-full rounded-xl px-3.5 py-2.5 text-xs text-ink bg-[#EFEEE7] border border-border focus:border-primary focus:outline-none"
+                        required
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                      <div className="p-3.5 rounded-xl bg-[#E6E4DA]/50 border border-border space-y-1">
+                        <span className="text-[10px] font-bold text-ink-muted uppercase">Email Terdaftar</span>
+                        <p className="font-semibold text-ink">{currentUser.email}</p>
+                        <span className="inline-flex items-center gap-1 text-[10px] text-primary font-bold">
+                          <CheckCircle2 className="w-3 h-3" /> Terverifikasi
+                        </span>
                       </div>
-                    ) : (
-                      filteredTenders.map((tender) => (
-                        <div
-                          key={tender.id}
-                          onClick={() => {
-                            if (tender.status === "HANDOVER") navigate("/handover");
-                            else if (tender.status === "COMPLETED") navigate("/completed");
-                            else if (tender.status === "AWARDED" || tender.status === "PAID_HELD") navigate("/escrow");
-                            else navigate(`/tender/${tender.id}`);
-                          }}
-                          className="p-4 sm:p-5 rounded-xl bg-[#E6E4DA] border border-border hover:border-primary/50 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 cursor-pointer group shadow-xs hover:shadow-sm"
-                        >
-                          <div className="space-y-1.5 flex-1">
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs font-bold text-primary">
-                                {tender.category}
-                              </span>
-                              <span className="text-xs text-ink-muted">•</span>
-                              <span className="text-xs font-mono text-ink-muted">
-                                {tender.id}
-                              </span>
-                            </div>
 
-                            <h3 className="text-sm font-bold text-ink group-hover:text-primary transition-colors">
-                              {tender.title}
-                            </h3>
+                      <div className="p-3.5 rounded-xl bg-[#E6E4DA]/50 border border-border space-y-1">
+                        <span className="text-[10px] font-bold text-ink-muted uppercase">Peran Akun</span>
+                        <p className="font-semibold text-ink">{currentUser.role}</p>
+                        <span className="inline-flex items-center gap-1 text-[10px] text-primary font-bold">
+                          <ShieldCheck className="w-3 h-3" /> Status Aktif
+                        </span>
+                      </div>
+                    </div>
 
-                            <div className="flex flex-wrap items-center gap-3 text-xs text-ink-secondary">
-                              <span>
-                                Target: <strong className="text-ink">{tender.requiredQuantityKg} Kg</strong>
-                              </span>
-                              <span>•</span>
-                              <span>
-                                Total: <strong className="text-primary">Rp {tender.totalBudget.toLocaleString("id-ID")}</strong>
-                              </span>
-                              <span>•</span>
-                              <span>
-                                Mitra: {tender.buyer.businessName}
-                              </span>
-                            </div>
-                          </div>
-
-                          <div className="flex sm:flex-col items-center sm:items-end justify-between gap-2 shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-border/80">
-                            <StatusBadge status={tender.status} size="sm" showIcon />
-                            <span className="text-[11px] text-ink-muted flex items-center gap-1 group-hover:text-primary transition-colors">
-                              <span>Detail Transaksi</span>
-                              <ChevronRight className="w-3.5 h-3.5" />
-                            </span>
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
+                    <div className="pt-3 border-t border-border/80 flex justify-end">
+                      <Button
+                        type="submit"
+                        variant="primary"
+                        size="md"
+                      >
+                        Simpan Perubahan Profil
+                      </Button>
+                    </div>
+                  </form>
                 </div>
               )}
 
-              {activeMenu === "TENDER_SAYA" && (
-                <div className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-5">
-                  <div className="flex items-center justify-between pb-3 border-b border-border/80">
+              {activeMenu === "KEAMANAN" && (
+                <div className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-6">
+                  <div className="pb-3 border-b border-border/80">
                     <h2 className="text-base font-bold text-ink">
-                      Daftar Tender Permintaan Dibuat
+                      Keamanan Akun &amp; Rekening Bank
                     </h2>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => navigate("/explore")}
-                    >
-                      Buat Tender Baru
-                    </Button>
+                    <p className="text-xs text-ink-muted mt-0.5">
+                      Kelola kredensial keamanan penarikan dana dan rekening pencairan hasil transaksi
+                    </p>
                   </div>
 
-                  <div className="space-y-3">
-                    {mockTenders.slice(0, 2).map((item) => (
-                      <div
-                        key={item.id}
-                        onClick={() => navigate(`/tender/${item.id}`)}
-                        className="p-4 rounded-xl bg-[#E6E4DA] border border-border hover:border-primary/50 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 cursor-pointer group"
-                      >
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <StatusBadge status={item.status} size="sm" />
-                            <span className="text-xs font-bold text-ink group-hover:text-primary transition-colors">
-                              {item.title}
-                            </span>
-                          </div>
-                          <p className="text-xs text-ink-secondary">
-                            Spesifikasi: "{item.specifications}"
-                          </p>
-                        </div>
-
-                        <div className="text-right shrink-0">
-                          <span className="text-sm font-bold text-primary block">
-                            Rp {item.targetPricePerKg.toLocaleString("id-ID")}/kg
-                          </span>
-                          <span className="text-[11px] text-ink-muted">
-                            Batas: {item.deadlineDate}
-                          </span>
-                        </div>
+                  <div className="space-y-4 text-xs">
+                    <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex items-center justify-between">
+                      <div>
+                        <span className="font-bold text-ink block">
+                          Autentikasi Dua Langkah (2FA)
+                        </span>
+                        <span className="text-ink-muted">
+                          Wajib untuk konfirmasi penarikan saldo di atas Rp 2.000.000
+                        </span>
                       </div>
-                    ))}
+                      <span className="px-2.5 py-1 rounded-full bg-surface-green text-primary font-bold text-[10px]">
+                        Aktif
+                      </span>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex items-center justify-between">
+                      <div>
+                        <span className="font-bold text-ink block">
+                          Kata Sandi Akun
+                        </span>
+                        <span className="text-ink-muted">
+                          Terakhir diperbarui 14 hari yang lalu
+                        </span>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => alert("Tautan ubah sandi telah dikirimkan ke email terdaftar Anda.")}
+                      >
+                        Ubah Sandi
+                      </Button>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex items-center justify-between">
+                      <div>
+                        <span className="font-bold text-ink block">
+                          Rekening Bank Pencairan Utama
+                        </span>
+                        <span className="text-ink-muted">
+                          {currentUser.bankName} • {currentUser.accountNumber} ({currentUser.accountHolder})
+                        </span>
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => alert("Silakan hubungi tim dukungan untuk verifikasi perubahan rekening bank.")}
+                      >
+                        Ganti Rekening
+                      </Button>
+                    </div>
                   </div>
                 </div>
               )}
@@ -565,101 +503,6 @@ export default function ProfilePage({ onBack, onLogout }) {
                         </p>
                       </div>
                     ))}
-                  </div>
-                </div>
-              )}
-
-              {activeMenu === "KEAMANAN" && (
-                <div className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-6">
-                  <div className="pb-3 border-b border-border/80">
-                    <h2 className="text-base font-bold text-ink">
-                      Keamanan Akun &amp; Rekening Bank
-                    </h2>
-                    <p className="text-xs text-ink-muted mt-0.5">
-                      Kelola kredensial keamanan penarikan dana hasil panen
-                    </p>
-                  </div>
-
-                  <div className="space-y-4 text-xs">
-                    <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex items-center justify-between">
-                      <div>
-                        <span className="font-bold text-ink block">
-                          Autentikasi Dua Langkah (2FA)
-                        </span>
-                        <span className="text-ink-muted">
-                          Wajib untuk konfirmasi penarikan saldo di atas Rp 2.000.000
-                        </span>
-                      </div>
-                      <span className="px-2.5 py-1 rounded-full bg-surface-green text-primary font-bold text-[10px]">
-                        Aktif
-                      </span>
-                    </div>
-
-                    <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex items-center justify-between">
-                      <div>
-                        <span className="font-bold text-ink block">
-                          Kata Sandi Akun
-                        </span>
-                        <span className="text-ink-muted">
-                          Terakhir diperbarui 14 hari yang lalu
-                        </span>
-                      </div>
-                      <Button variant="outline" size="sm">
-                        Ubah Sandi
-                      </Button>
-                    </div>
-
-                    <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex items-center justify-between">
-                      <div>
-                        <span className="font-bold text-ink block">
-                          Rekening Bank Pencairan Utama
-                        </span>
-                        <span className="text-ink-muted">
-                          {currentUser.bankName} • {currentUser.accountNumber} ({currentUser.accountHolder})
-                        </span>
-                      </div>
-                      <Button variant="outline" size="sm">
-                        Ganti Rekening
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {activeMenu === "DELIVERY" && (
-                <div className="bg-surface rounded-2xl p-6 sm:p-7 border border-border space-y-5">
-                  <div className="flex items-center justify-between pb-3 border-b border-border/80">
-                    <div>
-                      <h2 className="text-base font-bold text-ink">
-                        Pengaturan Delivery Mandiri Petani
-                      </h2>
-                      <p className="text-xs text-ink-muted">
-                        Kelola kapasitas armada, radius antar, dan tarif tetap pengiriman ke pembeli
-                      </p>
-                    </div>
-                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-surface-green text-primary border border-primary/20">
-                      100% Hak Petani
-                    </span>
-                  </div>
-
-                  <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border space-y-3 text-xs">
-                    <p className="text-ink-secondary leading-relaxed">
-                      Pengaturan kapasitas armada (maks. 50 kg), tarif tetap pengantaran (Rp 5.000/trip), dan radius jangkauan maksimal dikonfigurasi melalui Dasbor Operasional Petani.
-                    </p>
-                    <div className="pt-1">
-                      <Button
-                        variant="primary"
-                        size="sm"
-                        icon={Truck}
-                        onClick={() =>
-                          navigate("/dashboard/farmer", {
-                            state: { menu: "DELIVERY" },
-                          })
-                        }
-                      >
-                        Buka Panel Pengaturan Delivery di Dasbor Petani
-                      </Button>
-                    </div>
                   </div>
                 </div>
               )}
