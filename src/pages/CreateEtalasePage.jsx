@@ -21,6 +21,7 @@ export default function CreateEtalasePage() {
   const cameraInputRef = useRef(null);
 
   const [isLocating, setIsLocating] = useState(false);
+  const [deliveryMethod, setDeliveryMethod] = useState("pickup");
   const [formData, setFormData] = useState({
     name: "Tomat Mawar Segar",
     category: "Sayur Buah",
@@ -31,8 +32,6 @@ export default function CreateEtalasePage() {
     farmAddress: "Kp. Sukatani RT 02/04, Desa Pasirjambu, Ciwidey, Bandung",
     geotag: "-7.0984, 107.4921",
     gpsAccuracy: "8m",
-    allowSelfPickup: true,
-    allowFarmerDelivery: true,
     deliveryFee: 5000,
     notes:
       "Dipetik langsung pagi hari sebelum serah-terima. Harap siapkan keranjang sendiri jika memilih opsi ambil di kebun.",
@@ -444,13 +443,14 @@ export default function CreateEtalasePage() {
                   </div>
 
                   <div className="space-y-3 pt-2">
-                    <label className="flex items-start gap-3 p-3.5 rounded-xl border border-border bg-[#E6E4DA]/20 hover:bg-[#E6E4DA]/40 cursor-pointer transition-colors">
+                    <label className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-colors ${deliveryMethod === "pickup" ? "border-primary bg-primary-50/40" : "border-border bg-[#E6E4DA]/20 hover:bg-[#E6E4DA]/40"}`}>
                       <input
-                        type="checkbox"
-                        name="allowSelfPickup"
-                        checked={formData.allowSelfPickup}
-                        onChange={handleChange}
-                        className="w-4 h-4 mt-0.5 rounded text-primary focus:ring-primary"
+                        type="radio"
+                        name="deliveryMethod"
+                        value="pickup"
+                        checked={deliveryMethod === "pickup"}
+                        onChange={(e) => setDeliveryMethod(e.target.value)}
+                        className="w-4 h-4 mt-0.5 text-primary focus:ring-primary accent-primary"
                       />
                       <div>
                         <span className="text-xs font-bold text-ink block">
@@ -462,13 +462,14 @@ export default function CreateEtalasePage() {
                       </div>
                     </label>
 
-                    <label className="flex items-start gap-3 p-3.5 rounded-xl border border-border bg-[#E6E4DA]/20 hover:bg-[#E6E4DA]/40 cursor-pointer transition-colors">
+                    <label className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-colors ${deliveryMethod === "delivery" ? "border-primary bg-primary-50/40" : "border-border bg-[#E6E4DA]/20 hover:bg-[#E6E4DA]/40"}`}>
                       <input
-                        type="checkbox"
-                        name="allowFarmerDelivery"
-                        checked={formData.allowFarmerDelivery}
-                        onChange={handleChange}
-                        className="w-4 h-4 mt-0.5 rounded text-primary focus:ring-primary"
+                        type="radio"
+                        name="deliveryMethod"
+                        value="delivery"
+                        checked={deliveryMethod === "delivery"}
+                        onChange={(e) => setDeliveryMethod(e.target.value)}
+                        className="w-4 h-4 mt-0.5 text-primary focus:ring-primary accent-primary"
                       />
                       <div>
                         <span className="text-xs font-bold text-ink block">
@@ -586,9 +587,14 @@ export default function CreateEtalasePage() {
                     </div>
 
                     <div className="p-2 rounded-lg bg-[#E6E4DA]/40 text-[10px] text-ink-secondary flex items-center justify-between">
-                      <span>Ambil Sendiri: Rp 0</span>
-                      <span>•</span>
-                      <span>Antar: Rp {formData.deliveryFee.toLocaleString("id-ID")}</span>
+                      <span>
+                        {deliveryMethod === "pickup"
+                          ? "Opsi: Ambil Sendiri (Rp 0)"
+                          : `Opsi: Diantar Petani (Rp ${formData.deliveryFee.toLocaleString("id-ID")})`}
+                      </span>
+                      <span className="text-[10px] font-semibold text-primary">
+                        {deliveryMethod === "pickup" ? "Self-Pickup" : "Delivery"}
+                      </span>
                     </div>
                   </div>
                 </div>
