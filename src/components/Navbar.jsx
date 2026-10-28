@@ -155,7 +155,7 @@ export default function Navbar({
 
             {currentUser ? (
               <Link
-                to={currentUser.role?.toLowerCase().includes("admin") ? "/admin/disputes" : "/profile"}
+                to="/profile"
                 className="flex items-center gap-2 select-none py-1 px-2 rounded-xl transition-colors hover:bg-surface-green/40 group"
               >
                 <img
