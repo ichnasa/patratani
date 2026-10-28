@@ -10,13 +10,14 @@ import {
   Camera,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
+import { mockCommodities } from "../data/mockData";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Button from "../components/Button";
 
 export default function CreateEtalasePage() {
   const navigate = useNavigate();
-  const { showToast, currentUser } = useApp();
+  const { showToast, currentUser, addCommodity } = useApp();
   const fileInputRef = useRef(null);
   const cameraInputRef = useRef(null);
 
@@ -49,7 +50,9 @@ export default function CreateEtalasePage() {
     "Padi & Palawija",
   ];
 
-  const estimatedValue = formData.totalQuotaKg * formData.pricePerKg;
+  const numericPrice = Number(formData.pricePerKg) || 0;
+  const numericQuota = Number(formData.totalQuotaKg) || 0;
+  const estimatedValue = numericQuota * numericPrice;
   const platformFee = Math.round(estimatedValue * 0.03);
   const netEarnings = estimatedValue - platformFee;
 
@@ -59,18 +62,19 @@ export default function CreateEtalasePage() {
     if (type === "checkbox") {
       finalValue = checked;
     } else if (type === "number") {
-      const num = Number(value);
-      if (name === "totalQuotaKg" || name === "minOrderKg") {
-        finalValue = Math.max(10, num);
-      } else if (name === "pricePerKg") {
-        finalValue = Math.max(100, num);
-      } else {
-        finalValue = Math.max(0, num);
-      }
+      finalValue = value === "" ? "" : Number(value);
     }
     setFormData((prev) => ({
       ...prev,
       [name]: finalValue,
+    }));
+  };
+
+  const handlePriceChange = (e) => {
+    const rawDigits = e.target.value.replace(/\D/g, "");
+    setFormData((prev) => ({
+      ...prev,
+      pricePerKg: rawDigits === "" ? "" : Number(rawDigits),
     }));
   };
 
@@ -133,6 +137,68 @@ export default function CreateEtalasePage() {
 
   const handlePublish = (e) => {
     e.preventDefault();
+    const priceNum = Number(formData.pricePerKg);
+    if (!priceNum || priceNum < 100) {
+      if (showToast) {
+        showToast("Harga per kg harus diisi minimal Rp 100.", "warning");
+      }
+      return;
+    }
+    const quotaNum = Number(formData.totalQuotaKg);
+    if (!quotaNum || quotaNum < 1) {
+      if (showToast) {
+        showToast("Total kuota panen harus diisi.", "warning");
+      }
+      return;
+    }
+    const newCommodity = {
+      id: `CMD-${Date.now().toString().slice(-6)}`,
+      name: formData.name.trim(),
+      category: formData.category,
+      farmer: {
+        id: currentUser?.id || "FARM-01",
+        name: currentUser?.name || "Rizal Firmansyah",
+        farmName: currentUser?.farmName || "Kebun Mitra Patra Tani",
+        location: formData.farmAddress || currentUser?.location || "Ciwidey, Bandung Barat",
+        distanceKm: 2.5,
+        avatar: currentUser?.avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
+        rating: currentUser?.rating || 4.9,
+        totalTransactions: currentUser?.reviewCount || 45,
+        verified: true,
+      },
+      quotaKg: quotaNum,
+      totalQuotaKg: quotaNum,
+      availableQuotaKg: quotaNum,
+      minOrderKg: Number(formData.minOrderKg) || 10,
+      pricePerKg: priceNum,
+      harvestDate: formData.harvestDate || "2026-10-30",
+      image: formData.image || "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600&auto=format&fit=crop&q=80",
+      description: formData.notes || "Komoditas segar hasil panen langsung dari kebun mitra terverifikasi.",
+      grade: "Grade Super",
+      logistics: {
+        selfPickup: {
+          available: deliveryMethod === "pickup" || deliveryMethod === "both",
+          fee: 0,
+          address: formData.farmAddress || "Kp. Sukatani RT 02/04, Desa Pasirjambu, Ciwidey, Bandung",
+          notes: "Pengambilan langsung di lokasi kebun saat jam panen.",
+        },
+        farmerDelivery: {
+          available: deliveryMethod === "delivery" || deliveryMethod === "both",
+          fixedFee: Number(formData.deliveryFee) || 5000,
+          coverageArea: "Maksimal radius 15 km dari titik kebun",
+          estimatedTime: "Hari panen pukul 08.00 - 12.00 WIB",
+        },
+      },
+      platformCommissionPercent: 3.0,
+      status: "READY",
+    };
+
+    if (addCommodity) {
+      addCommodity(newCommodity);
+    } else {
+      mockCommodities.unshift(newCommodity);
+    }
+
     if (showToast) {
       showToast("Etalase Panen berhasil dipublikasikan!", "success");
     }
@@ -344,16 +410,16 @@ export default function CreateEtalasePage() {
                         Harga Tetap per kg <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
-                        <span className="absolute left-3.5 top-2.5 text-xs font-bold text-ink-muted">
+                        <span className="absolute left-3.5 top-2.5 text-xs font-bold text-ink-muted pointer-events-none select-none">
                           Rp
                         </span>
                         <input
-                          type="number"
+                          type="text"
+                          inputMode="numeric"
                           name="pricePerKg"
-                          value={formData.pricePerKg}
-                          onChange={handleChange}
-                          min={100}
-                          step={500}
+                          value={formData.pricePerKg === "" ? "" : Number(formData.pricePerKg).toLocaleString("id-ID")}
+                          onChange={handlePriceChange}
+                          placeholder="0"
                           required
                           className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                         />
@@ -575,7 +641,7 @@ export default function CreateEtalasePage() {
                       <div>
                         <span className="text-[10px] text-ink-muted block">Harga Tetap</span>
                         <span className="text-xs font-bold text-primary">
-                          Rp {formData.pricePerKg.toLocaleString("id-ID")}/kg
+                          Rp {(Number(formData.pricePerKg) || 0).toLocaleString("id-ID")}/kg
                         </span>
                       </div>
                       <div className="text-right">

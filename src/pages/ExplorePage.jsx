@@ -7,6 +7,7 @@ import Chip from "../components/Chip";
 import EtalaseCard from "../components/EtalaseCard";
 import TenderCard from "../components/TenderCard";
 import { mockCommodities, mockTenders } from "../data/mockData";
+import { useApp } from "../context/AppContext";
 import {
   Search,
   SlidersHorizontal,
@@ -21,6 +22,8 @@ import {
 
 export default function ExplorePage() {
   const navigate = useNavigate();
+  const { commodities } = useApp();
+  const commodityList = commodities && commodities.length > 0 ? commodities : mockCommodities;
   const [activeTab, setActiveTab] = useState("ETALASE");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
@@ -49,7 +52,7 @@ export default function ExplorePage() {
   };
 
   const filteredCommodities = useMemo(() => {
-    let result = mockCommodities.filter((item) => {
+    let result = commodityList.filter((item) => {
       const matchesSearch =
         searchQuery === "" ||
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -88,7 +91,7 @@ export default function ExplorePage() {
     }
 
     return result;
-  }, [searchQuery, selectedCategory, maxDistance, maxPrice, deliveryOption, sortBy]);
+  }, [commodityList, searchQuery, selectedCategory, maxDistance, maxPrice, deliveryOption, sortBy]);
 
   const filteredTenders = useMemo(() => {
     let result = mockTenders.filter((tender) => {

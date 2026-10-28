@@ -21,11 +21,12 @@ import Button from "../components/Button";
 export default function DetailEtalasePage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { currentUser, startTransactionFromCommodity, showToast } = useApp();
+  const { currentUser, startTransactionFromCommodity, showToast, commodities } = useApp();
 
-  const foundItem = mockCommodities.find(
-    (item) => String(item.id) === String(id)
-  );
+  const commodityList = commodities && commodities.length > 0 ? commodities : mockCommodities;
+  const foundItem =
+    commodityList.find((item) => String(item.id) === String(id)) ||
+    mockCommodities.find((item) => String(item.id) === String(id));
 
   const fallbackCommodity = {
     id: "CMD-001",

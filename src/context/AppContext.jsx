@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { mockUserProfile } from "../data/mockData";
+import { mockUserProfile, mockCommodities } from "../data/mockData";
 
 const AppContext = createContext();
 
@@ -23,6 +23,29 @@ export function AppProvider({ children }) {
       }
     } catch (e) {}
   }, [currentUser]);
+
+  const [commodities, setCommodities] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem("patratani_commodities");
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {}
+    return mockCommodities;
+  });
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem("patratani_commodities", JSON.stringify(commodities));
+    } catch (e) {}
+  }, [commodities]);
+
+  const addCommodity = (newCommodity) => {
+    setCommodities((prev) => [newCommodity, ...prev]);
+    if (!mockCommodities.some((c) => c.id === newCommodity.id)) {
+      mockCommodities.unshift(newCommodity);
+    }
+  };
 
   const [toast, setToast] = useState(null);
 
@@ -369,6 +392,8 @@ export function AppProvider({ children }) {
   const value = {
     currentUser,
     setCurrentUser,
+    commodities,
+    addCommodity,
     login,
     logout,
     register,
