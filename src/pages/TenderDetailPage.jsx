@@ -31,6 +31,7 @@ export default function TenderDetailPage({
   const roleLower = (currentUser?.role || "").toLowerCase();
   const isAdmin = roleLower.includes("admin");
   const isFarmer = !isAdmin && (roleLower.includes("petani") || roleLower.includes("mitra"));
+  const isBuyer = !isAdmin && (roleLower.includes("pembeli") || roleLower.includes("umkm"));
   const activeId = id || activeTransaction?.tenderId || tenderId;
 
   const tenderList = tenders && tenders.length > 0 ? tenders : mockTenders;
@@ -494,15 +495,17 @@ export default function TenderDetailPage({
                   </div>
                 </div>
 
-                <Button
-                  variant="primary"
-                  fullWidth
-                  size="md"
-                  icon={ShieldCheck}
-                  onClick={handleProceedToEscrow}
-                >
-                  Setor Dana ke Escrow
-                </Button>
+                {isBuyer && (
+                  <Button
+                    variant="primary"
+                    fullWidth
+                    size="md"
+                    icon={ShieldCheck}
+                    onClick={handleProceedToEscrow}
+                  >
+                    Setor Dana ke Escrow
+                  </Button>
+                )}
 
                 <div className="p-4 rounded-xl bg-[#DDE0D4] border border-primary/20 space-y-2">
                   <div className="flex items-center gap-2 text-primary font-bold text-xs">

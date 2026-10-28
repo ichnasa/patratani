@@ -10,7 +10,6 @@ import {
   ChevronRight,
   Plus,
   PackageCheck,
-  Users,
   Building2,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
@@ -64,7 +63,6 @@ export default function BuyerDashboardPage() {
     { id: "ringkasan", label: "Ringkasan", icon: Building2 },
     { id: "tender", label: "Tender Permintaan", icon: FileText, badge: "2" },
     { id: "pesanan", label: "Pesanan & Escrow", icon: PackageCheck, badge: "1" },
-    { id: "mitra", label: "Mitra Petani Langganan", icon: Users },
     { id: "profil", label: "Profil Dapur Usaha", icon: Store },
   ];
 
@@ -453,23 +451,6 @@ export default function BuyerDashboardPage() {
                 </div>
               )}
 
-              {activeTab === "mitra" && (
-                <div className="bg-surface rounded-2xl border border-border p-8 shadow-xs text-center space-y-4">
-                  <div className="w-12 h-12 rounded-2xl bg-surface-green text-primary mx-auto flex items-center justify-center">
-                    <Users className="w-6 h-6" />
-                  </div>
-                  <h1 className="text-xl font-bold text-ink">Mitra Petani Langganan</h1>
-                  <p className="text-xs sm:text-sm text-ink-secondary max-w-md mx-auto">
-                    Daftar kelompok tani lokal terverifikasi yang rutin memasok kebutuhan dapur usaha Anda langsung dari kebun.
-                  </p>
-                  <div className="pt-2">
-                    <Button variant="outline" onClick={() => navigate("/explore")}>
-                      Jelajahi Petani Terdekat
-                    </Button>
-                  </div>
-                </div>
-              )}
-
               {activeTab === "profil" && (
                 <div className="bg-surface rounded-2xl border border-border p-8 shadow-xs text-center space-y-4">
                   <div className="w-12 h-12 rounded-2xl bg-surface-green text-primary mx-auto flex items-center justify-center">
@@ -487,7 +468,7 @@ export default function BuyerDashboardPage() {
                 </div>
               )}
 
-              {!["ringkasan", "tender", "pesanan", "mitra", "profil"].includes(activeTab) && (
+              {!["ringkasan", "tender", "pesanan", "profil"].includes(activeTab) && (
                 <div className="bg-surface rounded-2xl border border-border p-8 shadow-xs text-center space-y-3">
                   <h1 className="text-lg font-bold text-ink capitalize">{activeTab}</h1>
                   <p className="text-xs text-ink-secondary">Fitur sedang dalam pengembangan.</p>
