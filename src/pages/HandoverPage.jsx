@@ -65,7 +65,7 @@ export default function HandoverPage({ onBack, onComplete }) {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
         .getUserMedia({
-          video: { facingMode: "environment" },
+          video: { facingMode: { ideal: "environment" } },
           audio: false,
         })
         .then((stream) => {
@@ -77,7 +77,8 @@ export default function HandoverPage({ onBack, onComplete }) {
           }
           setCameraStatus("STREAMING");
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error("Kamera gagal diakses:", error);
           setCameraStatus("DENIED");
         });
     } else {
@@ -211,7 +212,7 @@ export default function HandoverPage({ onBack, onComplete }) {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-border/80">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-full bg-status-handover/15 text-status-handover">
+                    <span className="text-[10px] font-bold font-mono px-2 py-0.5 rounded-full bg-status-handover/15 text-status-handover whitespace-nowrap flex-shrink-0">
                       {handoverData.tenderId}
                     </span>
                     <span className="text-xs text-ink-muted">•</span>
