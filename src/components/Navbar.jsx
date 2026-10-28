@@ -1,5 +1,5 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import clsx from "clsx";
 import {
   Sprout,
@@ -14,16 +14,15 @@ import {
 import { useApp } from "../context/AppContext";
 
 export default function Navbar({
-  searchValue = "",
+  searchValue,
   onSearchChange,
   notificationCount = 2,
 }) {
   const { currentUser } = useApp();
   const location = useLocation();
+  const navigate = useNavigate();
   const currentPath = location.pathname;
 
-<<<<<<< HEAD
-=======
   const isAdmin =
     currentUser?.role?.toLowerCase().includes("admin") ||
     currentPath.startsWith("/admin");
@@ -50,17 +49,19 @@ export default function Navbar({
     }
   };
 
->>>>>>> e12bdc3 (feat: implementasi quick login multi-peran dan navigasi portal admin)
   const isNavActive = (path) => {
     if (path === "/" && currentPath === "/") return true;
     if (path !== "/" && currentPath.startsWith(path)) return true;
     return false;
   };
 
+  const activeSearchVal =
+    onSearchChange && searchValue !== undefined ? searchValue : internalSearch;
+
   return (
     <>
       <header className="sticky top-0 z-40 w-full bg-surface border-b border-border transition-colors">
-        <div className="max-w-[1440px] mx-auto h-16 px-6 lg:px-16 flex items-center justify-between gap-4">
+        <div className="max-w-[1440px] mx-auto h-16 px-4 sm:px-6 lg:px-16 flex items-center justify-between gap-2 sm:gap-4">
           <div className="flex items-center gap-6 shrink-0">
             <Link
               to="/"
@@ -134,8 +135,9 @@ export default function Navbar({
               <input
                 type="text"
                 placeholder="Cari panen atau tender..."
-                value={searchValue}
-                onChange={onSearchChange}
+                value={activeSearchVal}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
                 className="w-full bg-transparent text-[13px] text-ink placeholder:text-ink-muted focus:outline-none"
               />
             </div>
@@ -179,14 +181,15 @@ export default function Navbar({
           </div>
         </div>
 
-        <div className="px-6 pb-3 lg:hidden">
+        <div className="px-4 sm:px-6 pb-3 lg:hidden">
           <div className="flex items-center w-full rounded-md border border-border px-3 py-2 gap-2 bg-[#E6E4DA]/40 focus-within:border-primary focus-within:bg-surface transition-colors">
             <Search className="w-4 h-4 text-ink-muted shrink-0 pointer-events-none" />
             <input
               type="text"
               placeholder="Cari panen atau tender..."
-              value={searchValue}
-              onChange={onSearchChange}
+              value={activeSearchVal}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
               className="w-full bg-transparent text-[13px] text-ink placeholder:text-ink-muted focus:outline-none"
             />
           </div>
