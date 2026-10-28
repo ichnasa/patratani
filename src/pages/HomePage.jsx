@@ -14,7 +14,6 @@ import {
   mockUserProfile,
 } from "../data/mockData";
 import {
-  Sprout,
   ShoppingBag,
   FileText,
   ShieldCheck,
@@ -24,7 +23,6 @@ import {
   Clock,
   CheckCircle2,
   TrendingUp,
-  Store,
   ChevronRight,
   SlidersHorizontal,
 } from "lucide-react";
@@ -40,7 +38,6 @@ export default function HomePage() {
   }
   const isFarmer = !isAdmin && (roleLower ? (roleLower.includes("petani") || roleLower.includes("mitra")) : true);
   const isBuyer = !isAdmin && (roleLower ? (roleLower.includes("pembeli") || roleLower.includes("umkm")) : false);
-  const [role, setRole] = useState(isBuyer ? "PEMBELI" : "PETANI");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [feedTab, setFeedTab] = useState("KOMODITAS");
 
@@ -91,7 +88,7 @@ export default function HomePage() {
               </h1>
 
               <p className="text-base text-ink-secondary leading-relaxed">
-                {role === "PETANI"
+                {isFarmer
                   ? "Jual panen segar langsung ke pembeli lokal, tanpa gudang."
                   : "Dapatkan pasokan segar langsung dari kebun petani lokal dengan harga panen adil dan tanpa perantara gudang."}
               </p>
@@ -114,7 +111,7 @@ export default function HomePage() {
                   variant="outline"
                   icon={ArrowRight}
                   iconPosition="right"
-                  onClick={() => navigate(isAdmin ? "/admin/disputes" : "/profile")}
+                  onClick={() => navigate(isAdmin ? "/admin/disputes" : "/dashboard")}
                 >
                   {isAdmin ? "Portal Sengketa Admin" : "Lihat Riwayat Pesanan"}
                 </Button>
@@ -135,36 +132,6 @@ export default function HomePage() {
                   Timbangan pasti • Ongkir 100% hak petani
                 </span>
               </div>
-            </div>
-          </section>
-
-          <section className="px-6 lg:px-16 pb-2">
-            <div className="inline-flex bg-surface-green p-1 rounded-xl border border-border">
-              <button
-                type="button"
-                onClick={() => setRole("PETANI")}
-                className={`py-2 px-5 rounded-lg text-xs font-semibold transition-all duration-150 flex items-center gap-1.5 cursor-pointer ${
-                  role === "PETANI"
-                    ? "bg-primary text-[#E6E4DA] shadow-xs"
-                    : "text-ink-secondary hover:text-ink hover:bg-black/5"
-                }`}
-              >
-                <Sprout className="w-4 h-4" />
-                <span>Petani</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setRole("PEMBELI")}
-                className={`py-2 px-5 rounded-lg text-xs font-semibold transition-all duration-150 flex items-center gap-1.5 cursor-pointer ${
-                  role === "PEMBELI"
-                    ? "bg-primary text-[#E6E4DA] shadow-xs"
-                    : "text-ink-secondary hover:text-ink hover:bg-black/5"
-                }`}
-              >
-                <Store className="w-4 h-4" />
-                <span>Pembeli UMKM</span>
-              </button>
             </div>
           </section>
 
