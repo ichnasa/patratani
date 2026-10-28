@@ -23,9 +23,15 @@ export default function Navbar({
   const navigate = useNavigate();
   const currentPath = location.pathname;
 
+  const roleLower = (currentUser?.role || "").toLowerCase();
   const isAdmin =
-    currentUser?.role?.toLowerCase().includes("admin") ||
-    currentPath.startsWith("/admin");
+    roleLower.includes("admin") || currentPath.startsWith("/admin");
+  const isBuyer = roleLower.includes("pembeli") || roleLower.includes("umkm");
+  const isFarmer = roleLower.includes("petani") || roleLower.includes("mitra");
+  const showUserDashboard = Boolean(
+    currentUser && !isAdmin && (isFarmer || isBuyer),
+  );
+  const dashboardRoute = isBuyer ? "/dashboard/buyer" : "/dashboard/farmer";
 
   const [internalSearch, setInternalSearch] = useState(searchValue || "");
 
@@ -82,18 +88,31 @@ export default function Navbar({
                   "text-sm font-medium transition-colors duration-150 py-1",
                   isNavActive("/")
                     ? "text-primary font-bold border-b-2 border-primary"
-                    : "text-ink-secondary hover:text-primary"
+                    : "text-ink-secondary hover:text-primary",
                 )}
               >
                 Beranda
               </Link>
+              {showUserDashboard && (
+                <Link
+                  to={dashboardRoute}
+                  className={clsx(
+                    "text-sm font-medium transition-colors duration-150 py-1",
+                    isNavActive("/dashboard")
+                      ? "text-primary font-bold border-b-2 border-primary"
+                      : "text-ink-secondary hover:text-primary",
+                  )}
+                >
+                  Dashboard
+                </Link>
+              )}
               <Link
                 to="/explore"
                 className={clsx(
                   "text-sm font-medium transition-colors duration-150 py-1",
                   isNavActive("/explore")
                     ? "text-primary font-bold border-b-2 border-primary"
-                    : "text-ink-secondary hover:text-primary"
+                    : "text-ink-secondary hover:text-primary",
                 )}
               >
                 Jelajahi
@@ -102,9 +121,12 @@ export default function Navbar({
                 to="/handover"
                 className={clsx(
                   "text-sm font-medium transition-colors duration-150 py-1 relative",
-                  isNavActive("/handover") || isNavActive("/tender") || isNavActive("/escrow") || isNavActive("/completed")
+                  isNavActive("/handover") ||
+                    isNavActive("/tender") ||
+                    isNavActive("/escrow") ||
+                    isNavActive("/completed")
                     ? "text-primary font-bold border-b-2 border-primary"
-                    : "text-ink-secondary hover:text-primary"
+                    : "text-ink-secondary hover:text-primary",
                 )}
               >
                 <span>Transaksi</span>
@@ -119,7 +141,7 @@ export default function Navbar({
                     "text-sm font-medium transition-colors duration-150 py-1 flex items-center gap-1.5",
                     isNavActive("/admin")
                       ? "text-primary font-bold border-b-2 border-primary"
-                      : "text-amber-700 hover:text-amber-800 font-semibold"
+                      : "text-amber-700 hover:text-amber-800 font-semibold",
                   )}
                 >
                   <Scale className="w-4 h-4 text-amber-600" />
@@ -203,7 +225,7 @@ export default function Navbar({
             "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
             isNavActive("/")
               ? "text-primary font-bold"
-              : "text-ink-secondary hover:text-ink"
+              : "text-ink-secondary hover:text-ink",
           )}
         >
           <Home className="w-5 h-5" />
@@ -216,7 +238,7 @@ export default function Navbar({
             "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
             isNavActive("/explore")
               ? "text-primary font-bold"
-              : "text-ink-secondary hover:text-ink"
+              : "text-ink-secondary hover:text-ink",
           )}
         >
           <Compass className="w-5 h-5" />
@@ -227,9 +249,12 @@ export default function Navbar({
           to="/handover"
           className={clsx(
             "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg relative",
-            isNavActive("/handover") || isNavActive("/tender") || isNavActive("/escrow") || isNavActive("/completed")
+            isNavActive("/handover") ||
+              isNavActive("/tender") ||
+              isNavActive("/escrow") ||
+              isNavActive("/completed")
               ? "text-primary font-bold"
-              : "text-ink-secondary hover:text-ink"
+              : "text-ink-secondary hover:text-ink",
           )}
         >
           <ClipboardList className="w-5 h-5" />
@@ -244,7 +269,7 @@ export default function Navbar({
               "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
               isNavActive("/admin")
                 ? "text-primary font-bold"
-                : "text-amber-700 hover:text-amber-800"
+                : "text-amber-700 hover:text-amber-800",
             )}
           >
             <Scale className="w-5 h-5 text-amber-600" />
@@ -258,7 +283,7 @@ export default function Navbar({
             "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
             isNavActive("/profile") || isNavActive("/login")
               ? "text-primary font-bold"
-              : "text-ink-secondary hover:text-ink"
+              : "text-ink-secondary hover:text-ink",
           )}
         >
           <User className="w-5 h-5" />
