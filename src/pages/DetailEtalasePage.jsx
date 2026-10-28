@@ -23,26 +23,25 @@ export default function DetailEtalasePage() {
   const navigate = useNavigate();
   const { currentUser, startTransactionFromCommodity, showToast } = useApp();
 
-  const isFarmerRole = (currentUser?.role || "").toLowerCase().includes("petani");
-  const isOwnCommodity = currentUser?.name === commodity.farmer?.name;
-  const isSelfPurchaseBlocked = isFarmerRole || isOwnCommodity;
-
   const foundItem = mockCommodities.find(
     (item) => String(item.id) === String(id)
   );
 
-  const commodity = foundItem || {
+  const fallbackCommodity = {
     id: "CMD-001",
     name: "Tomat Mawar Organik Segar",
-    category: "Sayur Buah",
+    category: "Sayuran Buah",
     pricePerKg: 12000,
+    quotaKg: 50,
     totalQuotaKg: 50,
     availableQuotaKg: 35,
     minOrderKg: 10,
     maxOrderKg: 35,
-    harvestDate: "30 Oktober 2026",
+    harvestDate: "2026-10-30",
     description:
       "Tomat mawar pilihan hasil budidaya kebun organik Pasirjambu Ciwidey. Ditanam tanpa pestisida kimia sintetis, bertekstur padat renyah dengan rasa asam-segar seimbang. Sangat cocok untuk kebutuhan sambal, saus, dan sup di warung makan, cafe, atau resto katering.",
+    image:
+      "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=800&auto=format&fit=crop&q=80",
     images: [
       "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=800&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1546470427-e26264be0b11?w=800&auto=format&fit=crop&q=80",
@@ -55,42 +54,91 @@ export default function DetailEtalasePage() {
         "https://images.unsplash.com/photo-1544717305-2782549b5136?w=150&auto=format&fit=crop&q=80",
       rating: 4.9,
       reviewCount: 42,
+      totalTransactions: 64,
       successfulTransactions: 64,
       distanceKm: 3.2,
+      location: "Kebun Tomat Pasirjambu, Ciwidey",
       locationName: "Kebun Tomat Pasirjambu, Ciwidey",
       coordinates: "-7.0984, 107.4921",
     },
-    deliveryOptions: {
+    logistics: {
       selfPickup: {
-        allowed: true,
+        available: true,
         fee: 0,
-        description:
-          "Ambil langsung ke kebun saat panen (30 Okt 2026, pkl 07:00 - 11:00 WIB). Tanpa biaya kirim.",
+        notes: "Ambil langsung ke kebun saat panen. Tanpa biaya kirim.",
       },
       farmerDelivery: {
-        allowed: true,
-        fee: 5000,
-        description:
-          "Diantar langsung oleh Rizal menggunakan motor box pertanian. Maks. muatan 25 kg per trip.",
+        available: true,
+        fixedFee: 5000,
+        coverageArea: "Diantar langsung oleh petani menggunakan armada kebun.",
       },
     },
   };
 
+  const commodity = foundItem || fallbackCommodity;
+
+  const isFarmerRole = (currentUser?.role || "").toLowerCase().includes("petani");
+  const isOwnCommodity = Boolean(
+    currentUser?.name &&
+      commodity.farmer?.name &&
+      currentUser.name.trim().toLowerCase() === commodity.farmer.name.trim().toLowerCase()
+  );
+  const isSelfPurchaseBlocked = isFarmerRole || isOwnCommodity;
+
+  const galleryImages =
+    Array.isArray(commodity.images) && commodity.images.length > 0
+      ? commodity.images
+      : [commodity.image || fallbackCommodity.image].filter(Boolean);
+
   const [selectedPhoto, setSelectedPhoto] = useState(
-    commodity.images?.[0] || commodity.image
+    galleryImages[0] || commodity.image || fallbackCommodity.image
   );
-  const [orderQuantity, setOrderQuantity] = useState(
-    commodity.minOrderKg || 10
-  );
-  const [fulfillmentMethod, setFulfillmentMethod] = useState("DELIVERY");
 
   const minKg = commodity.minOrderKg || 10;
-  const maxKg = commodity.availableQuotaKg || commodity.quotaKg || 35;
+  const totalQuota = commodity.totalQuotaKg || commodity.quotaKg || 50;
+  const maxKg = commodity.availableQuotaKg || commodity.quotaKg || totalQuota;
+
+  const [orderQuantity, setOrderQuantity] = useState(minKg);
+  const [fulfillmentMethod, setFulfillmentMethod] = useState("DELIVERY");
+
   const unitPrice = commodity.pricePerKg || 12000;
-  const deliveryFee =
-    fulfillmentMethod === "DELIVERY"
-      ? commodity.deliveryOptions?.farmerDelivery?.fee || 5000
-      : 0;
+
+  const deliveryFeeFixed =
+    commodity.logistics?.farmerDelivery?.fixedFee ??
+    commodity.deliveryOptions?.farmerDelivery?.fee ??
+    5000;
+
+  const deliveryFee = fulfillmentMethod === "DELIVERY" ? deliveryFeeFixed : 0;
+
+  const pickupDescription =
+    commodity.logistics?.selfPickup?.notes ||
+    commodity.logistics?.selfPickup?.address ||
+    commodity.deliveryOptions?.selfPickup?.description ||
+    "Ambil langsung di kebun saat jam panen. Bebas biaya kirim.";
+
+  const deliveryDescription =
+    commodity.logistics?.farmerDelivery?.coverageArea ||
+    commodity.logistics?.farmerDelivery?.estimatedTime ||
+    commodity.deliveryOptions?.farmerDelivery?.description ||
+    "Diantar langsung oleh petani dengan armada pengantaran mandiri.";
+
+  const farmerLocationText =
+    commodity.farmer?.locationName ||
+    commodity.farmer?.location ||
+    "Lembang, Jawa Barat";
+
+  const farmerCoordText = commodity.farmer?.coordinates
+    ? ` (${commodity.farmer.coordinates})`
+    : "";
+
+  const farmerReviews =
+    commodity.farmer?.reviewCount ??
+    Math.max(16, (commodity.farmer?.totalTransactions || 25) - 3);
+
+  const farmerTransactions =
+    commodity.farmer?.successfulTransactions ??
+    commodity.farmer?.totalTransactions ??
+    38;
 
   const subtotal = orderQuantity * unitPrice;
   const totalEscrow = subtotal + deliveryFee;
@@ -146,7 +194,7 @@ export default function DetailEtalasePage() {
       <Navbar activeNav="pasar" />
 
       <main className="w-full flex-1">
-        <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-6 md:py-8 space-y-6 pb-28 md:pb-14">
+        <div className="max-w-[1440px] mx-auto w-full px-4 sm:px-6 lg:px-16 py-6 md:py-8 space-y-6 pb-28 md:pb-14">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-4">
             <nav className="flex items-center gap-2 text-xs text-ink-muted flex-wrap">
               <Link to="/" className="hover:text-primary transition-colors">
@@ -202,9 +250,9 @@ export default function DetailEtalasePage() {
                   </div>
                 </div>
 
-                {commodity.images && commodity.images.length > 1 && (
+                {galleryImages.length > 1 && (
                   <div className="grid grid-cols-4 gap-3">
-                    {commodity.images.map((img, idx) => (
+                    {galleryImages.map((img, idx) => (
                       <button
                         key={idx}
                         type="button"
@@ -252,7 +300,7 @@ export default function DetailEtalasePage() {
                       Sisa Kuota Pre-Order:
                     </span>
                     <span className="font-bold text-primary">
-                      Tersedia {commodity.availableQuotaKg || 35} kg dari {commodity.totalQuotaKg || 50} kg kuota panen
+                      Tersedia {maxKg} kg dari {totalQuota} kg kuota panen
                     </span>
                   </div>
 
@@ -260,11 +308,7 @@ export default function DetailEtalasePage() {
                     <div
                       className="h-full bg-primary rounded-full transition-all duration-300"
                       style={{
-                        width: `${Math.round(
-                          ((commodity.availableQuotaKg || 35) /
-                            (commodity.totalQuotaKg || 50)) *
-                            100
-                        )}%`,
+                        width: `${Math.round((maxKg / totalQuota) * 100)}%`,
                       }}
                     />
                   </div>
@@ -295,7 +339,7 @@ export default function DetailEtalasePage() {
                         Ambil Sendiri di Kebun (Self-Pickup) — Rp 0
                       </h4>
                       <p className="text-[11px] text-ink-secondary leading-relaxed mt-0.5">
-                        {commodity.deliveryOptions?.selfPickup?.description}
+                        {pickupDescription}
                       </p>
                     </div>
                   </div>
@@ -306,10 +350,10 @@ export default function DetailEtalasePage() {
                     </div>
                     <div>
                       <h4 className="text-xs font-bold text-ink">
-                        Diantar Petani — Rp {(commodity.deliveryOptions?.farmerDelivery?.fee || 5000).toLocaleString("id-ID")} (Tarif Tetap)
+                        Diantar Petani — Rp {deliveryFeeFixed.toLocaleString("id-ID")} (Tarif Tetap)
                       </h4>
                       <p className="text-[11px] text-ink-secondary leading-relaxed mt-0.5">
-                        {commodity.deliveryOptions?.farmerDelivery?.description}
+                        {deliveryDescription}
                       </p>
                     </div>
                   </div>
@@ -320,14 +364,17 @@ export default function DetailEtalasePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <img
-                      src={commodity.farmer.avatar}
-                      alt={commodity.farmer.name}
+                      src={
+                        commodity.farmer?.avatar ||
+                        fallbackCommodity.farmer.avatar
+                      }
+                      alt={commodity.farmer?.name || "Petani"}
                       className="w-12 h-12 rounded-full object-cover border border-border"
                     />
                     <div>
                       <div className="flex items-center gap-2">
                         <h4 className="text-sm font-bold text-ink">
-                          {commodity.farmer.name}
+                          {commodity.farmer?.name || "Mitra Petani"}
                         </h4>
                         <span className="inline-flex items-center gap-1 text-[10px] font-bold text-primary px-2 py-0.5 rounded-full bg-primary/10">
                           <CheckCircle2 className="w-3 h-3" />
@@ -337,12 +384,12 @@ export default function DetailEtalasePage() {
                       <div className="flex items-center gap-2 text-xs text-ink-secondary mt-0.5">
                         <span className="flex items-center gap-1 font-semibold text-ink">
                           <Star className="w-3.5 h-3.5 fill-status-pending text-status-pending" />
-                          {commodity.farmer.rating} ({commodity.farmer.reviewCount} ulasan)
+                          {commodity.farmer?.rating || 4.9} ({farmerReviews} ulasan)
                         </span>
                         <span>•</span>
-                        <span>{commodity.farmer.successfulTransactions} Transaksi Sukses</span>
+                        <span>{farmerTransactions} Transaksi Sukses</span>
                         <span>•</span>
-                        <span>{commodity.farmer.distanceKm} km dari Anda</span>
+                        <span>{commodity.farmer?.distanceKm || 3.5} km dari Anda</span>
                       </div>
                     </div>
                   </div>
@@ -351,7 +398,7 @@ export default function DetailEtalasePage() {
                 <div className="p-3.5 rounded-xl bg-[#E6E4DA]/40 border border-border flex items-center gap-2.5 text-xs text-ink-secondary">
                   <MapPin className="w-4 h-4 text-primary shrink-0" />
                   <span>
-                    {commodity.farmer.locationName} ({commodity.farmer.coordinates})
+                    {farmerLocationText}{farmerCoordText}
                   </span>
                 </div>
               </div>
@@ -451,7 +498,7 @@ export default function DetailEtalasePage() {
                         </span>
                       </div>
                       <span className="text-xs font-bold text-ink">
-                        + Rp {(commodity.deliveryOptions?.farmerDelivery?.fee || 5000).toLocaleString("id-ID")}
+                        + Rp {deliveryFeeFixed.toLocaleString("id-ID")}
                       </span>
                     </label>
                   </div>
@@ -460,7 +507,7 @@ export default function DetailEtalasePage() {
                 <div className="pt-3 border-t border-border space-y-2 text-xs">
                   <div className="flex justify-between items-center text-ink-secondary">
                     <span>
-                      Harga Tomat ({orderQuantity} kg × Rp {unitPrice.toLocaleString("id-ID")})
+                      Harga {commodity.name} ({orderQuantity} kg × Rp {unitPrice.toLocaleString("id-ID")})
                     </span>
                     <span className="font-semibold text-ink">
                       Rp {subtotal.toLocaleString("id-ID")}
