@@ -24,6 +24,33 @@ export default function FarmerDashboardPage() {
     (location.state?.tab || location.state?.menu || "ringkasan").toLowerCase()
   );
 
+  const farmerCommodities = (commodities || []).filter((item) => {
+    if (item.authorId && currentUser?.id && item.authorId === currentUser.id) {
+      return true;
+    }
+    if (item.farmerId && currentUser?.id && item.farmerId === currentUser.id) {
+      return true;
+    }
+    if (item.farmer?.id && currentUser?.id && item.farmer.id === currentUser.id) {
+      return true;
+    }
+    if (
+      currentUser?.name &&
+      item.farmer?.name &&
+      (item.farmer.name.toLowerCase().includes(currentUser.name.toLowerCase()) ||
+       currentUser.name.toLowerCase().includes(item.farmer.name.toLowerCase()))
+    ) {
+      return true;
+    }
+    if (
+      (currentUser?.id === "USR-001" || currentUser?.id === "USR-002" || !currentUser?.id) &&
+      (item.farmer?.id === "FARM-01" || item.farmer?.name?.toLowerCase().includes("mulyono") || item.farmer?.name?.toLowerCase().includes("rizal"))
+    ) {
+      return true;
+    }
+    return false;
+  });
+
   const [deliverySettings, setDeliverySettings] = useState({
     isEnabled: true,
     maxCapacityKg: 50,
@@ -595,7 +622,12 @@ export default function FarmerDashboardPage() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                    {(commodities || []).map((item) => (
+                    {farmerCommodities.length === 0 ? (
+                      <div className="col-span-full py-12 text-center text-ink-muted bg-surface rounded-2xl border border-border">
+                        Belum ada komoditas hasil panen di etalase Anda.
+                      </div>
+                    ) : (
+                      farmerCommodities.map((item) => (
                       <div
                         key={item.id}
                         className="bg-surface rounded-2xl border border-border overflow-hidden shadow-xs hover:border-primary/40 transition-all flex flex-col justify-between"
@@ -631,7 +663,8 @@ export default function FarmerDashboardPage() {
                           </div>
                         </div>
                       </div>
-                    ))}
+                    ))
+                    )}
                   </div>
                 </div>
               )}

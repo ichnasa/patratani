@@ -572,7 +572,7 @@ export default function DetailEtalasePage() {
                 <div className="p-3 rounded-xl bg-surface-green/40 border border-border flex items-start gap-2.5">
                   <ShieldCheck className="w-4 h-4 text-primary shrink-0 mt-0.5" />
                   <p className="text-[11px] text-ink-secondary leading-relaxed">
-                    Pembayaran Anda ditahan aman di rekening Escrow (simulasi). Dana hanya dilepas ke petani setelah Anda memverifikasi foto serah-terima di aplikasi.
+                    Pembayaran Anda ditahan aman di rekening bersama (escrow). Dana hanya dilepas ke petani setelah Anda memverifikasi foto serah-terima di aplikasi.
                   </p>
                 </div>
               </div>

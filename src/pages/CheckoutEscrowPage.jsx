@@ -571,7 +571,7 @@ export default function CheckoutEscrowPage({
                       <span>Perlindungan Tanpa Gudang</span>
                     </div>
                     <p className="text-[11px] text-ink-secondary leading-relaxed">
-                      Dana Anda 100% aman tertahan di rekening escrow simulasi. Petani hanya dapat mencairkan dana setelah komoditas tiba di dapur dan diverifikasi dengan foto kamera + geotag.
+                      Dana Anda 100% aman tertahan di rekening bersama (escrow). Petani hanya dapat mencairkan dana setelah komoditas tiba di dapur dan diverifikasi dengan foto kamera + geotag.
                     </p>
                   </div>
                 </div>

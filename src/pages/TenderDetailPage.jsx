@@ -440,7 +440,7 @@ export default function TenderDetailPage({
                 <div className="flex items-center gap-2 pb-3 border-b border-border/80">
                   <Coins className="w-5 h-5 text-primary" />
                   <h3 className="text-base font-bold text-ink">
-                    Simulasi Finansial &amp; Transparansi
+                    Rincian Finansial &amp; Transparansi
                   </h3>
                 </div>
 
@@ -501,7 +501,7 @@ export default function TenderDetailPage({
                   icon={ShieldCheck}
                   onClick={handleProceedToEscrow}
                 >
-                  Simulasikan Setor Escrow
+                  Setor Dana ke Escrow
                 </Button>
 
                 <div className="p-4 rounded-xl bg-[#DDE0D4] border border-primary/20 space-y-2">
@@ -510,7 +510,7 @@ export default function TenderDetailPage({
                     <span>Jaminan Escrow Patra Tani</span>
                   </div>
                   <p className="text-[11px] text-ink-secondary leading-relaxed">
-                    Setelah tender disepakati, pembeli wajib menyetor Rp {totalBuyerPayment.toLocaleString("id-ID")} ke rekening escrow simulasi. Petani dijamin menerima dana penuh saat serah terima diverifikasi via kamera geotag.
+                    Setelah tender disepakati, pembeli wajib menyetor Rp {totalBuyerPayment.toLocaleString("id-ID")} ke rekening bersama (escrow). Petani dijamin menerima dana penuh saat serah terima diverifikasi via kamera geotag.
                   </p>
                 </div>
               </div>
