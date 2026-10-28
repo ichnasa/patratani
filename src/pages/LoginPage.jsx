@@ -12,6 +12,8 @@ import {
   ArrowRight,
   ShieldCheck,
   ArrowLeft,
+  Scale,
+  Store,
 } from "lucide-react";
 
 export default function LoginPage() {
@@ -34,9 +36,62 @@ export default function LoginPage() {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      login({ email });
-      navigate("/");
-    }, 400);
+      const emailLower = email.toLowerCase();
+      if (emailLower.includes("admin")) {
+        login({
+          email,
+          role: "Admin Mediasi Escrow",
+          name: "Admin Pengawas Escrow",
+        });
+        navigate("/admin/disputes");
+      } else if (emailLower.includes("petani") || emailLower.includes("mulyono")) {
+        login({
+          email,
+          role: "Petani Mitra",
+          name: "Pak Mulyono",
+        });
+        navigate("/dashboard/farmer");
+      } else if (emailLower.includes("pembeli") || emailLower.includes("lina")) {
+        login({
+          email,
+          role: "Pembeli UMKM",
+          name: "Ibu Lina Marlina",
+        });
+        navigate("/dashboard/buyer");
+      } else {
+        login({ email });
+        navigate("/");
+      }
+    }, 300);
+  };
+
+  const handleQuickLogin = (roleType) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      if (roleType === "admin") {
+        login({
+          email: "admin@patratani.id",
+          role: "Admin Mediasi Escrow",
+          name: "Admin Pengawas Escrow",
+        });
+        navigate("/admin/disputes");
+      } else if (roleType === "pembeli") {
+        login({
+          email: "lina@warungsambal.com",
+          role: "Pembeli UMKM",
+          name: "Ibu Lina Marlina",
+        });
+        navigate("/dashboard/buyer");
+      } else {
+        login({
+          email: "mulyono@lembangtani.id",
+          role: "Petani Mitra",
+          name: "Pak Mulyono",
+        });
+        navigate("/dashboard/farmer");
+      }
+    }, 250);
   };
 
   const handleGoogleLogin = () => {
@@ -87,6 +142,67 @@ export default function LoginPage() {
           </p>
         </div>
 
+        <div className="p-3.5 rounded-2xl bg-[#EFEEE7] border border-border/80 space-y-2.5">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold text-ink uppercase tracking-wider">
+              Akun Demo Uji Coba (1-Klik)
+            </span>
+            <span className="text-[10px] text-primary font-bold px-2 py-0.5 rounded-md bg-surface-green">
+              Uji Cepat
+            </span>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={() => handleQuickLogin("petani")}
+              className="p-2.5 rounded-xl border border-border bg-surface hover:bg-surface-green/40 hover:border-primary transition-all text-left flex flex-col justify-between cursor-pointer group shadow-xs"
+            >
+              <div className="flex items-center gap-1.5">
+                <Sprout className="w-4 h-4 text-primary shrink-0" />
+                <span className="text-[11px] font-bold text-ink group-hover:text-primary">
+                  Petani
+                </span>
+              </div>
+              <span className="text-[9px] text-ink-muted mt-1 truncate">
+                Pak Mulyono
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleQuickLogin("pembeli")}
+              className="p-2.5 rounded-xl border border-border bg-surface hover:bg-surface-green/40 hover:border-primary transition-all text-left flex flex-col justify-between cursor-pointer group shadow-xs"
+            >
+              <div className="flex items-center gap-1.5">
+                <Store className="w-4 h-4 text-primary shrink-0" />
+                <span className="text-[11px] font-bold text-ink group-hover:text-primary">
+                  Pembeli
+                </span>
+              </div>
+              <span className="text-[9px] text-ink-muted mt-1 truncate">
+                Ibu Lina
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleQuickLogin("admin")}
+              className="p-2.5 rounded-xl border border-[#FDE68A] bg-[#FEF3C7] hover:bg-[#FDE68A] hover:border-[#D97706] transition-all text-left flex flex-col justify-between cursor-pointer group shadow-xs"
+            >
+              <div className="flex items-center gap-1.5">
+                <Scale className="w-4 h-4 text-[#D97706] shrink-0" />
+                <span className="text-[11px] font-bold text-[#D97706]">
+                  Admin
+                </span>
+              </div>
+              <span className="text-[9px] text-ink-muted mt-1 truncate">
+                Escrow Sengketa
+              </span>
+            </button>
+          </div>
+        </div>
+
         {errorMsg && (
           <div className="p-3 rounded-xl bg-[#FEE2E2] border border-[#FECACA] text-xs font-medium text-[#991B1B] text-center">
             {errorMsg}
@@ -97,7 +213,7 @@ export default function LoginPage() {
           <Input
             label="Alamat Email"
             type="email"
-            placeholder="nama@usaha.com"
+            placeholder="admin@patratani.id atau nama@usaha.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             iconLeft={Mail}

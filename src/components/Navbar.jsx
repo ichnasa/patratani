@@ -9,6 +9,7 @@ import {
   Compass,
   ClipboardList,
   User,
+  Scale,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 
@@ -21,6 +22,35 @@ export default function Navbar({
   const location = useLocation();
   const currentPath = location.pathname;
 
+<<<<<<< HEAD
+=======
+  const isAdmin =
+    currentUser?.role?.toLowerCase().includes("admin") ||
+    currentPath.startsWith("/admin");
+
+  const [internalSearch, setInternalSearch] = useState(searchValue || "");
+
+  useEffect(() => {
+    if (searchValue !== undefined && searchValue !== null) {
+      setInternalSearch(searchValue);
+    }
+  }, [searchValue]);
+
+  const handleInputChange = (e) => {
+    const val = e.target.value;
+    setInternalSearch(val);
+    if (onSearchChange) {
+      onSearchChange(e);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      navigate(`/explore?search=${encodeURIComponent(internalSearch)}`);
+    }
+  };
+
+>>>>>>> e12bdc3 (feat: implementasi quick login multi-peran dan navigasi portal admin)
   const isNavActive = (path) => {
     if (path === "/" && currentPath === "/") return true;
     if (path !== "/" && currentPath.startsWith(path)) return true;
@@ -81,6 +111,20 @@ export default function Navbar({
                   1
                 </span>
               </Link>
+              {isAdmin && (
+                <Link
+                  to="/admin/disputes"
+                  className={clsx(
+                    "text-sm font-medium transition-colors duration-150 py-1 flex items-center gap-1.5",
+                    isNavActive("/admin")
+                      ? "text-primary font-bold border-b-2 border-primary"
+                      : "text-amber-700 hover:text-amber-800 font-semibold"
+                  )}
+                >
+                  <Scale className="w-4 h-4 text-amber-600" />
+                  <span>Portal Admin</span>
+                </Link>
+              )}
             </nav>
           </div>
 
@@ -109,7 +153,7 @@ export default function Navbar({
 
             {currentUser ? (
               <Link
-                to="/profile"
+                to={currentUser.role?.toLowerCase().includes("admin") ? "/admin/disputes" : "/profile"}
                 className="flex items-center gap-2 select-none py-1 px-2 rounded-xl transition-colors hover:bg-surface-green/40 group"
               >
                 <img
@@ -189,6 +233,21 @@ export default function Navbar({
           <span className="text-[10px]">Transaksi</span>
           <span className="absolute top-1 right-2 w-1.5 h-1.5 rounded-full bg-primary" />
         </Link>
+
+        {isAdmin && (
+          <Link
+            to="/admin/disputes"
+            className={clsx(
+              "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
+              isNavActive("/admin")
+                ? "text-primary font-bold"
+                : "text-amber-700 hover:text-amber-800"
+            )}
+          >
+            <Scale className="w-5 h-5 text-amber-600" />
+            <span className="text-[10px] font-semibold">Admin</span>
+          </Link>
+        )}
 
         <Link
           to={currentUser ? "/profile" : "/login"}

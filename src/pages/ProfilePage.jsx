@@ -210,7 +210,9 @@ export default function ProfilePage({ onBack, onLogout }) {
                   icon={LayoutDashboard}
                   onClick={() => {
                     const roleLower = (currentUser.role || "").toLowerCase();
-                    if (roleLower.includes("pembeli") || roleLower.includes("umkm")) {
+                    if (roleLower.includes("admin")) {
+                      navigate("/admin/disputes");
+                    } else if (roleLower.includes("pembeli") || roleLower.includes("umkm")) {
                       navigate("/dashboard/buyer");
                     } else {
                       navigate("/dashboard/farmer");
@@ -332,7 +334,9 @@ export default function ProfilePage({ onBack, onLogout }) {
                           const roleLower = (
                             currentUser.role || ""
                           ).toLowerCase();
-                          if (
+                          if (roleLower.includes("admin")) {
+                            navigate("/admin/disputes");
+                          } else if (
                             roleLower.includes("pembeli") ||
                             roleLower.includes("umkm")
                           ) {

@@ -1,19 +1,20 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Sprout, ShieldCheck, CheckCircle2, Camera, Truck } from "lucide-react";
 
 export default function Footer() {
   const linksNavigasi = [
-    { label: "Beranda Utama", href: "#" },
-    { label: "Jelajahi Komoditas", href: "#" },
-    { label: "Tender Permintaan", href: "#" },
-    { label: "Riwayat Transaksi", href: "#" },
+    { label: "Beranda Utama", href: "/" },
+    { label: "Jelajahi Komoditas", href: "/explore" },
+    { label: "Serah Terima & Bukti", href: "/handover" },
+    { label: "Portal Admin Escrow", href: "/admin/disputes" },
   ];
 
   const linksEkosistem = [
-    { label: "Untuk Petani Kecil", href: "#" },
-    { label: "Untuk Pembeli UMKM / HoReCa", href: "#" },
-    { label: "Verifikasi Geotag & Kamera", href: "#" },
-    { label: "Aturan Komisi 3–5%", href: "#" },
+    { label: "Dashboard Petani Mitra", href: "/dashboard/farmer" },
+    { label: "Dashboard Pembeli UMKM", href: "/dashboard/buyer" },
+    { label: "Verifikasi Geotag & Kamera", href: "/handover" },
+    { label: "Aturan Komisi 3–5%", href: "/escrow" },
   ];
 
   return (
@@ -58,12 +59,12 @@ export default function Footer() {
               <ul className="space-y-2.5">
                 {linksNavigasi.map((link) => (
                   <li key={link.label}>
-                    <a
-                      href={link.href}
+                    <Link
+                      to={link.href}
                       className="text-xs text-white/70 hover:text-white transition-colors"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -76,12 +77,12 @@ export default function Footer() {
               <ul className="space-y-2.5">
                 {linksEkosistem.map((link) => (
                   <li key={link.label}>
-                    <a
-                      href={link.href}
+                    <Link
+                      to={link.href}
                       className="text-xs text-white/70 hover:text-white transition-colors"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -140,17 +141,17 @@ export default function Footer() {
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50">
           <p>© 2026 Patra Tani Indonesia. Hak Cipta Dilindungi.</p>
           <div className="flex items-center gap-4">
-            <a href="#" className="hover:text-white transition-colors">
+            <Link to="/explore" className="hover:text-white transition-colors">
               Peta Lokasi Panen
-            </a>
+            </Link>
             <span>•</span>
-            <a href="#" className="hover:text-white transition-colors">
+            <Link to="/dashboard/farmer" className="hover:text-white transition-colors">
               Mitra Kelompok Tani
-            </a>
+            </Link>
             <span>•</span>
-            <a href="#" className="hover:text-white transition-colors">
-              Status Layanan
-            </a>
+            <Link to="/admin/disputes" className="hover:text-white transition-colors">
+              Status Layanan &amp; Escrow
+            </Link>
           </div>
         </div>
       </div>

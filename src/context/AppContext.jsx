@@ -4,7 +4,26 @@ import { mockUserProfile } from "../data/mockData";
 const AppContext = createContext();
 
 export function AppProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState(mockUserProfile);
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem("patratani_current_user");
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {}
+    return mockUserProfile;
+  });
+
+  useEffect(() => {
+    try {
+      if (currentUser) {
+        sessionStorage.setItem("patratani_current_user", JSON.stringify(currentUser));
+      } else {
+        sessionStorage.removeItem("patratani_current_user");
+      }
+    } catch (e) {}
+  }, [currentUser]);
+
   const [toast, setToast] = useState(null);
 
   const initialTransaction = {
@@ -99,17 +118,43 @@ export function AppProvider({ children }) {
   };
 
   const login = (credentials = {}) => {
+    const email = credentials.email || mockUserProfile.email;
+    let role = credentials.role;
+    let name = credentials.name;
+
+    if (!role) {
+      const emailLower = email.toLowerCase();
+      if (emailLower.includes("admin")) {
+        role = "Admin Mediasi Escrow";
+        name = "Admin Pengawas Escrow";
+      } else if (emailLower.includes("petani") || emailLower.includes("mulyono")) {
+        role = "Petani Mitra";
+        name = "Pak Mulyono";
+      } else if (emailLower.includes("pembeli") || emailLower.includes("lina")) {
+        role = "Pembeli UMKM";
+        name = "Ibu Lina Marlina";
+      } else {
+        role = mockUserProfile.role;
+        name = mockUserProfile.name;
+      }
+    }
+
     const user = {
       ...mockUserProfile,
-      email: credentials.email || mockUserProfile.email,
+      email,
+      role,
+      name: name || mockUserProfile.name,
     };
     setCurrentUser(user);
-    showToast("Login Berhasil", "success");
+    showToast(`Login Berhasil sebagai ${role}`, "success");
     return user;
   };
 
   const logout = () => {
     setCurrentUser(null);
+    try {
+      sessionStorage.removeItem("patratani_current_user");
+    } catch (e) {}
     showToast("Berhasil Keluar", "info");
   };
 
