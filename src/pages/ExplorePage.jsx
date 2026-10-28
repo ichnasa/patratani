@@ -22,7 +22,11 @@ import {
 
 export default function ExplorePage() {
   const navigate = useNavigate();
-  const { commodities, tenders } = useApp();
+  const { commodities, tenders, currentUser } = useApp();
+  const roleLower = (currentUser?.role || "").toLowerCase();
+  const isAdmin = roleLower.includes("admin");
+  const isFarmer = !isAdmin && (roleLower.includes("petani") || roleLower.includes("mitra"));
+  const isBuyer = !isAdmin && (roleLower.includes("pembeli") || roleLower.includes("umkm"));
   const commodityList = commodities && commodities.length > 0 ? commodities : mockCommodities;
   const tenderList = tenders && tenders.length > 0 ? tenders : mockTenders;
   const [activeTab, setActiveTab] = useState("ETALASE");
@@ -359,22 +363,27 @@ export default function ExplorePage() {
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-              <button
-                type="button"
-                onClick={() =>
-                  navigate(
-                    activeTab === "ETALASE"
-                      ? "/etalase/create"
-                      : "/tender/create"
-                  )
-                }
-                className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary text-[#E6E4DA] text-xs font-semibold hover:bg-primary-hover transition-colors shadow-xs shrink-0 cursor-pointer"
-              >
-                <Plus className="w-4 h-4" />
-                <span>
-                  {activeTab === "ETALASE" ? "Pasang Panen" : "Buat Tender"}
-                </span>
-              </button>
+              {isFarmer && activeTab === "ETALASE" && (
+                <button
+                  type="button"
+                  onClick={() => navigate("/etalase/create")}
+                  className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary text-[#E6E4DA] text-xs font-semibold hover:bg-primary-hover transition-colors shadow-xs shrink-0 cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Pasang Panen</span>
+                </button>
+              )}
+
+              {isBuyer && activeTab === "TENDER" && (
+                <button
+                  type="button"
+                  onClick={() => navigate("/tender/create")}
+                  className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary text-[#E6E4DA] text-xs font-semibold hover:bg-primary-hover transition-colors shadow-xs shrink-0 cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>Buat Tender</span>
+                </button>
+              )}
 
               <button
                 type="button"

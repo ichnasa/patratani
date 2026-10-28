@@ -33,7 +33,7 @@ export default function App() {
           <Route
             path="/etalase/create"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["farmer"]}>
                 <CreateEtalasePage />
               </ProtectedRoute>
             }
@@ -59,7 +59,7 @@ export default function App() {
           <Route
             path="/tender/create"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["buyer"]}>
                 <CreateTenderPage />
               </ProtectedRoute>
             }
@@ -67,7 +67,7 @@ export default function App() {
           <Route
             path="/escrow"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["buyer"]}>
                 <CheckoutEscrowPage />
               </ProtectedRoute>
             }
@@ -75,7 +75,7 @@ export default function App() {
           <Route
             path="/escrow/:id"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["buyer"]}>
                 <CheckoutEscrowPage />
               </ProtectedRoute>
             }
@@ -115,7 +115,7 @@ export default function App() {
           <Route
             path="/dashboard/farmer"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["farmer"]}>
                 <FarmerDashboardPage />
               </ProtectedRoute>
             }
@@ -123,7 +123,7 @@ export default function App() {
           <Route
             path="/dashboard/buyer"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["buyer"]}>
                 <BuyerDashboardPage />
               </ProtectedRoute>
             }
@@ -131,7 +131,7 @@ export default function App() {
           <Route
             path="/admin/disputes"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["admin"]}>
                 <AdminDisputeDashboardPage />
               </ProtectedRoute>
             }

@@ -27,7 +27,10 @@ export default function TenderDetailPage({
 }) {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { activeTransaction, startTransactionFromTender, tenders } = useApp();
+  const { activeTransaction, startTransactionFromTender, tenders, currentUser } = useApp();
+  const roleLower = (currentUser?.role || "").toLowerCase();
+  const isAdmin = roleLower.includes("admin");
+  const isFarmer = !isAdmin && (roleLower.includes("petani") || roleLower.includes("mitra"));
   const activeId = id || activeTransaction?.tenderId || tenderId;
 
   const tenderList = tenders && tenders.length > 0 ? tenders : mockTenders;
@@ -233,7 +236,8 @@ export default function TenderDetailPage({
                   </span>
                 </div>
 
-                {isSubmitted ? (
+                {isFarmer ? (
+                  isSubmitted ? (
                   <div className="p-6 rounded-xl bg-[#DCFCE7] border border-[#BBF7D0] text-center space-y-4">
                     <div className="w-12 h-12 rounded-full bg-[#16A34A] text-white flex items-center justify-center mx-auto shadow-sm">
                       <CheckCircle2 className="w-6 h-6" />
@@ -359,6 +363,20 @@ export default function TenderDetailPage({
                       </Button>
                     </div>
                   </form>
+                )) : (
+                  <div className="p-6 rounded-xl bg-[#E6E4DA]/30 border border-border text-center space-y-3">
+                    <div className="w-10 h-10 rounded-full bg-surface-green text-primary flex items-center justify-center mx-auto">
+                      <Store className="w-5 h-5" />
+                    </div>
+                    <div className="space-y-1">
+                      <h3 className="text-sm font-bold text-ink">
+                        Aksi Penawaran Khusus Petani Mitra
+                      </h3>
+                      <p className="text-xs text-ink-secondary max-w-sm mx-auto leading-relaxed">
+                        Pengajuan penawaran bahan baku hanya dapat dilakukan oleh akun Mitra Petani terverifikasi.
+                      </p>
+                    </div>
+                  </div>
                 )}
               </section>
 

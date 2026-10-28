@@ -1,7 +1,7 @@
 export const mockUserProfile = {
   id: "USR-001",
   name: "Rizal Firmansyah",
-  role: "Petani Kecil & Pembeli UMKM",
+  role: "Petani Mitra",
   avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
   email: "rizal.firmansyah@patratani.id",
   phone: "+62 812-9988-7711",

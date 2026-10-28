@@ -30,7 +30,12 @@ import {
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const [role, setRole] = useState("PETANI");
+  const { currentUser } = useApp();
+  const roleLower = (currentUser?.role || "").toLowerCase();
+  const isAdmin = roleLower.includes("admin");
+  const isFarmer = !isAdmin && (roleLower ? (roleLower.includes("petani") || roleLower.includes("mitra")) : true);
+  const isBuyer = !isAdmin && (roleLower ? (roleLower.includes("pembeli") || roleLower.includes("umkm")) : false);
+  const [role, setRole] = useState(isBuyer ? "PEMBELI" : "PETANI");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [feedTab, setFeedTab] = useState("KOMODITAS");
 
@@ -87,24 +92,26 @@ export default function HomePage() {
               </p>
 
               <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-3">
-                <Button
-                  variant="primary"
-                  icon={role === "PETANI" ? ShoppingBag : FileText}
-                  onClick={() =>
-                    navigate(
-                      role === "PETANI" ? "/etalase/create" : "/tender/create"
-                    )
-                  }
-                >
-                  {role === "PETANI" ? "Pasang Hasil Panen" : "Buka Tender Baru"}
-                </Button>
+                {!isAdmin && (
+                  <Button
+                    variant="primary"
+                    icon={isFarmer ? ShoppingBag : FileText}
+                    onClick={() =>
+                      navigate(
+                        isFarmer ? "/etalase/create" : "/tender/create"
+                      )
+                    }
+                  >
+                    {isFarmer ? "Pasang Hasil Panen" : "Buka Tender Baru"}
+                  </Button>
+                )}
                 <Button
                   variant="outline"
                   icon={ArrowRight}
                   iconPosition="right"
-                  onClick={() => navigate("/profile")}
+                  onClick={() => navigate(isAdmin ? "/admin/disputes" : "/profile")}
                 >
-                  Lihat Riwayat Pesanan
+                  {isAdmin ? "Portal Sengketa Admin" : "Lihat Riwayat Pesanan"}
                 </Button>
               </div>
             </div>
@@ -180,14 +187,26 @@ export default function HomePage() {
                   <span className="text-xs font-semibold text-primary">
                     {mockCommodities.length} Komoditas Siap Panen
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => navigate("/etalase/create")}
-                    className="px-4 py-2 bg-primary hover:bg-primary-hover text-[#E6E4DA] text-xs font-bold rounded-xl transition-all shadow-xs cursor-pointer inline-flex items-center gap-1.5"
-                  >
-                    <span>Buka Etalase</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
+                  {isFarmer && (
+                    <button
+                      type="button"
+                      onClick={() => navigate("/etalase/create")}
+                      className="px-4 py-2 bg-primary hover:bg-primary-hover text-[#E6E4DA] text-xs font-bold rounded-xl transition-all shadow-xs cursor-pointer inline-flex items-center gap-1.5"
+                    >
+                      <span>Buka Etalase</span>
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  )}
+                  {!isFarmer && !isAdmin && (
+                    <button
+                      type="button"
+                      onClick={() => navigate("/explore")}
+                      className="text-xs font-bold text-primary hover:underline flex items-center gap-1 cursor-pointer"
+                    >
+                      <span>Jelajahi Panen</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -213,14 +232,26 @@ export default function HomePage() {
                   <span className="text-xs font-semibold text-[#D97706]">
                     {mockTenders.length} Tender Terbuka
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => navigate("/tender/create")}
-                    className="px-4 py-2 bg-primary hover:bg-primary-hover text-[#E6E4DA] text-xs font-bold rounded-xl transition-all shadow-xs cursor-pointer inline-flex items-center gap-1.5"
-                  >
-                    <span>Buka Tender</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
+                  {isBuyer && (
+                    <button
+                      type="button"
+                      onClick={() => navigate("/tender/create")}
+                      className="px-4 py-2 bg-primary hover:bg-primary-hover text-[#E6E4DA] text-xs font-bold rounded-xl transition-all shadow-xs cursor-pointer inline-flex items-center gap-1.5"
+                    >
+                      <span>Buka Tender</span>
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  )}
+                  {!isBuyer && !isAdmin && (
+                    <button
+                      type="button"
+                      onClick={() => navigate("/explore")}
+                      className="text-xs font-bold text-[#D97706] hover:underline flex items-center gap-1 cursor-pointer"
+                    >
+                      <span>Lihat Semua Tender</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
               </div>
             </section>

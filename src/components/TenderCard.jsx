@@ -1,13 +1,19 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useApp } from "../context/AppContext";
 import Button from "./Button";
 import StatusBadge from "./StatusBadge";
 import { MapPin } from "lucide-react";
 
 export default function TenderCard({ tender, onBid }) {
   const navigate = useNavigate();
+  const { currentUser } = useApp();
 
   if (!tender) return null;
+
+  const roleLower = (currentUser?.role || "").toLowerCase();
+  const isAdmin = roleLower.includes("admin");
+  const isFarmer = !isAdmin && (roleLower.includes("petani") || roleLower.includes("mitra"));
 
   const handleCardClick = () => {
     navigate(`/tender/${tender.id}`);
@@ -101,13 +107,23 @@ export default function TenderCard({ tender, onBid }) {
           Penawaran masuk: <strong className="text-ink">{tender.bidsCount || 0} Petani</strong>
         </span>
 
-        <Button
-          variant="primary"
-          size="sm"
-          onClick={handleBidClick}
-        >
-          Ajukan Penawaran
-        </Button>
+        {isFarmer ? (
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={handleBidClick}
+          >
+            Beri Penawaran
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleCardClick}
+          >
+            Lihat Rincian
+          </Button>
+        )}
       </div>
     </article>
   );

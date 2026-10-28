@@ -10,7 +10,9 @@ export default function EtalaseCard({ commodity, onOrder }) {
 
   if (!commodity) return null;
 
-  const isAdmin = currentUser?.role?.toLowerCase().includes("admin");
+  const roleLower = (currentUser?.role || "").toLowerCase();
+  const isAdmin = roleLower.includes("admin");
+  const isBuyer = !isAdmin && (roleLower.includes("pembeli") || roleLower.includes("umkm"));
 
   const handleOrder = (e) => {
     e.stopPropagation();
@@ -120,16 +122,7 @@ export default function EtalaseCard({ commodity, onOrder }) {
       </div>
 
       <div className="p-3.5 sm:p-4 pt-0">
-        {isAdmin ? (
-          <Button
-            variant="outline"
-            fullWidth
-            size="sm"
-            onClick={handleCardClick}
-          >
-            Lihat Detail Panen
-          </Button>
-        ) : (
+        {isBuyer ? (
           <Button
             variant="primary"
             fullWidth
@@ -137,6 +130,15 @@ export default function EtalaseCard({ commodity, onOrder }) {
             onClick={handleOrder}
           >
             Pesan Langsung
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            fullWidth
+            size="sm"
+            onClick={handleCardClick}
+          >
+            Lihat Detail Panen
           </Button>
         )}
       </div>

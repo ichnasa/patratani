@@ -10,6 +10,7 @@ import {
   User,
   Scale,
   ChevronRight,
+  ShoppingCart,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 
@@ -22,8 +23,10 @@ export default function Navbar() {
   const roleLower = (currentUser?.role || "").toLowerCase();
   const isAdmin =
     roleLower.includes("admin") || currentPath.startsWith("/admin");
-  const isBuyer = roleLower.includes("pembeli") || roleLower.includes("umkm");
-  const isFarmer = roleLower.includes("petani") || roleLower.includes("mitra");
+  const isBuyer =
+    !isAdmin && (roleLower.includes("pembeli") || roleLower.includes("umkm"));
+  const isFarmer =
+    !isAdmin && (roleLower.includes("petani") || roleLower.includes("mitra"));
   const showUserDashboard = Boolean(
     currentUser && !isAdmin && (isFarmer || isBuyer),
   );
@@ -177,6 +180,16 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-4">
+            {isBuyer && (
+              <Link
+                to="/escrow"
+                aria-label="Keranjang Belanja"
+                className="relative w-10 h-10 rounded-full flex items-center justify-center text-ink-secondary hover:text-ink hover:bg-surface-green/60 transition-colors"
+              >
+                <ShoppingCart className="w-5 h-5" />
+              </Link>
+            )}
+
             {isTransactionalUser && (
               <div className="relative" ref={notifRef}>
                 <button
@@ -322,6 +335,21 @@ export default function Navbar() {
           <Compass className="w-5 h-5" />
           <span className="text-[10px]">Jelajahi</span>
         </Link>
+
+        {isBuyer && (
+          <Link
+            to="/escrow"
+            className={clsx(
+              "flex flex-col items-center gap-1 text-xs font-medium transition-colors py-1 px-2 rounded-lg",
+              isNavActive("/escrow")
+                ? "text-primary font-bold"
+                : "text-ink-secondary hover:text-ink",
+            )}
+          >
+            <ShoppingCart className="w-5 h-5" />
+            <span className="text-[10px]">Keranjang</span>
+          </Link>
+        )}
 
         {isTransactionalUser && (
           <Link
