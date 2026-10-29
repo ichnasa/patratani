@@ -80,7 +80,7 @@ function FarmerDashboardPage() {
       deliveryType: "Diantar Petani",
       status: "HANDOVER",
       netPayment: 257200,
-      actionText: "Buka Kamera Geotag",
+      actionText: "Timbang & Foto Barang",
       actionRoute: "/handover",
     },
     {
