@@ -92,7 +92,7 @@ function CompletedPage({ onBack, onExploreMore }) {
                     </div>
 
                     <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
-                      Transaksi Sukses! Dana Telah Dicairkan
+                      Transaksi Selesai, Pembayaran Sudah Diteruskan
                     </h1>
 
                     <p className="text-xs sm:text-sm text-ink-secondary">
@@ -109,7 +109,7 @@ function CompletedPage({ onBack, onExploreMore }) {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-6 text-xs">
                 <div className="p-4 rounded-xl bg-[#EFEEE7] border border-border space-y-1">
                   <span className="text-[10px] uppercase font-bold text-ink-muted block">
-                    ID Rekening Escrow
+                    Nomor Transaksi
                   </span>
                   <p className="font-mono font-bold text-ink">{transactionData.escrowId || "ESC-20261027-8891"}</p>
                   <p className="text-[10px] text-ink-secondary">Rekening Bersama Patra Tani</p>
@@ -117,7 +117,7 @@ function CompletedPage({ onBack, onExploreMore }) {
 
                 <div className="p-4 rounded-xl bg-[#EFEEE7] border border-border space-y-1">
                   <span className="text-[10px] uppercase font-bold text-ink-muted block">
-                    Total Dana Bersih Petani
+                    Uang Diterima Petani
                   </span>
                   <p className="text-2xl sm:text-3xl font-bold text-[#166534]">
                     Rp {(transactionData.netFarmerPayment || 187800).toLocaleString("id-ID")}
@@ -127,7 +127,7 @@ function CompletedPage({ onBack, onExploreMore }) {
 
                 <div className="p-4 rounded-xl bg-[#EFEEE7] border border-border space-y-1">
                   <span className="text-[10px] uppercase font-bold text-ink-muted block">
-                    Waktu Pelepasan Dana
+                    Waktu Pembayaran Diteruskan
                   </span>
                   <p className="font-bold text-ink">{transactionData.releaseTime || transactionData.timestamp}</p>
                   <p className="text-[10px] text-ink-secondary">Otomatisasi smart escrow</p>
@@ -135,7 +135,7 @@ function CompletedPage({ onBack, onExploreMore }) {
 
                 <div className="p-4 rounded-xl bg-[#EFEEE7] border border-border space-y-1">
                   <span className="text-[10px] uppercase font-bold text-ink-muted block">
-                    Metode Pengantaran
+                    Cara Pengiriman
                   </span>
                   <p className="font-bold text-ink">
                     {transactionData.fulfillmentMethod === "SELF_PICKUP" ? "Ambil Sendiri di Kebun" : "Kurir Petani Mandiri"}

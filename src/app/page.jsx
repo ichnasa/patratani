@@ -85,7 +85,7 @@ export default function HomePage() {
                 Portal Kebun &amp; Panen
               </h1>
               <p className="text-sm text-ink-secondary mt-1">
-                Kelola pasokan siap panen dan penuhi tender bahan baku usaha kuliner lokal.
+                Kelola hasil panen kebun dan penuhi pesanan sayur dari warung atau resto sekitar.
               </p>
             </div>
 
@@ -96,14 +96,14 @@ export default function HomePage() {
                 icon={Plus}
                 onClick={() => navigate("/etalase/create")}
               >
-                Buka Etalase Panen
+                Pasang Panen Baru
               </Button>
               <Button
                 variant="outline"
                 size="md"
                 onClick={() => navigate("/dashboard/farmer")}
               >
-                Dasbor Operasional
+                Kelola Pesanan
               </Button>
             </div>
           </div>
@@ -111,8 +111,8 @@ export default function HomePage() {
           {/* 2. Farmer Key Numbers (Tabular Strip, No Cluttered Cards) */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 rounded-xl bg-surface border border-border">
             <div>
-              <span className="text-xs text-ink-muted block">Panen Siap Jual</span>
-              <span className="text-xl font-bold text-ink mt-0.5 block">2 Komoditas</span>
+              <span className="text-xs text-ink-muted block">Sayur Siap Petik</span>
+              <span className="text-xl font-bold text-ink mt-0.5 block">2 Jenis Sayur</span>
               <span className="text-[11px] text-ink-secondary">Tomat &amp; Cabai</span>
             </div>
             <div>
@@ -121,9 +121,9 @@ export default function HomePage() {
               <span className="text-[11px] text-primary font-medium">Bisa dipesan resto</span>
             </div>
             <div>
-              <span className="text-xs text-ink-muted block">Pengantaran Hari Ini</span>
+              <span className="text-xs text-ink-muted block">Jadwal Kirim Hari Ini</span>
               <span className="text-xl font-bold text-blue-600 mt-0.5 block">1 Jadwal</span>
-              <span className="text-[11px] text-blue-700 font-medium">Perlu serah terima</span>
+              <span className="text-[11px] text-blue-700 font-medium">Siap diantar</span>
             </div>
             <div>
               <span className="text-xs text-ink-muted block">Saldo Kas Siap Tarik</span>
@@ -140,7 +140,7 @@ export default function HomePage() {
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
-                  <span className="text-xs font-bold text-blue-700">Tugas Pengantaran Hari Ini</span>
+                  <span className="text-xs font-bold text-blue-700">Tugas Jadwal Kirim Hari Ini</span>
                   <span className="text-xs text-ink-muted">•</span>
                   <StatusBadge status="HANDOVER" size="sm" />
                 </div>
@@ -167,7 +167,7 @@ export default function HomePage() {
                   icon={Camera}
                   onClick={() => navigate("/handover")}
                 >
-                  Buka Kamera Serah Terima
+                  Timbang & Foto Barang
                 </Button>
               </div>
             </div>
@@ -177,8 +177,8 @@ export default function HomePage() {
           <section className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-bold text-ink">Hasil Panen Kebun Saya</h2>
-                <p className="text-xs text-ink-secondary">Jadwal panen dan sisa kuota yang dibuka untuk pre-order pembeli.</p>
+                <h2 className="text-lg font-bold text-ink">Daftar Panen Kebun Saya</h2>
+                <p className="text-xs text-ink-secondary">Jadwal panen dan sisa sayur yang siap dipesan oleh pembeli.</p>
               </div>
               <Link href="/dashboard/farmer" className="text-xs font-semibold text-primary hover:underline">
                 Kelola Semua Panen →
@@ -240,8 +240,8 @@ export default function HomePage() {
           <section className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-lg font-bold text-ink">Permintaan Tender Restoran Terbuka</h2>
-                <p className="text-xs text-ink-secondary">Dapur kuliner lokal sedang mencari pasokan rutin. Ajukan harga penawaran Anda.</p>
+                <h2 className="text-lg font-bold text-ink">Permintaan Sayur dari Warung & Resto</h2>
+                <p className="text-xs text-ink-secondary">Usaha kuliner sekitar butuh pasokan sayur segar. Silakan tawarkan harga terbaik Anda.</p>
               </div>
               <Link href="/explore" className="text-xs font-semibold text-primary hover:underline">
                 Lihat Semua Tender →
@@ -275,7 +275,7 @@ export default function HomePage() {
                       size="sm"
                       onClick={() => navigate(`/tender/${tender.id}`)}
                     >
-                      Ajukan Bidding
+                      Tawarkan Harga
                     </Button>
                   </div>
                 </div>
@@ -304,10 +304,10 @@ export default function HomePage() {
               <span className="text-ink-secondary">Akun UMKM Kuliner</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold text-ink mt-1">
-              Portal Pengadaan Dapur
+              Dapur & Belanja Sayur
             </h1>
             <p className="text-sm text-ink-secondary mt-1">
-              Pesan bahan baku segar langsung dari petani lokal dengan rekening bersama tanpa perantara.
+              Pesan sayur dan bumbu segar langsung dari kebun petani sekitar, timbangan pas dan uang aman.
             </p>
           </div>
 
@@ -318,14 +318,14 @@ export default function HomePage() {
               icon={Plus}
               onClick={() => navigate("/tender/create")}
             >
-              Buka Tender Baru
+              Cari Pasokan Baru
             </Button>
             <Button
               variant="outline"
               size="md"
               onClick={() => navigate("/explore")}
             >
-              Belanja Panen Kebun
+              Lihat Pasar Sayur
             </Button>
           </div>
         </div>
@@ -333,14 +333,14 @@ export default function HomePage() {
         {/* 2. Buyer Key Numbers (Tabular Strip, No Cluttered Cards) */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 rounded-xl bg-surface border border-border">
           <div>
-            <span className="text-xs text-ink-muted block">Tender Dapur Aktif</span>
-            <span className="text-xl font-bold text-ink mt-0.5 block">2 Tender</span>
-            <span className="text-[11px] text-amber-800 font-medium">3 Penawaran masuk</span>
+            <span className="text-xs text-ink-muted block">Kebutuhan Dapur</span>
+            <span className="text-xl font-bold text-ink mt-0.5 block">2 Permintaan</span>
+            <span className="text-[11px] text-amber-800 font-medium">3 Petani menawarkan</span>
           </div>
           <div>
-            <span className="text-xs text-ink-muted block">Pesanan Menuju Dapur</span>
+            <span className="text-xs text-ink-muted block">Barang Sedang Diantar</span>
             <span className="text-xl font-bold text-blue-600 mt-0.5 block">1 Pengantaran</span>
-            <span className="text-[11px] text-blue-700 font-medium">Siap diperiksa hari ini</span>
+            <span className="text-[11px] text-blue-700 font-medium">Tiba hari ini</span>
           </div>
           <div>
             <span className="text-xs text-ink-muted block">Dana Tersimpan di Escrow</span>
@@ -360,7 +360,7 @@ export default function HomePage() {
             <div className="space-y-1">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse" />
-                <span className="text-xs font-bold text-emerald-800">Kurir Petani Telah Tiba di Dapur</span>
+                <span className="text-xs font-bold text-emerald-800">Petani Sudah Sampai di Tempat Anda</span>
                 <span className="text-xs text-ink-muted">•</span>
                 <StatusBadge status="HANDOVER" size="sm" />
               </div>
@@ -397,8 +397,8 @@ export default function HomePage() {
         <section className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-bold text-ink">Tender Pengadaan Dapur Saya</h2>
-              <p className="text-xs text-ink-secondary">Permintaan pasokan yang Anda buka dan penawaran harga masuk dari petani.</p>
+              <h2 className="text-lg font-bold text-ink">Daftar Sayur yang Sedang Anda Cari</h2>
+              <p className="text-xs text-ink-secondary">Kebutuhan dapur yang Anda pasang, beserta penawaran harga dari petani mitra.</p>
             </div>
             <Link href="/dashboard/buyer" className="text-xs font-semibold text-primary hover:underline">
               Kelola di Dasbor →
@@ -465,7 +465,7 @@ export default function HomePage() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-bold text-ink">Hasil Panen Segar Terdekat (&lt; 10 km)</h2>
-              <p className="text-xs text-ink-secondary">Beli langsung kuota panen segar dari kebun mitra tanpa perantara gudang.</p>
+              <p className="text-xs text-ink-secondary">Beli langsung hasil panen dari kebun terdekat tanpa perantara gudang.</p>
             </div>
             <Link href="/explore" className="text-xs font-semibold text-primary hover:underline">
               Jelajahi Semua Panen →
@@ -512,7 +512,7 @@ export default function HomePage() {
                     </span>
                   </div>
                   <span className="text-xs font-semibold text-primary hover:underline">
-                    Pesan Kuota →
+                    Pesan Sekarang →
                   </span>
                 </div>
               </div>

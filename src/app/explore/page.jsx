@@ -232,8 +232,8 @@ export default function ExplorePage() {
         <div className="space-y-1.5">
           {[
             { id: "SEMUA", label: "Semua Metode" },
-            { id: "SELF_PICKUP", label: "Ambil Sendiri (Rp 0)" },
-            { id: "FARMER_DELIVERY", label: "Diantar Petani (Tarif Tetap)" },
+            { id: "SELF_PICKUP", label: "Ambil Sendiri di Kebun (Rp 0)" },
+            { id: "FARMER_DELIVERY", label: "Diantar Petani (Ongkir Tetap)" },
           ].map((opt) => (
             <label
               key={opt.id}
@@ -257,9 +257,9 @@ export default function ExplorePage() {
         </label>
         <div className="space-y-1.5">
           {[
-            { id: "TERDEKAT", label: "Jarak Terdekat (Radius Kebun)" },
-            { id: "HARGA_TERENDAH", label: "Harga Termurah per Kg" },
-            { id: "KUOTA_TERBANYAK", label: "Ketersediaan Kuota Terbesar" },
+            { id: "TERDEKAT", label: "Paling Dekat dari Lokasi Anda" },
+            { id: "HARGA_TERENDAH", label: "Harga Termurah" },
+            { id: "KUOTA_TERBANYAK", label: "Stok Terbanyak" },
           ].map((sort) => (
             <label
               key={sort.id}
@@ -286,13 +286,13 @@ export default function ExplorePage() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
               <span className="text-xs font-semibold text-primary uppercase tracking-wider block">
-                Pasar Agrikultur Lokal
+                Pasar PatraTani
               </span>
               <h1 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight mt-1">
                 Jelajahi Panen &amp; Permintaan UMKM
               </h1>
               <p className="text-xs sm:text-sm text-ink-secondary mt-1">
-                Temukan hasil bumi segar dari petani binaan atau respon tender pengadaan dapur resto lokal.
+                Pesan sayur langsung dari kebun terdekat, atau tawarkan hasil panen ke warung dan resto sekitar.
               </p>
             </div>
 
@@ -307,7 +307,7 @@ export default function ExplorePage() {
                 }`}
               >
                 <Sprout className="w-4 h-4" />
-                <span>Etalase Panen ({filteredCommodities.length})</span>
+                <span>Sayur Siap Panen ({filteredCommodities.length})</span>
               </button>
 
               <button
@@ -320,7 +320,7 @@ export default function ExplorePage() {
                 }`}
               >
                 <Store className="w-4 h-4" />
-                <span>Tender UMKM ({filteredTenders.length})</span>
+                <span>Permintaan Warung & Resto ({filteredTenders.length})</span>
               </button>
             </div>
           </div>

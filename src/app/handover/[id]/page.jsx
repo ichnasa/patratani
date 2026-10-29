@@ -268,7 +268,7 @@ function HandoverPage({ onBack, onComplete }) {
                   </div>
                   <span className="px-2 py-1 rounded-md bg-[#DCFCE7] text-[#166534] font-bold text-[10px] flex items-center gap-1 border border-[#BBF7D0]">
                     <CheckCircle2 className="w-3 h-3" />
-                    Telah Tiba di Lokasi
+                    Sudah Sampai di Lokasi
                   </span>
                 </div>
 
@@ -288,7 +288,7 @@ function HandoverPage({ onBack, onComplete }) {
                   </div>
                   <span className="px-2 py-1 rounded-md bg-[#FEF3C7] text-[#B45309] font-bold text-[10px] flex items-center gap-1 border border-[#FDE68A]">
                     <Clock className="w-3 h-3" />
-                    Pemeriksaan Fisik
+                    Pengecekan Barang
                   </span>
                 </div>
               </div>
@@ -481,7 +481,7 @@ function HandoverPage({ onBack, onComplete }) {
                     <div className="flex items-center gap-2">
                       <Scale className="w-5 h-5 text-primary" />
                       <h3 className="text-base font-bold text-ink">
-                        Pemeriksaan Timbangan Aktual
+                        Cek Timbangan Barang
                       </h3>
                     </div>
                     <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#E6E4DA] text-ink">
@@ -492,7 +492,7 @@ function HandoverPage({ onBack, onComplete }) {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                       <label className="text-xs font-semibold text-ink uppercase tracking-wider block">
-                        Input Timbangan Aktual (Kg)
+                        Hasil Timbang di Tempat (kg)
                       </label>
                       <input
                         type="number"
@@ -512,7 +512,7 @@ function HandoverPage({ onBack, onComplete }) {
 
                     <div className="p-3.5 rounded-xl bg-[#EFEEE7] border border-border flex flex-col justify-between">
                       <span className="text-[10px] font-bold uppercase tracking-wider text-ink-muted">
-                        Status Selisih Kuota
+                        Hasil Timbangan
                       </span>
                       <div>
                         <div className="flex items-baseline gap-2">
@@ -524,13 +524,13 @@ function HandoverPage({ onBack, onComplete }) {
                             {weightDiff > 0 ? `+${weightDiff}` : weightDiff} Kg
                           </span>
                           <span className="text-xs text-ink-secondary">
-                            {isWeightValid ? "(Memenuhi Kuota)" : "(Kurang dari Target)"}
+                            {isWeightValid ? "(Sudah pas / lebih)" : "(Masih kurang)"}
                           </span>
                         </div>
                         <p className="text-[10px] text-ink-muted mt-0.5">
                           {isWeightValid
-                            ? "Sesuai dengan kesepakatan pesanan."
-                            : "Berat kurang dari target! Ajukan penyesuaian/sengketa."}
+                            ? "Berat timbangan sudah sesuai kesepakatan."
+                            : "Berat timbangan masih kurang. Silakan timbang ulang atau diskusikan bersama."}
                         </p>
                       </div>
                     </div>
@@ -551,10 +551,10 @@ function HandoverPage({ onBack, onComplete }) {
                     <div className="p-3.5 rounded-xl bg-[#EFEEE7] border border-border space-y-2.5">
                       <div className="flex items-center justify-between pb-2 border-b border-border/60">
                         <span className="text-[10px] font-bold uppercase tracking-wider text-ink-muted">
-                          Status Konfirmasi Dua Pihak
+                          Persetujuan Kedua Pihak
                         </span>
                         <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-surface text-ink-secondary border border-border">
-                          {isPetani ? "Mode: Petani Mitra" : "Mode: Pembeli UMKM"}
+                          {isPetani ? "Akun Petani" : "Akun Pembeli"}
                         </span>
                       </div>
 
@@ -592,7 +592,7 @@ function HandoverPage({ onBack, onComplete }) {
                     </div>
 
                     <div className="flex items-center justify-between p-3.5 rounded-xl bg-[#EFEEE7] border border-border">
-                      <span className="text-ink-secondary">Total Nilai Escrow Tertahan:</span>
+                      <span className="text-ink-secondary">Total Pembayaran yang Diamankan:</span>
                       <span className="font-bold text-primary text-2xl sm:text-3xl">
                         Rp {(handoverData.escrowAmount || handoverData.totalPayment || 800000).toLocaleString("id-ID")}
                       </span>
@@ -605,7 +605,7 @@ function HandoverPage({ onBack, onComplete }) {
                         <div className="p-3.5 rounded-xl bg-[#DCFCE7] border border-[#BBF7D0] text-center space-y-1">
                           <span className="text-xs font-bold text-[#166534] flex items-center justify-center gap-1.5">
                             <CheckCircle2 className="w-4 h-4" />
-                            Penyerahan Dikonfirmasi Petani
+                            Petani Sudah Konfirmasi
                           </span>
                           <p className="text-[11px] text-ink-secondary">
                             Menunggu Pembeli ({handoverData.buyer?.businessName || "Pembeli"}) memeriksa fisik &amp; menyetujui pelepasan escrow.
@@ -620,7 +620,7 @@ function HandoverPage({ onBack, onComplete }) {
                           disabled={!isPhotoCaptured}
                           onClick={handleFarmerConfirm}
                         >
-                          Konfirmasi Penyerahan Komoditas
+                          Konfirmasi Barang Sudah Diserahkan
                         </Button>
                       )
                     ) : (
@@ -633,7 +633,7 @@ function HandoverPage({ onBack, onComplete }) {
                         disabled={!isPhotoCaptured || !farmerConfirmed}
                         onClick={handleBuyerRelease}
                       >
-                        Konfirmasi Penerimaan
+                        Konfirmasi Barang Diterima & Selesai
                       </Button>
                     )}
 

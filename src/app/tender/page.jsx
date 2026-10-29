@@ -172,7 +172,7 @@ export default function TenderDetailPage({
                 <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border/70 space-y-1">
                   <span className="text-[11px] font-medium text-ink-muted flex items-center gap-1.5 uppercase tracking-wider">
                     <Truck className="w-3.5 h-3.5 text-primary" />
-                    Metode Serah-Terima
+                    Cara Pengiriman
                   </span>
                   <p className="text-base font-bold text-ink">
                     {tender.fulfillmentMethod === "SELF_PICKUP"
@@ -239,7 +239,7 @@ export default function TenderDetailPage({
                   <div className="flex items-center gap-2">
                     <Send className="w-5 h-5 text-primary" />
                     <h2 className="text-base font-bold text-ink">
-                      Formulir Pengajuan Penawaran Petani
+                      Ajukan Penawaran Harga
                     </h2>
                   </div>
                   <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-primary/10 text-primary">

@@ -293,7 +293,7 @@ export default function DetailEtalasePage() {
                   </div>
 
                   <div className="sm:text-right shrink-0">
-                    <span className="text-xs text-ink-muted block">Harga Bersih Panen</span>
+                    <span className="text-xs text-ink-muted block">Harga Panen</span>
                     <span className="text-2xl font-bold text-primary">
                       Rp {unitPrice.toLocaleString("id-ID")}
                     </span>
@@ -304,7 +304,7 @@ export default function DetailEtalasePage() {
                 <div className="p-4 rounded-xl bg-[#E6E4DA]/30 border border-border space-y-2">
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-ink-secondary font-medium">
-                      Sisa Kuota Pre-Order:
+                      Sisa yang Bisa Dipesan:
                     </span>
                     <span className="font-bold text-primary">
                       Tersedia {maxKg} kg dari {totalQuota} kg kuota panen
@@ -414,7 +414,7 @@ export default function DetailEtalasePage() {
             <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
               <div className="bg-surface rounded-2xl border border-border p-6 shadow-xs space-y-5">
                 <h3 className="text-base font-bold text-ink pb-3 border-b border-border">
-                  Atur Pesanan Pre-Order
+                  Pesan Jumlah Sayur
                 </h3>
 
                 <div className="space-y-2">
@@ -563,7 +563,7 @@ export default function DetailEtalasePage() {
                     onClick={handleProceedEscrow}
                     className="font-bold"
                   >
-                    Lanjut ke Pembayaran Escrow
+                    Lanjut ke Pembayaran Aman
                   </Button>
                 )}
 

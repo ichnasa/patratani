@@ -224,7 +224,7 @@ function CreateTenderPage() {
 
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight">
-                Buat Tender Permintaan (Bidding)
+                Cari Pasokan Sayur & Bumbu
               </h1>
               <p className="text-xs sm:text-sm text-ink-secondary mt-1 max-w-3xl leading-relaxed">
                 Ajukan kebutuhan bahan baku usaha kuliner Anda. Petani lokal sekitar
@@ -244,7 +244,7 @@ function CreateTenderPage() {
                     1
                   </div>
                   <h2 className="text-base font-bold text-ink">
-                    Spesifikasi Bahan Baku
+                    Barang yang Dibutuhkan
                   </h2>
                 </div>
 

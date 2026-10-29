@@ -227,7 +227,7 @@ function CreateEtalasePage() {
 
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight">
-                Buka Etalase Panen (Pre-Order)
+                Pasang Hasil Panen
               </h1>
               <p className="text-xs sm:text-sm text-ink-secondary mt-1 max-w-3xl leading-relaxed">
                 Publikasikan jadwal panen dan kuota komoditas Anda agar UMKM lokal
@@ -247,7 +247,7 @@ function CreateEtalasePage() {
                     1
                   </div>
                   <h2 className="text-base font-bold text-ink">
-                    Informasi Hasil Panen
+                    Data Sayur & Jadwal Panen
                   </h2>
                 </div>
 

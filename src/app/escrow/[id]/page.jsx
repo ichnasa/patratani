@@ -68,7 +68,7 @@ function CheckoutEscrowPage({
   };
 
   const steps = [
-    { key: "AWARDED", label: "Pemenang Ditunjuk", isDone: true },
+    { key: "AWARDED", label: "Pesanan Disetujui", isDone: true },
     { key: "PAID_HELD", label: "Setor Escrow", isActive: !isPaidSuccess, isDone: isPaidSuccess },
     { key: "HANDOVER", label: "Serah Terima", isPending: !isPaidSuccess, isActive: isPaidSuccess },
     { key: "COMPLETED", label: "Pencairan Selesai", isPending: true },
@@ -129,7 +129,7 @@ function CheckoutEscrowPage({
               className="inline-flex items-center gap-2 text-xs font-semibold text-ink-muted hover:text-primary transition-colors cursor-pointer select-none mb-4"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Kembali ke Detail Kesepakatan</span>
+              <span>Kembali</span>
             </button>
 
             <section className="bg-surface rounded-2xl p-6 sm:p-7 border border-border shadow-xs">
@@ -139,7 +139,7 @@ function CheckoutEscrowPage({
                     Alur Pembayaran Aman • {dealData.tenderId}
                   </span>
                   <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight mt-0.5">
-                    Setor Dana ke Rekening Bersama Escrow
+                    Simpan Pembayaran di Rekening Bersama
                   </h1>
                 </div>
 
@@ -319,7 +319,7 @@ function CheckoutEscrowPage({
                   iconPosition="right"
                   onClick={() => navigate("/handover")}
                 >
-                  Lanjutkan ke Serah-Terima (Handover)
+                  Lanjut ke Jadwal Pengantaran
                 </Button>
                 <Button
                   variant="outline"
@@ -338,11 +338,11 @@ function CheckoutEscrowPage({
                     <div className="flex items-center gap-2">
                       <Sprout className="w-5 h-5 text-primary" />
                       <h2 className="text-base font-bold text-ink">
-                        Ringkasan Kesepakatan Panen
+                        Ringkasan Pesanan
                       </h2>
                     </div>
                     <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary">
-                      Pemenang Ditunjuk
+                      Pesanan Disetujui
                     </span>
                   </div>
 

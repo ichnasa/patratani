@@ -266,7 +266,7 @@ function BuyerDashboardPage() {
 
               <div className="p-4 rounded-2xl bg-surface-green/30 border border-primary/20 space-y-2 text-xs">
                 <span className="font-bold text-primary block">
-                  Perlindungan Dana 100%
+                  Jaminan Uang Aman
                 </span>
                 <p className="text-[11px] text-ink-secondary leading-relaxed">
                   Deposit escrow Anda tetap aman di penampungan bersama. Petani baru menerima dana saat Anda mengonfirmasi verifikasi serah-terima.

@@ -259,7 +259,7 @@ function FarmerDashboardPage() {
 
               <div className="p-4 rounded-2xl bg-surface-green/30 border border-primary/20 space-y-2 text-xs">
                 <span className="font-bold text-primary block">
-                  Status Pengantaran Mandiri
+                  Pengantaran oleh Petani
                 </span>
                 <p className="text-[11px] text-ink-secondary leading-relaxed">
                   Tarif tetap Rp 5.000/trip aktif. 100% ongkir otomatis ditransfer ke saldo dompet Anda saat serah-terima terverifikasi.

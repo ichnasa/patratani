@@ -165,7 +165,7 @@ export default function Navbar() {
                     : "border-transparent text-ink-secondary hover:text-ink",
                 )}
               >
-                Pusat Resolusi Sengketa
+                Bantuan &amp; Sengketa
               </Link>
             ) : isFarmer ? (
               <>
@@ -178,7 +178,7 @@ export default function Navbar() {
                       : "border-transparent text-ink-secondary hover:text-ink",
                   )}
                 >
-                  Beranda Kebun
+                  Kebun Saya
                 </Link>
                 <Link
                   href="/dashboard/farmer"
@@ -189,7 +189,7 @@ export default function Navbar() {
                       : "border-transparent text-ink-secondary hover:text-ink",
                   )}
                 >
-                  Operasional Kebun
+                  Kelola Pesanan
                 </Link>
                 <Link
                   href="/explore"
@@ -200,7 +200,7 @@ export default function Navbar() {
                       : "border-transparent text-ink-secondary hover:text-ink",
                   )}
                 >
-                  Tender Restoran
+                  Cari Pembeli
                 </Link>
                 <Link
                   href="/handover"
@@ -211,7 +211,7 @@ export default function Navbar() {
                       : "border-transparent text-ink-secondary hover:text-ink",
                   )}
                 >
-                  <span>Serah Terima Fisik</span>
+                  <span>Serah Terima</span>
                   <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
                 </Link>
               </>
@@ -226,7 +226,7 @@ export default function Navbar() {
                       : "border-transparent text-ink-secondary hover:text-ink",
                   )}
                 >
-                  Beranda Dapur
+                  Dapur Saya
                 </Link>
                 <Link
                   href="/explore"
@@ -237,7 +237,7 @@ export default function Navbar() {
                       : "border-transparent text-ink-secondary hover:text-ink",
                   )}
                 >
-                  Pasar Panen Segar
+                  Pasar Sayur
                 </Link>
                 <Link
                   href="/dashboard/buyer"
@@ -248,7 +248,7 @@ export default function Navbar() {
                       : "border-transparent text-ink-secondary hover:text-ink",
                   )}
                 >
-                  Tender Pengadaan Saya
+                  Kebutuhan Dapur
                 </Link>
                 <Link
                   href="/escrow"
@@ -259,7 +259,7 @@ export default function Navbar() {
                       : "border-transparent text-ink-secondary hover:text-ink",
                   )}
                 >
-                  Rekening Escrow
+                  Rekening Bersama
                 </Link>
               </>
             )}
@@ -276,7 +276,7 @@ export default function Navbar() {
                   className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-[#E6E4DA] hover:bg-primary-hover transition-colors"
                 >
                   <ShoppingBag className="w-3.5 h-3.5" />
-                  <span>+ Buka Panen</span>
+                  <span>+ Pasang Panen</span>
                 </Link>
               ) : (
                 <Link
@@ -284,7 +284,7 @@ export default function Navbar() {
                   className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-[#E6E4DA] hover:bg-primary-hover transition-colors"
                 >
                   <FileText className="w-3.5 h-3.5" />
-                  <span>+ Buat Tender</span>
+                  <span>+ Cari Pasokan</span>
                 </Link>
               )
             )}
