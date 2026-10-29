@@ -120,9 +120,6 @@ function HandoverPage({ onBack, onComplete }) {
 
     return () => {
       clearTimeout(timer);
-      if (activeStream) {
-        activeStream.getTracks().forEach((track) => track.stop());
-      }
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop());
       }
