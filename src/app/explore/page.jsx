@@ -277,21 +277,11 @@ export default function ExplorePage() {
         </div>
       </div>
 
-      <div className="p-3.5 rounded-xl bg-[#E6E4DA] border border-border/80 space-y-1.5 text-xs text-ink-secondary">
-        <div className="flex items-center gap-1.5 font-bold text-primary">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Tanpa Gudang Sentral</span>
-        </div>
-        <p className="text-[11px] leading-relaxed">
-          Semua produk dipetik segar sesuai jadwal pre-order &amp; dikirim langsung dari kebun terdekat tanpa transit berhari-hari.
-        </p>
-      </div>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-background text-ink flex flex-col selection:bg-primary-50 selection:text-primary">
-      <main className="w-full flex-1 flex-grow">
+    <div className="w-full flex-1 flex flex-col">
         <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-8 md:py-10 space-y-8 pb-28 md:pb-14">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
@@ -452,7 +442,6 @@ export default function ExplorePage() {
             </section>
           </div>
         </div>
-      </main>
 
       {isMobileFilterOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex flex-col justify-end">

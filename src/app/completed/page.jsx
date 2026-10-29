@@ -61,8 +61,7 @@ function CompletedPage({ onBack, onExploreMore }) {
   };
 
   return (
-    <div className="min-h-screen bg-background text-ink flex flex-col selection:bg-primary-50 selection:text-primary">
-      <main className="w-full flex-1 flex-grow">
+    <div className="w-full flex-1 flex flex-col">
         <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-8 md:py-10 space-y-8 pb-28 md:pb-14">
           <div>
             <button
@@ -453,12 +452,9 @@ function CompletedPage({ onBack, onExploreMore }) {
             </aside>
           </div>
         </div>
-      </main>
-
       </div>
   );
 }
-
 
 export default function WrappedCompletedPage(props) {
   return (
