@@ -298,65 +298,26 @@ function BuyerDashboardPage() {
                     </Button>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                    <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
-                      <div className="flex items-center justify-between text-ink-muted">
-                        <span className="text-xs font-semibold">Pengeluaran Bulan Ini</span>
-                        <div className="w-8 h-8 rounded-lg bg-surface-green text-primary flex items-center justify-center">
-                          <TrendingDown className="w-4 h-4" />
-                        </div>
-                      </div>
-                      <p className="text-xl font-bold text-ink">
-                        Rp 4.650.000
-                      </p>
-                      <span className="text-[11px] font-semibold text-primary block">
-                        Hemat 22.4% vs tengkulak
-                      </span>
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 p-4 rounded-xl bg-surface border border-border">
+                    <div className="space-y-1">
+                      <span className="text-xs text-ink-muted block">Pengeluaran Bulan Ini</span>
+                      <p className="text-xl font-bold text-ink">Rp 4.650.000</p>
+                      <span className="text-[11px] font-semibold text-primary block">Hemat 22.4% vs pasar induk</span>
                     </div>
-
-                    <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
-                      <div className="flex items-center justify-between text-ink-muted">
-                        <span className="text-xs font-semibold">Tender Permintaan Aktif</span>
-                        <div className="w-8 h-8 rounded-lg bg-[#E6E4DA] text-ink flex items-center justify-center">
-                          <FileText className="w-4 h-4" />
-                        </div>
-                      </div>
-                      <p className="text-xl font-bold text-ink">
-                        2 Tender
-                      </p>
-                      <span className="text-[11px] text-ink-secondary block">
-                        1 tender menerima 4 penawaran
-                      </span>
+                    <div className="space-y-1">
+                      <span className="text-xs text-ink-muted block">Tender Dapur Aktif</span>
+                      <p className="text-xl font-bold text-ink">2 Tender</p>
+                      <span className="text-[11px] text-amber-800 font-medium block">4 penawaran petani masuk</span>
                     </div>
-
-                    <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
-                      <div className="flex items-center justify-between text-ink-muted">
-                        <span className="text-xs font-semibold">Dana di Escrow</span>
-                        <div className="w-8 h-8 rounded-lg bg-[#FEF3C7] text-[#D97706] flex items-center justify-center">
-                          <ShieldCheck className="w-4 h-4" />
-                        </div>
-                      </div>
-                      <p className="text-xl font-bold text-[#D97706]">
-                        Rp 265.000
-                      </p>
-                      <span className="text-[11px] text-ink-secondary block">
-                        Aman hingga serah-terima selesai
-                      </span>
+                    <div className="space-y-1">
+                      <span className="text-xs text-ink-muted block">Dana di Escrow</span>
+                      <p className="text-xl font-bold text-primary">Rp 265.000</p>
+                      <span className="text-[11px] text-ink-secondary block">Aman di rekening bersama</span>
                     </div>
-
-                    <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
-                      <div className="flex items-center justify-between text-ink-muted">
-                        <span className="text-xs font-semibold">Menunggu Serah-Terima</span>
-                        <div className="w-8 h-8 rounded-lg bg-surface-green text-primary flex items-center justify-center">
-                          <Clock className="w-4 h-4" />
-                        </div>
-                      </div>
-                      <p className="text-xl font-bold text-ink">
-                        1 Pesanan
-                      </p>
-                      <span className="text-[11px] text-primary font-semibold block">
-                        Jadwal hari ini pkl 07:00
-                      </span>
+                    <div className="space-y-1">
+                      <span className="text-xs text-ink-muted block">Pesanan Menuju Dapur</span>
+                      <p className="text-xl font-bold text-blue-600">1 Pesanan</p>
+                      <span className="text-[11px] text-blue-700 font-medium block">Jadwal tiba hari ini</span>
                     </div>
                   </div>
 

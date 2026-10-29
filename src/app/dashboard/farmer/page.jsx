@@ -293,65 +293,26 @@ function FarmerDashboardPage() {
                     </Button>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-                    <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
-                      <div className="flex items-center justify-between text-ink-muted">
-                        <span className="text-xs font-semibold">Pendapatan Bulan Ini</span>
-                        <div className="w-8 h-8 rounded-lg bg-surface-green text-primary flex items-center justify-center">
-                          <TrendingUp className="w-4 h-4" />
-                        </div>
-                      </div>
-                      <p className="text-xl font-bold text-ink">
-                        Rp 8.420.000
-                      </p>
-                      <span className="text-[11px] font-semibold text-primary block">
-                        +18.4% dari bulan lalu
-                      </span>
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 p-4 rounded-xl bg-surface border border-border">
+                    <div className="space-y-1">
+                      <span className="text-xs text-ink-muted block">Pendapatan Bulan Ini</span>
+                      <p className="text-xl font-bold text-ink">Rp 8.420.000</p>
+                      <span className="text-[11px] font-semibold text-primary block">+18.4% dari bulan lalu</span>
                     </div>
-
-                    <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
-                      <div className="flex items-center justify-between text-ink-muted">
-                        <span className="text-xs font-semibold">Kuota Terjual / Siap</span>
-                        <div className="w-8 h-8 rounded-lg bg-[#E6E4DA] text-ink flex items-center justify-center">
-                          <Sprout className="w-4 h-4" />
-                        </div>
-                      </div>
-                      <p className="text-xl font-bold text-ink">
-                        340 / 400 kg
-                      </p>
-                      <span className="text-[11px] text-ink-secondary block">
-                        85% teralokasi pre-order
-                      </span>
+                    <div className="space-y-1">
+                      <span className="text-xs text-ink-muted block">Kuota Terjual / Siap</span>
+                      <p className="text-xl font-bold text-ink">340 / 400 kg</p>
+                      <span className="text-[11px] text-ink-secondary block">85% teralokasi pre-order</span>
                     </div>
-
-                    <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
-                      <div className="flex items-center justify-between text-ink-muted">
-                        <span className="text-xs font-semibold">Dana di Escrow</span>
-                        <div className="w-8 h-8 rounded-lg bg-[#FEF3C7] text-[#D97706] flex items-center justify-center">
-                          <ShieldCheck className="w-4 h-4" />
-                        </div>
-                      </div>
-                      <p className="text-xl font-bold text-[#D97706]">
-                        Rp {(currentUser?.escrowBalance || 1585000).toLocaleString("id-ID")}
-                      </p>
-                      <span className="text-[11px] text-ink-secondary block">
-                        Menunggu serah-terima selesai
-                      </span>
+                    <div className="space-y-1">
+                      <span className="text-xs text-ink-muted block">Dana di Escrow</span>
+                      <p className="text-xl font-bold text-[#D97706]">Rp {(currentUser?.escrowBalance || 1585000).toLocaleString("id-ID")}</p>
+                      <span className="text-[11px] text-ink-secondary block">Menunggu serah terima</span>
                     </div>
-
-                    <div className="bg-surface rounded-2xl p-5 border border-border shadow-xs space-y-2">
-                      <div className="flex items-center justify-between text-ink-muted">
-                        <span className="text-xs font-semibold">Transaksi Sukses</span>
-                        <div className="w-8 h-8 rounded-lg bg-surface-green text-primary flex items-center justify-center">
-                          <CheckCircle2 className="w-4 h-4" />
-                        </div>
-                      </div>
-                      <p className="text-xl font-bold text-ink">
-                        64 Pesanan
-                      </p>
-                      <span className="text-[11px] text-primary font-semibold block">
-                        100% tanpa sengketa
-                      </span>
+                    <div className="space-y-1">
+                      <span className="text-xs text-ink-muted block">Transaksi Sukses</span>
+                      <p className="text-xl font-bold text-[#16A34A]">64 Pesanan</p>
+                      <span className="text-[11px] text-primary font-medium block">100% tanpa sengketa</span>
                     </div>
                   </div>
 

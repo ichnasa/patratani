@@ -29,7 +29,7 @@ export default function ExplorePage() {
   const isBuyer = !isAdmin && (roleLower.includes("pembeli") || roleLower.includes("umkm"));
   const commodityList = commodities && commodities.length > 0 ? commodities : mockCommodities;
   const tenderList = tenders && tenders.length > 0 ? tenders : mockTenders;
-  const [activeTab, setActiveTab] = useState("ETALASE");
+  const [activeTab, setActiveTab] = useState(isFarmer ? "TENDER" : "ETALASE");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
   const [maxDistance, setMaxDistance] = useState(20);

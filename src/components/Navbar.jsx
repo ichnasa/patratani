@@ -1,471 +1,563 @@
 "use client";
+
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import Navigate from "./Navigate";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
+import { useApp } from "@/context/AppContext";
 import {
   Sprout,
-  Bell,
-  Home,
-  Compass,
-  ClipboardList,
-  User,
   Scale,
-  ChevronRight,
-  ShoppingCart,
+  Store,
+  Truck,
+  FileText,
+  ShoppingBag,
+  Bell,
+  User,
+  LogOut,
+  ChevronDown,
+  Check,
+  PackageCheck,
+  Compass,
+  Home,
+  ShieldCheck,
+  RefreshCw,
 } from "lucide-react";
-import { useApp } from "../context/AppContext";
 
 export default function Navbar() {
-  const { currentUser } = useApp();
+  const { currentUser, login, logout } = useApp();
   const pathname = usePathname();
-  const location = { pathname, state: {} };
   const router = useRouter();
-  const navigate = (to, opts) => (to === -1 ? router.back() : (opts?.replace ? router.replace(to) : router.push(to)));
-  const currentPath = location.pathname;
 
   const roleLower = (currentUser?.role || "").toLowerCase();
-  const isAdmin =
-    roleLower.includes("admin") || currentPath.startsWith("/admin");
-  const isBuyer =
-    !isAdmin && (roleLower.includes("pembeli") || roleLower.includes("umkm"));
-  const isFarmer =
-    !isAdmin && (roleLower.includes("petani") || roleLower.includes("mitra"));
-  const showUserDashboard = Boolean(
-    currentUser && !isAdmin && (isFarmer || isBuyer),
-  );
-  const isTransactionalUser = Boolean(
-    currentUser && !isAdmin && (isFarmer || isBuyer),
-  );
-  const dashboardRoute = isBuyer ? "/dashboard/buyer" : "/dashboard/farmer";
+  const isAdmin = roleLower.includes("admin") || pathname.startsWith("/admin");
+  const isBuyer = !isAdmin && (roleLower.includes("pembeli") || roleLower.includes("umkm"));
+  const isFarmer = !isAdmin && !isBuyer; // default to farmer if not buyer or admin
 
   const [showNotif, setShowNotif] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const notifRef = useRef(null);
+  const profileRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (notifRef.current && !notifRef.current.contains(e.target)) {
         setShowNotif(false);
       }
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setShowProfileMenu(false);
+      }
     };
-    if (showNotif) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showNotif]);
-
-  const notifications = [
-    {
-      id: "notif-1",
-      title: "Dana Escrow Diamankan",
-      description:
-        "Dana Rp 1.585.000 untuk transaksi Tomat Mawar telah diamankan di rekening escrow.",
-      time: "10 mnt lalu",
-      link: "/escrow",
-      unread: true,
-    },
-    {
-      id: "notif-2",
-      title: "Penawaran Tender Masuk",
-      description:
-        "Pak Wayan mengajukan penawaran Rp 46.000/kg untuk Tender Cabai Rawit.",
-      time: "1 jam lalu",
-      link: "/tender",
-      unread: true,
-    },
-    {
-      id: "notif-3",
-      title: "Verifikasi Serah-Terima Kebun",
-      description:
-        "Pesanan Bawang Merah siap diperiksa dengan foto kamera geotag lokasi.",
-      time: "3 jam lalu",
-      link: "/handover",
-      unread: false,
-    },
-  ];
-
-  const unreadCount = notifications.filter((n) => n.unread).length;
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const isNavActive = (path) => {
-    if (path === "/" && currentPath === "/") return true;
-    if (path !== "/" && currentPath.startsWith(path)) return true;
+    if (path === "/" && pathname === "/") return true;
+    if (path !== "/" && pathname.startsWith(path)) return true;
     return false;
   };
 
+  const handleSwitchToFarmer = () => {
+    login({
+      email: "petani@patratani.com",
+      role: "Petani Mitra",
+      name: "Pak Mulyono",
+    });
+    setShowProfileMenu(false);
+    router.push("/");
+  };
+
+  const handleSwitchToBuyer = () => {
+    login({
+      email: "pembeli@patratani.com",
+      role: "Pembeli UMKM",
+      name: "Ibu Lina Marlina",
+    });
+    setShowProfileMenu(false);
+    router.push("/");
+  };
+
+  const farmerNotifications = [
+    {
+      id: "fn-1",
+      title: "Pesanan Siap Diantar",
+      description: "Pesanan Bawang Merah 25 Kg ke Dapur Bu Lina siap untuk serah terima.",
+      time: "15 mnt lalu",
+      link: "/handover",
+      unread: true,
+    },
+    {
+      id: "fn-2",
+      title: "Tender Restoran Baru",
+      description: "Resto Dapur Sunda membuka tender Tomat Merah 20 Kg (anggaran Rp 14.000/kg).",
+      time: "1 jam lalu",
+      link: "/tender/TND-2026-002",
+      unread: true,
+    },
+  ];
+
+  const buyerNotifications = [
+    {
+      id: "bn-1",
+      title: "Penawaran Masuk dari Petani",
+      description: "Kang Rizal mengajukan penawaran Rp 12.000/kg untuk tender Tomat Merah Anda.",
+      time: "20 mnt lalu",
+      link: "/tender/pembeli/TND-8821",
+      unread: true,
+    },
+    {
+      id: "bn-2",
+      title: "Kurir Petani Telah Tiba",
+      description: "Pak Solihin telah tiba membawa pesanan Bawang Merah 25 Kg untuk ditimbang.",
+      time: "45 mnt lalu",
+      link: "/handover",
+      unread: true,
+    },
+  ];
+
+  const activeNotifs = isFarmer ? farmerNotifications : buyerNotifications;
+  const unreadCount = activeNotifs.filter((n) => n.unread).length;
+
   return (
     <>
-      <header className="sticky top-0 z-40 w-full bg-surface border-b border-border transition-colors">
+      <header className="sticky top-0 z-40 w-full bg-surface border-b border-border">
         <div className="max-w-[1440px] mx-auto h-16 px-4 sm:px-6 lg:px-16 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-6 shrink-0">
-            <Link
-              href={isAdmin ? "/admin/disputes" : "/"}
-              className="flex items-center gap-2 select-none group transition-transform duration-150 hover:scale-[1.02]"
-            >
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-[#E6E4DA] transition-colors group-hover:bg-primary-hover">
+
+          {/* Logo & Role Identity Badge */}
+          <div className="flex items-center gap-4 shrink-0">
+            <Link href="/" className="flex items-center gap-2 select-none group">
+              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-[#E6E4DA]">
                 <Sprout className="w-5 h-5" />
               </div>
-              <span className="text-xl font-bold tracking-tight text-primary transition-colors group-hover:text-primary-hover">
+              <span className="text-xl font-bold tracking-tight text-primary">
                 PatraTani
               </span>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-6">
-              {isAdmin ? (
-                <Link
-                  href="/admin/disputes"
-                  className={clsx(
-                    "text-sm font-medium transition-colors duration-150 py-1 flex items-center gap-1.5",
-                    isNavActive("/admin")
-                      ? "text-primary font-bold border-b-2 border-primary"
-                      : "text-amber-700 hover:text-amber-800 font-semibold",
-                  )}
-                >
-                  <Scale className="w-4 h-4 text-amber-600" />
-                  <span>Portal Admin</span>
-                </Link>
-              ) : (
-                <>
-                  <Link
-                    href="/"
-                    className={clsx(
-                      "text-sm font-medium transition-colors duration-150 py-1",
-                      isNavActive("/")
-                        ? "text-primary font-bold border-b-2 border-primary"
-                        : "text-ink-secondary hover:text-primary",
-                    )}
-                  >
-                    Beranda
-                  </Link>
-                  {showUserDashboard && (
-                    <Link
-                      href={dashboardRoute}
-                      className={clsx(
-                        "text-sm font-medium transition-colors duration-150 py-1",
-                        isNavActive("/dashboard")
-                          ? "text-primary font-bold border-b-2 border-primary"
-                          : "text-ink-secondary hover:text-primary",
-                      )}
-                    >
-                      Dashboard
-                    </Link>
-                  )}
-                  <Link
-                    href="/explore"
-                    className={clsx(
-                      "text-sm font-medium transition-colors duration-150 py-1",
-                      isNavActive("/explore")
-                        ? "text-primary font-bold border-b-2 border-primary"
-                        : "text-ink-secondary hover:text-primary",
-                    )}
-                  >
-                    Jelajahi
-                  </Link>
-                  {isTransactionalUser && (
-                    <Link
-                      href="/handover"
-                      className={clsx(
-                        "text-sm font-medium transition-colors duration-150 py-1 relative",
-                        isNavActive("/handover") ||
-                          isNavActive("/tender") ||
-                          isNavActive("/escrow") ||
-                          isNavActive("/completed")
-                          ? "text-primary font-bold border-b-2 border-primary"
-                          : "text-ink-secondary hover:text-primary",
-                      )}
-                    >
-                      <span>Transaksi</span>
-                      <span className="ml-1.5 px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-primary text-[#E6E4DA]">
-                        1
-                      </span>
-                    </Link>
-                  )}
-                </>
-              )}
-            </nav>
+            {/* Distinct Role Chip */}
+            {isAdmin ? (
+              <span className="text-[11px] font-semibold text-red-900 bg-red-100 border border-red-200 px-2.5 py-0.5 rounded-md">
+                Admin Escrow
+              </span>
+            ) : isFarmer ? (
+              <span className="text-[11px] font-semibold text-primary bg-surface-green border border-primary/20 px-2.5 py-0.5 rounded-md flex items-center gap-1">
+                <span>🌱</span>
+                <span>Petani Mitra</span>
+              </span>
+            ) : (
+              <span className="text-[11px] font-semibold text-amber-900 bg-amber-100 border border-amber-200 px-2.5 py-0.5 rounded-md flex items-center gap-1">
+                <span>🍳</span>
+                <span>Dapur UMKM</span>
+              </span>
+            )}
           </div>
 
-          <div className="flex items-center gap-4">
-            {isBuyer && (
+          {/* Role-Specific Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+            {isAdmin ? (
               <Link
-                href="/escrow"
-                aria-label="Keranjang Belanja"
-                className="relative w-10 h-10 rounded-full flex items-center justify-center text-ink-secondary hover:text-ink hover:bg-surface-green/60 transition-colors"
+                href="/admin/disputes"
+                className={clsx(
+                  "py-1 border-b-2 transition-colors",
+                  isNavActive("/admin")
+                    ? "border-primary text-primary font-bold"
+                    : "border-transparent text-ink-secondary hover:text-ink",
+                )}
               >
-                <ShoppingCart className="w-5 h-5" />
+                Pusat Resolusi Sengketa
               </Link>
-            )}
-
-            {isTransactionalUser && (
-              <div className="relative" ref={notifRef}>
-                <button
-                  type="button"
-                  onClick={() => setShowNotif((prev) => !prev)}
-                  aria-label="Pemberitahuan Notifikasi"
+            ) : isFarmer ? (
+              <>
+                <Link
+                  href="/"
                   className={clsx(
-                    "relative w-10 h-10 rounded-full flex items-center justify-center text-ink-secondary hover:text-ink hover:bg-surface-green/60 transition-colors cursor-pointer",
-                    showNotif && "bg-surface-green/60 text-primary",
+                    "py-1 border-b-2 transition-colors",
+                    pathname === "/"
+                      ? "border-primary text-primary font-bold"
+                      : "border-transparent text-ink-secondary hover:text-ink",
                   )}
                 >
-                  <Bell className="w-5 h-5" />
-                  {unreadCount > 0 && (
-                    <span className="absolute top-1 right-1 min-w-4 h-4 px-1 rounded-full bg-status-disputed text-white text-[10px] font-bold flex items-center justify-center leading-none">
-                      {unreadCount}
-                    </span>
+                  Beranda Kebun
+                </Link>
+                <Link
+                  href="/dashboard/farmer"
+                  className={clsx(
+                    "py-1 border-b-2 transition-colors",
+                    isNavActive("/dashboard/farmer")
+                      ? "border-primary text-primary font-bold"
+                      : "border-transparent text-ink-secondary hover:text-ink",
                   )}
-                </button>
+                >
+                  Operasional Kebun
+                </Link>
+                <Link
+                  href="/explore"
+                  className={clsx(
+                    "py-1 border-b-2 transition-colors",
+                    isNavActive("/explore")
+                      ? "border-primary text-primary font-bold"
+                      : "border-transparent text-ink-secondary hover:text-ink",
+                  )}
+                >
+                  Tender Restoran
+                </Link>
+                <Link
+                  href="/handover"
+                  className={clsx(
+                    "py-1 border-b-2 transition-colors flex items-center gap-1.5",
+                    isNavActive("/handover")
+                      ? "border-primary text-primary font-bold"
+                      : "border-transparent text-ink-secondary hover:text-ink",
+                  )}
+                >
+                  <span>Serah Terima Fisik</span>
+                  <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/"
+                  className={clsx(
+                    "py-1 border-b-2 transition-colors",
+                    pathname === "/"
+                      ? "border-primary text-primary font-bold"
+                      : "border-transparent text-ink-secondary hover:text-ink",
+                  )}
+                >
+                  Beranda Dapur
+                </Link>
+                <Link
+                  href="/explore"
+                  className={clsx(
+                    "py-1 border-b-2 transition-colors",
+                    isNavActive("/explore")
+                      ? "border-primary text-primary font-bold"
+                      : "border-transparent text-ink-secondary hover:text-ink",
+                  )}
+                >
+                  Pasar Panen Segar
+                </Link>
+                <Link
+                  href="/dashboard/buyer"
+                  className={clsx(
+                    "py-1 border-b-2 transition-colors",
+                    isNavActive("/dashboard/buyer")
+                      ? "border-primary text-primary font-bold"
+                      : "border-transparent text-ink-secondary hover:text-ink",
+                  )}
+                >
+                  Tender Pengadaan Saya
+                </Link>
+                <Link
+                  href="/escrow"
+                  className={clsx(
+                    "py-1 border-b-2 transition-colors",
+                    isNavActive("/escrow")
+                      ? "border-primary text-primary font-bold"
+                      : "border-transparent text-ink-secondary hover:text-ink",
+                  )}
+                >
+                  Rekening Escrow
+                </Link>
+              </>
+            )}
+          </nav>
 
-                {showNotif && (
-                  <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-surface rounded-2xl border border-border shadow-xl z-50 overflow-hidden animate-in fade-in duration-150">
-                    <div className="px-4 py-3 border-b border-border flex items-center justify-between bg-[#E6E4DA]/20">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-ink">
-                          Notifikasi
-                        </span>
-                        <span className="px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold text-[10px]">
-                          {unreadCount} Baru
-                        </span>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setShowNotif(false)}
-                        className="text-[11px] font-semibold text-primary hover:underline cursor-pointer"
-                      >
-                        Tutup
-                      </button>
-                    </div>
+          {/* Right Area: Actions, Notifications & User Switcher */}
+          <div className="flex items-center gap-3">
 
-                    <div className="divide-y divide-border/60 max-h-80 overflow-y-auto">
-                      {notifications.map((item) => (
-                        <div
-                          key={item.id}
-                          onClick={() => {
-                            setShowNotif(false);
-                            navigate(item.link);
-                          }}
-                          className={clsx(
-                            "p-3.5 hover:bg-surface-green/30 transition-colors cursor-pointer flex items-start gap-3 text-left",
-                            item.unread && "bg-[#E6E4DA]/10",
-                          )}
-                        >
-                          <div className="w-8 h-8 rounded-xl bg-surface-green text-primary flex items-center justify-center shrink-0 mt-0.5">
-                            <Bell className="w-4 h-4" />
-                          </div>
-                          <div className="flex-1 min-w-0 space-y-0.5">
-                            <div className="flex items-center justify-between gap-2">
-                              <p className="text-xs font-bold text-ink truncate">
-                                {item.title}
-                              </p>
-                              <span className="text-[10px] text-ink-muted shrink-0">
-                                {item.time}
-                              </span>
-                            </div>
-                            <p className="text-[11px] text-ink-secondary leading-snug line-clamp-2">
-                              {item.description}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="p-2.5 border-t border-border bg-[#E6E4DA]/20 text-center">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setShowNotif(false);
-                          navigate("/handover");
-                        }}
-                        className="text-xs font-bold text-primary hover:underline cursor-pointer inline-flex items-center gap-1"
-                      >
-                        <span>Lihat Semua Transaksi</span>
-                        <ChevronRight className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
+            {/* Quick Action Button */}
+            {!isAdmin && (
+              isFarmer ? (
+                <Link
+                  href="/etalase/create"
+                  className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-[#E6E4DA] hover:bg-primary-hover transition-colors"
+                >
+                  <ShoppingBag className="w-3.5 h-3.5" />
+                  <span>+ Buka Panen</span>
+                </Link>
+              ) : (
+                <Link
+                  href="/tender/create"
+                  className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-[#E6E4DA] hover:bg-primary-hover transition-colors"
+                >
+                  <FileText className="w-3.5 h-3.5" />
+                  <span>+ Buat Tender</span>
+                </Link>
+              )
             )}
 
-            {currentUser ? (
-              <Link
-                href="/profile"
-                className="flex items-center gap-2 select-none py-1 px-2 rounded-xl transition-colors hover:bg-surface-green/40 group"
+            {/* Notification Dropdown */}
+            <div className="relative" ref={notifRef}>
+              <button
+                type="button"
+                onClick={() => setShowNotif((prev) => !prev)}
+                className="relative p-2 rounded-lg text-ink-secondary hover:text-ink hover:bg-black/5 transition-colors cursor-pointer"
+                title="Notifikasi"
+              >
+                <Bell className="w-5 h-5" />
+                {unreadCount > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500 ring-2 ring-surface" />
+                )}
+              </button>
+
+              {showNotif && (
+                <div className="absolute right-0 mt-2 w-80 bg-surface rounded-xl border border-border shadow-xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+                  <div className="p-3 border-b border-border flex items-center justify-between bg-[#E6E4DA]/40">
+                    <span className="text-xs font-bold text-ink">
+                      Pemberitahuan ({isFarmer ? "Petani" : "Pembeli"})
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setShowNotif(false)}
+                      className="text-[11px] text-primary hover:underline font-semibold"
+                    >
+                      Tutup
+                    </button>
+                  </div>
+                  <div className="divide-y divide-border/60 max-h-72 overflow-y-auto">
+                    {activeNotifs.map((item) => (
+                      <Link
+                        key={item.id}
+                        href={item.link}
+                        onClick={() => setShowNotif(false)}
+                        className="p-3 block hover:bg-black/5 transition-colors text-left"
+                      >
+                        <p className="text-xs font-bold text-ink">{item.title}</p>
+                        <p className="text-[11px] text-ink-secondary mt-0.5 line-clamp-2">
+                          {item.description}
+                        </p>
+                        <span className="text-[10px] text-ink-muted mt-1 block">
+                          {item.time}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* User Profile & Role Switcher Dropdown */}
+            <div className="relative" ref={profileRef}>
+              <button
+                type="button"
+                onClick={() => setShowProfileMenu((prev) => !prev)}
+                className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-black/5 transition-colors cursor-pointer select-none"
               >
                 <img
                   src={
-                    currentUser.avatar ||
-                    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80"
+                    currentUser?.avatar ||
+                    (isFarmer
+                      ? "https://images.unsplash.com/photo-1544717305-2782549b5136?w=150&auto=format&fit=crop&q=80"
+                      : "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150&auto=format&fit=crop&q=80")
                   }
-                  alt={currentUser.name || "Profil"}
-                  className="w-8 h-8 rounded-full object-cover border border-border group-hover:border-primary transition-colors"
+                  alt={currentUser?.name || "Profil"}
+                  className="w-7 h-7 rounded-full object-cover border border-border"
                 />
-                <span className="text-[13px] font-medium text-ink group-hover:text-primary transition-colors hidden sm:inline">
-                  {currentUser.role || currentUser.name?.split(" ")[0]}
+                <span className="text-xs font-semibold text-ink hidden sm:inline max-w-[120px] truncate">
+                  {currentUser?.name || (isFarmer ? "Kang Rizal" : "Bu Lina")}
                 </span>
-              </Link>
-            ) : (
-              <Link
-                href="/login"
-                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-[#E6E4DA] hover:bg-primary-hover transition-colors"
-              >
-                Masuk
-              </Link>
-            )}
+                <ChevronDown className="w-3.5 h-3.5 text-ink-muted" />
+              </button>
+
+              {showProfileMenu && (
+                <div className="absolute right-0 mt-2 w-64 bg-surface rounded-xl border border-border shadow-xl z-50 p-2 space-y-2 animate-in fade-in zoom-in-95 duration-100">
+                  <div className="p-2 border-b border-border/80">
+                    <p className="text-xs font-bold text-ink truncate">
+                      {currentUser?.name || (isFarmer ? "Pak Mulyono" : "Ibu Lina")}
+                    </p>
+                    <p className="text-[11px] text-primary font-medium mt-0.5">
+                      {currentUser?.role || (isFarmer ? "Petani Mitra" : "Pembeli UMKM")}
+                    </p>
+                  </div>
+
+                  {/* Switch Role Feature */}
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-bold text-ink-muted px-2 block">
+                      Ganti Akun Peran:
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleSwitchToFarmer}
+                      className={clsx(
+                        "w-full px-2.5 py-1.5 text-xs rounded-lg text-left flex items-center justify-between cursor-pointer transition-colors",
+                        isFarmer ? "bg-surface-green text-primary font-bold" : "hover:bg-black/5 text-ink-secondary",
+                      )}
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <span>🌱</span>
+                        <span>Petani Mitra</span>
+                      </span>
+                      {isFarmer && <Check className="w-3.5 h-3.5" />}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSwitchToBuyer}
+                      className={clsx(
+                        "w-full px-2.5 py-1.5 text-xs rounded-lg text-left flex items-center justify-between cursor-pointer transition-colors",
+                        isBuyer ? "bg-amber-100 text-amber-900 font-bold" : "hover:bg-black/5 text-ink-secondary",
+                      )}
+                    >
+                      <span className="flex items-center gap-1.5">
+                        <span>🍳</span>
+                        <span>Pembeli UMKM</span>
+                      </span>
+                      {isBuyer && <Check className="w-3.5 h-3.5" />}
+                    </button>
+                  </div>
+
+                  <div className="pt-1 border-t border-border/80 space-y-1">
+                    <Link
+                      href="/profile"
+                      onClick={() => setShowProfileMenu(false)}
+                      className="w-full px-2.5 py-1.5 text-xs rounded-lg text-ink-secondary hover:text-ink hover:bg-black/5 flex items-center gap-2 transition-colors block"
+                    >
+                      <User className="w-3.5 h-3.5" />
+                      <span>Profil &amp; Rekening Kas</span>
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        logout();
+                        router.push("/login");
+                      }}
+                      className="w-full px-2.5 py-1.5 text-xs rounded-lg text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors cursor-pointer text-left"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>Keluar Akun</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
           </div>
         </div>
       </header>
 
-      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-surface/95 backdrop-blur-md border-t border-border px-4 py-2 flex items-center justify-around md:hidden shadow-lg">
+      {/* Mobile Role-Specific Bottom Navigation Bar */}
+      <nav className="fixed bottom-0 left-0 right-0 z-40 bg-surface/95 backdrop-blur-md border-t border-border px-3 py-2 flex items-center justify-around md:hidden shadow-lg">
         {isAdmin ? (
           <Link
             href="/admin/disputes"
             className={clsx(
-              "flex flex-col items-center gap-1 transition-all py-1 px-3 rounded-xl",
-              isNavActive("/admin")
-                ? "text-primary font-bold"
-                : "text-gray-400 hover:text-gray-600",
+              "flex flex-col items-center gap-1 py-1 px-3 rounded-lg text-xs",
+              isNavActive("/admin") ? "text-primary font-bold" : "text-ink-muted",
             )}
           >
-            <div
+            <Scale className="w-5 h-5" />
+            <span className="text-[10px]">Sengketa</span>
+          </Link>
+        ) : isFarmer ? (
+          <>
+            <Link
+              href="/"
               className={clsx(
-                "p-1.5 px-3 rounded-full transition-all",
-                isNavActive("/admin")
-                  ? "bg-primary/15 text-primary"
-                  : "text-gray-400",
+                "flex flex-col items-center gap-1 py-1 px-2 text-xs",
+                pathname === "/" ? "text-primary font-bold" : "text-ink-muted",
               )}
             >
-              <Scale className="w-5 h-5 text-amber-600" />
-            </div>
-            <span className="text-[10px] font-semibold">Portal Admin</span>
-          </Link>
+              <Home className="w-5 h-5" />
+              <span className="text-[10px]">Kebun</span>
+            </Link>
+            <Link
+              href="/dashboard/farmer"
+              className={clsx(
+                "flex flex-col items-center gap-1 py-1 px-2 text-xs",
+                isNavActive("/dashboard/farmer") ? "text-primary font-bold" : "text-ink-muted",
+              )}
+            >
+              <Sprout className="w-5 h-5" />
+              <span className="text-[10px]">Operasional</span>
+            </Link>
+            <Link
+              href="/explore"
+              className={clsx(
+                "flex flex-col items-center gap-1 py-1 px-2 text-xs",
+                isNavActive("/explore") ? "text-primary font-bold" : "text-ink-muted",
+              )}
+            >
+              <FileText className="w-5 h-5" />
+              <span className="text-[10px]">Tender Masuk</span>
+            </Link>
+            <Link
+              href="/handover"
+              className={clsx(
+                "flex flex-col items-center gap-1 py-1 px-2 text-xs",
+                isNavActive("/handover") ? "text-primary font-bold" : "text-ink-muted",
+              )}
+            >
+              <Truck className="w-5 h-5" />
+              <span className="text-[10px]">Serah Terima</span>
+            </Link>
+            <Link
+              href="/profile"
+              className={clsx(
+                "flex flex-col items-center gap-1 py-1 px-2 text-xs",
+                isNavActive("/profile") ? "text-primary font-bold" : "text-ink-muted",
+              )}
+            >
+              <User className="w-5 h-5" />
+              <span className="text-[10px]">Akun</span>
+            </Link>
+          </>
         ) : (
           <>
             <Link
               href="/"
               className={clsx(
-                "flex flex-col items-center gap-1 transition-all py-1 px-2.5 rounded-xl",
-                isNavActive("/")
-                  ? "text-[#16A34A] font-bold"
-                  : "text-gray-400 hover:text-gray-600",
+                "flex flex-col items-center gap-1 py-1 px-2 text-xs",
+                pathname === "/" ? "text-primary font-bold" : "text-ink-muted",
               )}
             >
-              <div
-                className={clsx(
-                  "p-1.5 px-3 rounded-full transition-all",
-                  isNavActive("/")
-                    ? "bg-[#DCFCE7] text-[#16A34A]"
-                    : "text-gray-400",
-                )}
-              >
-                <Home className="w-5 h-5" />
-              </div>
-              <span className="text-[10px]">Beranda</span>
+              <Home className="w-5 h-5" />
+              <span className="text-[10px]">Dapur</span>
             </Link>
-
             <Link
               href="/explore"
               className={clsx(
-                "flex flex-col items-center gap-1 transition-all py-1 px-2.5 rounded-xl",
-                isNavActive("/explore")
-                  ? "text-[#16A34A] font-bold"
-                  : "text-gray-400 hover:text-gray-600",
+                "flex flex-col items-center gap-1 py-1 px-2 text-xs",
+                isNavActive("/explore") ? "text-primary font-bold" : "text-ink-muted",
               )}
             >
-              <div
-                className={clsx(
-                  "p-1.5 px-3 rounded-full transition-all",
-                  isNavActive("/explore")
-                    ? "bg-[#DCFCE7] text-[#16A34A]"
-                    : "text-gray-400",
-                )}
-              >
-                <Compass className="w-5 h-5" />
-              </div>
-              <span className="text-[10px]">Jelajahi</span>
+              <Compass className="w-5 h-5" />
+              <span className="text-[10px]">Pasar Panen</span>
             </Link>
-
-            {isBuyer && (
-              <Link
-                href="/escrow"
-                className={clsx(
-                  "flex flex-col items-center gap-1 transition-all py-1 px-2.5 rounded-xl",
-                  isNavActive("/escrow")
-                    ? "text-[#16A34A] font-bold"
-                    : "text-gray-400 hover:text-gray-600",
-                )}
-              >
-                <div
-                  className={clsx(
-                    "p-1.5 px-3 rounded-full transition-all",
-                    isNavActive("/escrow")
-                      ? "bg-[#DCFCE7] text-[#16A34A]"
-                      : "text-gray-400",
-                  )}
-                >
-                  <ShoppingCart className="w-5 h-5" />
-                </div>
-                <span className="text-[10px]">Keranjang</span>
-              </Link>
-            )}
-
-            {isTransactionalUser && (
-              <Link
-                href="/handover"
-                className={clsx(
-                  "flex flex-col items-center gap-1 transition-all py-1 px-2.5 rounded-xl relative",
-                  isNavActive("/handover") ||
-                    isNavActive("/tender") ||
-                    isNavActive("/escrow") ||
-                    isNavActive("/completed")
-                    ? "text-[#16A34A] font-bold"
-                    : "text-gray-400 hover:text-gray-600",
-                )}
-              >
-                <div
-                  className={clsx(
-                    "p-1.5 px-3 rounded-full transition-all relative",
-                    isNavActive("/handover") ||
-                      isNavActive("/tender") ||
-                      isNavActive("/escrow") ||
-                      isNavActive("/completed")
-                      ? "bg-[#DCFCE7] text-[#16A34A]"
-                      : "text-gray-400",
-                  )}
-                >
-                  <ClipboardList className="w-5 h-5" />
-                  <span className="absolute -top-1 -right-0.5 px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-[#16A34A] text-white">
-                    1
-                  </span>
-                </div>
-                <span className="text-[10px]">Transaksi</span>
-              </Link>
-            )}
+            <Link
+              href="/dashboard/buyer"
+              className={clsx(
+                "flex flex-col items-center gap-1 py-1 px-2 text-xs",
+                isNavActive("/dashboard/buyer") ? "text-primary font-bold" : "text-ink-muted",
+              )}
+            >
+              <FileText className="w-5 h-5" />
+              <span className="text-[10px]">Tender Saya</span>
+            </Link>
+            <Link
+              href="/escrow"
+              className={clsx(
+                "flex flex-col items-center gap-1 py-1 px-2 text-xs",
+                isNavActive("/escrow") ? "text-primary font-bold" : "text-ink-muted",
+              )}
+            >
+              <ShieldCheck className="w-5 h-5" />
+              <span className="text-[10px]">Escrow</span>
+            </Link>
+            <Link
+              href="/profile"
+              className={clsx(
+                "flex flex-col items-center gap-1 py-1 px-2 text-xs",
+                isNavActive("/profile") ? "text-primary font-bold" : "text-ink-muted",
+              )}
+            >
+              <User className="w-5 h-5" />
+              <span className="text-[10px]">Akun</span>
+            </Link>
           </>
         )}
-
-        <Link
-          href={currentUser ? "/profile" : "/login"}
-          className={clsx(
-            "flex flex-col items-center gap-1 transition-all py-1 px-2.5 rounded-xl",
-            isNavActive("/profile") || isNavActive("/login")
-              ? "text-[#16A34A] font-bold"
-              : "text-gray-400 hover:text-gray-600",
-          )}
-        >
-          <div
-            className={clsx(
-              "p-1.5 px-3 rounded-full transition-all",
-              isNavActive("/profile") || isNavActive("/login")
-                ? "bg-[#DCFCE7] text-[#16A34A]"
-                : "text-gray-400",
-            )}
-          >
-            <User className="w-5 h-5" />
-          </div>
-          <span className="text-[10px]">{currentUser ? "Akun" : "Masuk"}</span>
-        </Link>
       </nav>
     </>
   );
