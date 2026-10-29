@@ -91,7 +91,7 @@ function BuyerDashboardPage() {
             </tr>
           ) : (
             buyerOrders.map((order) => (
-              <tr key={order.id} className="hover:bg-[#E6E4DA]/20 transition-colors">
+              <tr key={order.id} className="hover:bg-[#E5E5DB]/20 transition-colors">
                 <td className="py-4 font-bold text-primary whitespace-nowrap">
                   {order.id}
                 </td>
@@ -168,7 +168,7 @@ function BuyerDashboardPage() {
                 <span
                   className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
                     tender.isBidding
-                      ? "bg-primary text-[#E6E4DA]"
+                      ? "bg-primary text-[#E5E5DB]"
                       : "bg-[#FEF3C7] text-[#D97706]"
                   }`}
                 >
@@ -238,7 +238,7 @@ function BuyerDashboardPage() {
                         onClick={() => setActiveTab(item.id)}
                         className={`w-full p-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
                           isActive
-                            ? "bg-primary text-[#E6E4DA] shadow-xs"
+                            ? "bg-primary text-[#E5E5DB] shadow-xs"
                             : "text-ink-secondary hover:text-ink hover:bg-surface-green/40"
                         }`}
                       >
@@ -251,7 +251,7 @@ function BuyerDashboardPage() {
                           <span
                             className={`text-[10px] font-bold px-2 py-0.2 rounded-full ${
                               isActive
-                                ? "bg-[#E6E4DA] text-primary"
+                                ? "bg-[#E5E5DB] text-primary"
                                 : "bg-border text-ink"
                             }`}
                           >

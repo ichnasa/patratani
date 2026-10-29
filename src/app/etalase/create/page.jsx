@@ -264,7 +264,7 @@ function CreateEtalasePage() {
                       maxLength={80}
                       required
                       placeholder="Contoh: Tomat Mawar Segar"
-                      className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
+                      className="w-full bg-[#E5E5DB]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                     />
                   </div>
 
@@ -277,7 +277,7 @@ function CreateEtalasePage() {
                         name="category"
                         value={formData.category}
                         onChange={handleChange}
-                        className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
+                        className="w-full bg-[#E5E5DB]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                       >
                         {categories.map((cat) => (
                           <option key={cat} value={cat}>
@@ -298,7 +298,7 @@ function CreateEtalasePage() {
                           value={formData.harvestDate}
                           onChange={handleChange}
                           required
-                          className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
+                          className="w-full bg-[#E5E5DB]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                         />
                       </div>
                     </div>
@@ -323,7 +323,7 @@ function CreateEtalasePage() {
                     <label className="block text-xs font-semibold text-ink mb-1.5">
                       Foto / Dokumen Hasil Panen <span className="text-red-500">*</span>
                     </label>
-                    <div className="border-2 border-dashed border-border hover:border-primary/80 rounded-2xl p-6 flex flex-col items-center justify-center text-center bg-[#E6E4DA]/20 transition-colors">
+                    <div className="border-2 border-dashed border-border hover:border-primary/80 rounded-2xl p-6 flex flex-col items-center justify-center text-center bg-[#E5E5DB]/20 transition-colors">
                       <div className="w-12 h-12 rounded-full bg-surface-green flex items-center justify-center text-primary mb-2">
                         <Upload className="w-5 h-5" />
                       </div>
@@ -352,7 +352,7 @@ function CreateEtalasePage() {
                         <button
                           type="button"
                           onClick={() => cameraInputRef.current && cameraInputRef.current.click()}
-                          className="px-3.5 py-2 rounded-xl bg-primary text-[#E6E4DA] text-xs font-semibold hover:bg-primary-hover transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
+                          className="px-3.5 py-2 rounded-xl bg-primary text-[#E5E5DB] text-xs font-semibold hover:bg-primary-hover transition-colors flex items-center gap-1.5 cursor-pointer shadow-xs"
                         >
                           <Camera className="w-3.5 h-3.5" />
                           <span>Buka Kamera Langsung</span>
@@ -387,7 +387,7 @@ function CreateEtalasePage() {
                           onChange={handleChange}
                           min={10}
                           required
-                          className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors pr-10"
+                          className="w-full bg-[#E5E5DB]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors pr-10"
                         />
                         <span className="absolute right-3.5 top-2.5 text-xs font-bold text-ink-muted">
                           kg
@@ -414,7 +414,7 @@ function CreateEtalasePage() {
                           onChange={handlePriceChange}
                           placeholder="0"
                           required
-                          className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
+                          className="w-full bg-[#E5E5DB]/40 border border-border rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                         />
                       </div>
                       <p className="text-[11px] text-ink-muted mt-1">
@@ -451,14 +451,14 @@ function CreateEtalasePage() {
                         onChange={handleChange}
                         maxLength={150}
                         required
-                        className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
+                        className="w-full bg-[#E5E5DB]/40 border border-border rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                       />
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-[#E6E4DA]/30 border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="p-3.5 rounded-xl bg-[#E5E5DB]/30 border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-primary text-[#E6E4DA] flex items-center justify-center shrink-0">
+                      <div className="w-8 h-8 rounded-lg bg-primary text-[#E5E5DB] flex items-center justify-center shrink-0">
                         <MapPin className="w-4 h-4" />
                       </div>
                       <div>
@@ -483,7 +483,7 @@ function CreateEtalasePage() {
                   </div>
 
                   <div className="space-y-3 pt-2">
-                    <label className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-colors ${deliveryMethod === "pickup" ? "border-primary bg-primary-50/40" : "border-border bg-[#E6E4DA]/20 hover:bg-[#E6E4DA]/40"}`}>
+                    <label className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-colors ${deliveryMethod === "pickup" ? "border-primary bg-primary-50/40" : "border-border bg-[#E5E5DB]/20 hover:bg-[#E5E5DB]/40"}`}>
                       <input
                         type="radio"
                         name="deliveryMethod"
@@ -502,7 +502,7 @@ function CreateEtalasePage() {
                       </div>
                     </label>
 
-                    <label className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-colors ${deliveryMethod === "delivery" ? "border-primary bg-primary-50/40" : "border-border bg-[#E6E4DA]/20 hover:bg-[#E6E4DA]/40"}`}>
+                    <label className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-colors ${deliveryMethod === "delivery" ? "border-primary bg-primary-50/40" : "border-border bg-[#E5E5DB]/20 hover:bg-[#E5E5DB]/40"}`}>
                       <input
                         type="radio"
                         name="deliveryMethod"
@@ -541,7 +541,7 @@ function CreateEtalasePage() {
                     value={formData.notes}
                     onChange={handleChange}
                     maxLength={500}
-                    className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl p-3.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
+                    className="w-full bg-[#E5E5DB]/40 border border-border rounded-xl p-3.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                   />
 
                   <div className="p-3 rounded-xl bg-status-confirmed/15 border border-status-confirmed/30 flex items-center gap-2.5 text-primary">
@@ -576,14 +576,14 @@ function CreateEtalasePage() {
                 </div>
 
                 <div className="rounded-xl border border-border overflow-hidden bg-background">
-                  <div className="relative h-36 w-full overflow-hidden bg-[#E6E4DA]">
+                  <div className="relative h-36 w-full overflow-hidden bg-[#E5E5DB]">
                     <img
                       src={formData.image}
                       alt={formData.name}
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute top-2.5 left-2.5">
-                      <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-primary text-[#E6E4DA]">
+                      <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-primary text-[#E5E5DB]">
                         Pre-Order
                       </span>
                     </div>
@@ -618,7 +618,7 @@ function CreateEtalasePage() {
                       </div>
                     </div>
 
-                    <div className="p-2 rounded-lg bg-[#E6E4DA]/40 text-[10px] text-ink-secondary flex items-center justify-between">
+                    <div className="p-2 rounded-lg bg-[#E5E5DB]/40 text-[10px] text-ink-secondary flex items-center justify-between">
                       <span>
                         {deliveryMethod === "pickup"
                           ? "Opsi: Ambil Sendiri (Rp 0)"

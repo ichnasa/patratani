@@ -88,7 +88,7 @@ export default function RegisterPage() {
             href="/"
             className="inline-flex items-center gap-2 select-none mb-1 group"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-[#E6E4DA] shadow-xs group-hover:bg-primary-hover transition-colors">
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-[#E5E5DB] shadow-xs group-hover:bg-primary-hover transition-colors">
               <Sprout className="w-6 h-6" />
             </div>
             <span className="text-2xl font-bold tracking-tight text-primary group-hover:text-primary-hover transition-colors">
@@ -124,14 +124,14 @@ export default function RegisterPage() {
               className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between gap-2 ${
                 role === "PETANI"
                   ? "bg-surface-green border-primary ring-2 ring-primary/20"
-                  : "bg-[#E6E4DA] border-border hover:bg-surface-green/40"
+                  : "bg-[#E5E5DB] border-border hover:bg-surface-green/40"
               }`}
             >
               <div className="flex items-center justify-between">
                 <div
                   className={`w-8 h-8 rounded-lg flex items-center justify-center ${
                     role === "PETANI"
-                      ? "bg-primary text-[#E6E4DA]"
+                      ? "bg-primary text-[#E5E5DB]"
                       : "bg-surface text-ink"
                   }`}
                 >
@@ -158,14 +158,14 @@ export default function RegisterPage() {
               className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex flex-col justify-between gap-2 ${
                 role === "PEMBELI"
                   ? "bg-surface-green border-primary ring-2 ring-primary/20"
-                  : "bg-[#E6E4DA] border-border hover:bg-surface-green/40"
+                  : "bg-[#E5E5DB] border-border hover:bg-surface-green/40"
               }`}
             >
               <div className="flex items-center justify-between">
                 <div
                   className={`w-8 h-8 rounded-lg flex items-center justify-center ${
                     role === "PEMBELI"
-                      ? "bg-primary text-[#E6E4DA]"
+                      ? "bg-primary text-[#E5E5DB]"
                       : "bg-surface text-ink"
                   }`}
                 >

@@ -139,7 +139,7 @@ function AdminDisputeDashboardPage() {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 bg-[#E6E4DA]/40 p-1 rounded-xl border border-border/60">
+                <div className="grid grid-cols-2 gap-2 bg-[#E5E5DB]/40 p-1 rounded-xl border border-border/60">
                   <button
                     type="button"
                     onClick={() => handleTabChange("PENDING")}
@@ -166,7 +166,7 @@ function AdminDisputeDashboardPage() {
 
                 <div className="space-y-3 pt-1">
                   {filteredDisputes.length === 0 ? (
-                    <div className="p-8 text-center text-xs text-ink-muted bg-[#E6E4DA]/20 rounded-xl border border-dashed border-border">
+                    <div className="p-8 text-center text-xs text-ink-muted bg-[#E5E5DB]/20 rounded-xl border border-dashed border-border">
                       {activeTab === "RESOLVED"
                         ? "Tidak ada riwayat sengketa yang selesai"
                         : "Tidak ada sengketa yang perlu mediasi"}
@@ -182,7 +182,7 @@ function AdminDisputeDashboardPage() {
                           className={`p-4 rounded-xl border transition-all cursor-pointer space-y-2 ${
                             isSelected
                               ? "bg-background border-primary ring-1 ring-primary/20 shadow-xs"
-                              : "bg-surface hover:bg-[#E6E4DA]/30 border-border"
+                              : "bg-surface hover:bg-[#E5E5DB]/30 border-border"
                           }`}
                         >
                           <div className="flex items-center justify-between">
@@ -245,7 +245,7 @@ function AdminDisputeDashboardPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 rounded-xl bg-[#E6E4DA]/30 border border-border space-y-2">
+                  <div className="p-4 rounded-xl bg-[#E5E5DB]/30 border border-border space-y-2">
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-bold text-primary">
                         Petani: {selectedDispute.farmerName}
@@ -259,7 +259,7 @@ function AdminDisputeDashboardPage() {
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-xl bg-[#E6E4DA]/30 border border-border space-y-2">
+                  <div className="p-4 rounded-xl bg-[#E5E5DB]/30 border border-border space-y-2">
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-bold text-[#D97706]">
                         Pembeli: {selectedDispute.buyerName}
@@ -275,7 +275,7 @@ function AdminDisputeDashboardPage() {
                 </div>
 
                 {selectedDispute.geotagProof && (
-                  <div className="p-5 rounded-2xl bg-[#E6E4DA]/40 border border-border space-y-4">
+                  <div className="p-5 rounded-2xl bg-[#E5E5DB]/40 border border-border space-y-4">
                     <div className="flex items-center justify-between">
                       <h3 className="text-xs font-bold text-ink uppercase tracking-wider flex items-center gap-1.5">
                         <Camera className="w-4 h-4 text-primary" />
@@ -335,12 +335,12 @@ function AdminDisputeDashboardPage() {
                       rows={3}
                       value={adminNotes}
                       onChange={(e) => setAdminNotes(e.target.value)}
-                      className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl p-3.5 text-xs text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
+                      className="w-full bg-[#E5E5DB]/40 border border-border rounded-xl p-3.5 text-xs text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                     />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="p-4 rounded-xl border border-border bg-[#E6E4DA]/20 space-y-2">
+                    <div className="p-4 rounded-xl border border-border bg-[#E5E5DB]/20 space-y-2">
                       <label className="block text-xs font-bold text-primary">
                         Alokasi Pencairan ke Petani:
                       </label>
@@ -360,7 +360,7 @@ function AdminDisputeDashboardPage() {
                       </span>
                     </div>
 
-                    <div className="p-4 rounded-xl border border-border bg-[#E6E4DA]/20 space-y-2">
+                    <div className="p-4 rounded-xl border border-border bg-[#E5E5DB]/20 space-y-2">
                       <label className="block text-xs font-bold text-[#D97706]">
                         Alokasi Refund ke Pembeli:
                       </label>

@@ -92,7 +92,7 @@ export default function Input({
               : "border border-border hover:border-ink/40 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none",
             IconLeft ? "pl-10" : "pl-3.5",
             IconRight ? "pr-10" : "pr-3.5",
-            disabled && "opacity-60 bg-[#E6E4DA] cursor-not-allowed",
+            disabled && "opacity-60 bg-[#E5E5DB] cursor-not-allowed",
             inputClassName
           )}
           {...props}

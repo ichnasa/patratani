@@ -369,14 +369,14 @@ function CompletedPage({ onBack, onExploreMore }) {
                   </span>
                 </div>
 
-                <div className="relative rounded-xl overflow-hidden border border-border bg-[#1A1A1A]">
+                <div className="relative rounded-xl overflow-hidden border border-border bg-[#181818]">
                   <img
                     src={transactionData.photoUrl || transactionData.samplePhoto || transactionData.image || "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=800&auto=format&fit=crop&q=80"}
                     alt="Bukti Serah Terima Sah"
                     className="w-full h-48 object-cover"
                   />
 
-                  <div className="absolute top-3 left-3 bg-[#1A1A1A]/85 backdrop-blur-md rounded-lg px-2.5 py-1 border border-white/20 text-[10px] text-[#E6E4DA] font-semibold flex items-center gap-1.5">
+                  <div className="absolute top-3 left-3 bg-[#181818]/85 backdrop-blur-md rounded-lg px-2.5 py-1 border border-white/20 text-[10px] text-[#E5E5DB] font-semibold flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5 text-status-completed" />
                     <span>TERVERIFIKASI SISTEM ESCROW</span>
                   </div>
@@ -393,7 +393,7 @@ function CompletedPage({ onBack, onExploreMore }) {
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border space-y-2.5 text-xs">
+                <div className="p-4 rounded-xl bg-[#E5E5DB] border border-border space-y-2.5 text-xs">
                   <div className="flex items-center justify-between text-ink">
                     <span className="text-ink-secondary flex items-center gap-1.5">
                       <Scale className="w-4 h-4 text-primary" />

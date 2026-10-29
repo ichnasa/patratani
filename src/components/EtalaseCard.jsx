@@ -49,7 +49,7 @@ export default function EtalaseCard({ commodity, onOrder }) {
       className="bg-surface rounded-2xl border border-border overflow-hidden hover:border-primary/50 transition-all flex flex-col justify-between group shadow-xs hover:shadow-md cursor-pointer"
     >
       <div>
-        <div className="relative h-40 sm:h-44 w-full bg-[#E6E4DA] overflow-hidden">
+        <div className="relative h-40 sm:h-44 w-full bg-[#E5E5DB] overflow-hidden">
           <img
             src={commodity.image}
             alt={commodity.name}

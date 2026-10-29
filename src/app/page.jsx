@@ -297,7 +297,7 @@ export default function HomePage() {
             </div>
 
             {/* Category Filter Tabs */}
-            <div className="px-4 py-2 bg-[#E6E4DA]/30 border-b border-border/60 flex items-center gap-1.5 overflow-x-auto text-xs">
+            <div className="px-4 py-2 bg-[#E5E5DB]/30 border-b border-border/60 flex items-center gap-1.5 overflow-x-auto text-xs">
               {["Semua", "Sayuran Buah", "Cabai & Bumbu", "Sayuran Daun", "Buah-buahan"].map((cat) => (
                 <button
                   key={cat}
@@ -305,7 +305,7 @@ export default function HomePage() {
                   onClick={() => setInventoryCategory(cat)}
                   className={`px-3 py-1 rounded-md font-medium transition-colors cursor-pointer whitespace-nowrap ${
                     inventoryCategory === cat
-                      ? "bg-primary text-[#E6E4DA] font-semibold"
+                      ? "bg-primary text-[#E5E5DB] font-semibold"
                       : "text-ink-secondary hover:text-ink hover:bg-black/5"
                   }`}
                 >
@@ -317,7 +317,7 @@ export default function HomePage() {
             {/* Clean Structured Table */}
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-[#E6E4DA]/40 border-b border-border text-ink-muted font-semibold">
+                <thead className="bg-[#E5E5DB]/40 border-b border-border text-ink-muted font-semibold">
                   <tr>
                     <th scope="col" className="py-3 px-4 w-[35%]">Komoditas</th>
                     <th scope="col" className="py-3 px-4 w-[15%]">Kategori</th>
@@ -341,7 +341,7 @@ export default function HomePage() {
                               <img
                                 src={item.image}
                                 alt={item.name}
-                                className="w-11 h-11 rounded-lg object-cover border border-border shrink-0 bg-[#E6E4DA]"
+                                className="w-11 h-11 rounded-lg object-cover border border-border shrink-0 bg-[#E5E5DB]"
                               />
                               <div className="min-w-0">
                                 <span className="font-bold text-ink text-sm block leading-snug truncate">
@@ -734,7 +734,7 @@ export default function HomePage() {
                 className="bg-surface border border-border/80 rounded-xl overflow-hidden hover:border-primary/60 transition-all cursor-pointer flex flex-col justify-between group shadow-2xs"
               >
                 <div>
-                  <div className="relative h-36 w-full bg-[#E6E4DA] overflow-hidden">
+                  <div className="relative h-36 w-full bg-[#E5E5DB] overflow-hidden">
                     <img
                       src={item.image}
                       alt={item.name}

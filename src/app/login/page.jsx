@@ -128,7 +128,7 @@ export default function LoginPage() {
             href="/"
             className="inline-flex items-center gap-2 select-none mb-1 group"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-[#E6E4DA] shadow-xs group-hover:bg-primary-hover transition-colors">
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-[#E5E5DB] shadow-xs group-hover:bg-primary-hover transition-colors">
               <Sprout className="w-6 h-6" />
             </div>
             <span className="text-2xl font-bold tracking-tight text-primary group-hover:text-primary-hover transition-colors">

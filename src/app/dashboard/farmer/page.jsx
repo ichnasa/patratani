@@ -137,7 +137,7 @@ function FarmerDashboardPage() {
             </tr>
           ) : (
             farmerOrders.map((order) => (
-              <tr key={order.id} className="hover:bg-[#E6E4DA]/20 transition-colors">
+              <tr key={order.id} className="hover:bg-[#E5E5DB]/20 transition-colors">
                 <td className="py-4 font-bold text-primary whitespace-nowrap">
                   {order.id}
                 </td>
@@ -231,7 +231,7 @@ function FarmerDashboardPage() {
                         onClick={() => setActiveTab(item.id)}
                         className={`w-full p-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
                           isActive
-                            ? "bg-primary text-[#E6E4DA] shadow-xs"
+                            ? "bg-primary text-[#E5E5DB] shadow-xs"
                             : "text-ink-secondary hover:text-ink hover:bg-surface-green/40"
                         }`}
                       >
@@ -244,7 +244,7 @@ function FarmerDashboardPage() {
                           <span
                             className={`text-[10px] font-bold px-2 py-0.2 rounded-full ${
                               isActive
-                                ? "bg-[#E6E4DA] text-primary"
+                                ? "bg-[#E5E5DB] text-primary"
                                 : "bg-border text-ink"
                             }`}
                           >
@@ -390,7 +390,7 @@ function FarmerDashboardPage() {
                   </div>
 
                   <form onSubmit={handleSaveDelivery} className="space-y-6">
-                    <div className="p-4 rounded-xl bg-[#E6E4DA]/40 border border-border flex items-center justify-between">
+                    <div className="p-4 rounded-xl bg-[#E5E5DB]/40 border border-border flex items-center justify-between">
                       <div>
                         <span className="text-xs font-bold text-ink block">
                           Status Layanan Pengantaran Mandiri
@@ -432,7 +432,7 @@ function FarmerDashboardPage() {
                                 maxCapacityKg: Number(e.target.value),
                               }))
                             }
-                            className="w-full bg-[#E6E4DA]/30 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-ink focus:outline-none focus:border-primary"
+                            className="w-full bg-[#E5E5DB]/30 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-ink focus:outline-none focus:border-primary"
                           />
                           <span className="absolute right-3.5 top-2.5 text-xs font-bold text-ink-muted">
                             kg
@@ -462,7 +462,7 @@ function FarmerDashboardPage() {
                                 fixedDeliveryFee: Number(e.target.value),
                               }))
                             }
-                            className="w-full bg-[#E6E4DA]/30 border border-border rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm font-bold text-ink focus:outline-none focus:border-primary"
+                            className="w-full bg-[#E5E5DB]/30 border border-border rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm font-bold text-ink focus:outline-none focus:border-primary"
                           />
                         </div>
                         <p className="text-[11px] text-ink-muted">
@@ -486,7 +486,7 @@ function FarmerDashboardPage() {
                                 maxRadiusKm: Number(e.target.value),
                               }))
                             }
-                            className="w-full bg-[#E6E4DA]/30 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-ink focus:outline-none focus:border-primary"
+                            className="w-full bg-[#E5E5DB]/30 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-bold text-ink focus:outline-none focus:border-primary"
                           />
                           <span className="absolute right-3.5 top-2.5 text-xs font-bold text-ink-muted">
                             km
@@ -512,7 +512,7 @@ function FarmerDashboardPage() {
                               vehicleType: e.target.value,
                             }))
                           }
-                          className="w-full bg-[#E6E4DA]/30 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary"
+                          className="w-full bg-[#E5E5DB]/30 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary"
                         />
                       </div>
 
@@ -531,7 +531,7 @@ function FarmerDashboardPage() {
                                 operatingHours: `${e.target.value} - ${prev.operatingHoursEnd || "10:00"}`,
                               }))
                             }
-                            className="w-full bg-[#E6E4DA]/30 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-ink focus:outline-none focus:border-primary"
+                            className="w-full bg-[#E5E5DB]/30 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-ink focus:outline-none focus:border-primary"
                           />
                           <span className="text-xs text-ink-muted font-bold">s/d</span>
                           <input
@@ -544,7 +544,7 @@ function FarmerDashboardPage() {
                                 operatingHours: `${prev.operatingHoursStart || "06:00"} - ${e.target.value}`,
                               }))
                             }
-                            className="w-full bg-[#E6E4DA]/30 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-ink focus:outline-none focus:border-primary"
+                            className="w-full bg-[#E5E5DB]/30 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-ink focus:outline-none focus:border-primary"
                           />
                         </div>
                       </div>
@@ -616,7 +616,7 @@ function FarmerDashboardPage() {
                             alt={item.name}
                             className="w-full h-full object-cover"
                           />
-                          <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-primary text-[#E6E4DA]">
+                          <span className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-primary text-[#E5E5DB]">
                             {item.category || "Sayuran"}
                           </span>
                         </div>

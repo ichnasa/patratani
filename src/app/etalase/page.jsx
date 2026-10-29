@@ -241,14 +241,14 @@ export default function DetailEtalasePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="lg:col-span-8 space-y-6">
               <div className="bg-surface rounded-2xl border border-border p-5 sm:p-6 shadow-xs space-y-4">
-                <div className="relative h-72 sm:h-96 w-full rounded-xl overflow-hidden bg-[#E6E4DA]">
+                <div className="relative h-72 sm:h-96 w-full rounded-xl overflow-hidden bg-[#E5E5DB]">
                   <img
                     src={selectedPhoto}
                     alt={commodity.name}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute top-3.5 left-3.5 flex items-center gap-2">
-                    <span className="px-3 py-1 rounded-lg text-xs font-bold bg-primary text-[#E6E4DA] shadow-xs">
+                    <span className="px-3 py-1 rounded-lg text-xs font-bold bg-primary text-[#E5E5DB] shadow-xs">
                       Siap Panen
                     </span>
                     <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-surface/90 text-primary backdrop-blur-xs shadow-xs border border-border/60">
@@ -301,7 +301,7 @@ export default function DetailEtalasePage() {
                   </div>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#E6E4DA]/30 border border-border space-y-2">
+                <div className="p-4 rounded-xl bg-[#E5E5DB]/30 border border-border space-y-2">
                   <div className="flex justify-between items-center text-xs">
                     <span className="text-ink-secondary font-medium">
                       Sisa yang Bisa Dipesan:
@@ -337,7 +337,7 @@ export default function DetailEtalasePage() {
                 </h3>
 
                 <div className="space-y-3">
-                  <div className="p-4 rounded-xl border border-border bg-[#E6E4DA]/20 flex items-start gap-3">
+                  <div className="p-4 rounded-xl border border-border bg-[#E5E5DB]/20 flex items-start gap-3">
                     <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-primary border border-border shrink-0 mt-0.5">
                       <MapPin className="w-4 h-4" />
                     </div>
@@ -351,7 +351,7 @@ export default function DetailEtalasePage() {
                     </div>
                   </div>
 
-                  <div className="p-4 rounded-xl border border-border bg-[#E6E4DA]/20 flex items-start gap-3">
+                  <div className="p-4 rounded-xl border border-border bg-[#E5E5DB]/20 flex items-start gap-3">
                     <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-primary border border-border shrink-0 mt-0.5">
                       <Truck className="w-4 h-4" />
                     </div>
@@ -402,7 +402,7 @@ export default function DetailEtalasePage() {
                   </div>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-[#E6E4DA]/40 border border-border flex items-center gap-2.5 text-xs text-ink-secondary">
+                <div className="p-3.5 rounded-xl bg-[#E5E5DB]/40 border border-border flex items-center gap-2.5 text-xs text-ink-secondary">
                   <MapPin className="w-4 h-4 text-primary shrink-0" />
                   <span>
                     {farmerLocationText}{farmerCoordText}
@@ -425,7 +425,7 @@ export default function DetailEtalasePage() {
                     </span>
                   </div>
 
-                  <div className="flex items-center justify-between border border-border rounded-xl p-1 bg-[#E6E4DA]/30">
+                  <div className="flex items-center justify-between border border-border rounded-xl p-1 bg-[#E5E5DB]/30">
                     <button
                       type="button"
                       onClick={handleDecrease}
@@ -465,7 +465,7 @@ export default function DetailEtalasePage() {
                       className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${
                         fulfillmentMethod === "PICKUP"
                           ? "border-primary bg-primary-50/30"
-                          : "border-border bg-surface hover:bg-[#E6E4DA]/20"
+                          : "border-border bg-surface hover:bg-[#E5E5DB]/20"
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
@@ -488,7 +488,7 @@ export default function DetailEtalasePage() {
                       className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${
                         fulfillmentMethod === "DELIVERY"
                           ? "border-primary bg-primary-50/30"
-                          : "border-border bg-surface hover:bg-[#E6E4DA]/20"
+                          : "border-border bg-surface hover:bg-[#E5E5DB]/20"
                       }`}
                     >
                       <div className="flex items-center gap-2.5">

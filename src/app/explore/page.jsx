@@ -302,7 +302,7 @@ export default function ExplorePage() {
                 onClick={() => setActiveTab("ETALASE")}
                 className={`py-2 px-4 rounded-lg text-xs font-bold transition-all duration-150 flex items-center gap-2 cursor-pointer ${
                   activeTab === "ETALASE"
-                    ? "bg-primary text-[#E6E4DA] shadow-xs"
+                    ? "bg-primary text-[#E5E5DB] shadow-xs"
                     : "text-ink-secondary hover:text-ink hover:bg-black/5"
                 }`}
               >
@@ -315,7 +315,7 @@ export default function ExplorePage() {
                 onClick={() => setActiveTab("TENDER")}
                 className={`py-2 px-4 rounded-lg text-xs font-bold transition-all duration-150 flex items-center gap-2 cursor-pointer ${
                   activeTab === "TENDER"
-                    ? "bg-primary text-[#E6E4DA] shadow-xs"
+                    ? "bg-primary text-[#E5E5DB] shadow-xs"
                     : "text-ink-secondary hover:text-ink hover:bg-black/5"
                 }`}
               >
@@ -355,7 +355,7 @@ export default function ExplorePage() {
                 <button
                   type="button"
                   onClick={() => navigate("/etalase/create")}
-                  className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary text-[#E6E4DA] text-xs font-semibold hover:bg-primary-hover transition-colors shadow-xs shrink-0 cursor-pointer"
+                  className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary text-[#E5E5DB] text-xs font-semibold hover:bg-primary-hover transition-colors shadow-xs shrink-0 cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Pasang Panen</span>
@@ -366,7 +366,7 @@ export default function ExplorePage() {
                 <button
                   type="button"
                   onClick={() => navigate("/tender/create")}
-                  className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary text-[#E6E4DA] text-xs font-semibold hover:bg-primary-hover transition-colors shadow-xs shrink-0 cursor-pointer"
+                  className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-primary text-[#E5E5DB] text-xs font-semibold hover:bg-primary-hover transition-colors shadow-xs shrink-0 cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Buat Tender</span>
@@ -399,7 +399,7 @@ export default function ExplorePage() {
                   </div>
                 ) : (
                   <div className="bg-surface rounded-2xl p-12 text-center border border-border space-y-4">
-                    <div className="w-14 h-14 rounded-2xl bg-[#E6E4DA] text-ink-muted flex items-center justify-center mx-auto">
+                    <div className="w-14 h-14 rounded-2xl bg-[#E5E5DB] text-ink-muted flex items-center justify-center mx-auto">
                       <Sprout className="w-8 h-8" />
                     </div>
                     <div>
@@ -423,7 +423,7 @@ export default function ExplorePage() {
                 </div>
               ) : (
                 <div className="bg-surface rounded-2xl p-12 text-center border border-border space-y-4">
-                  <div className="w-14 h-14 rounded-2xl bg-[#E6E4DA] text-ink-muted flex items-center justify-center mx-auto">
+                  <div className="w-14 h-14 rounded-2xl bg-[#E5E5DB] text-ink-muted flex items-center justify-center mx-auto">
                     <Store className="w-8 h-8" />
                   </div>
                   <div>

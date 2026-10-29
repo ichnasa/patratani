@@ -1,37 +1,45 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #E6E4DA;
-  --color-surface: #EFEEE7;
-  --color-surface-card: #EFEEE7;
-  --color-surface-green: #DDE0D4;
-  --color-surface-light: #F7F6F2;
-  --color-ink: #1A1A1A;
-  --color-ink-secondary: #595959;
-  --color-ink-muted: #767676;
-  --color-ink-light: #E6E4DA;
-  --color-primary: #0F3520;
-  --color-primary-hover: #092214;
-  --color-primary-dark: #1A1A1A;
-  --color-primary-light: #D5D8CC;
-  --color-primary-50: #DDE0D4;
-  --color-border: #CFCDC2;
-  --color-border-light: #DAD8CD;
+  /* 60% Dominant: Warm Light Neutral Base */
+  --color-background: #E5E5DB;
+  --color-surface: #EFEFE8;
+  --color-surface-card: #EFEFE8;
+  --color-surface-green: #D6DFD9;
+  --color-surface-light: #F7F7F3;
+  --color-border: #CFCFC4;
+  --color-border-light: #DCDCD3;
+
+  /* 30% Secondary: Deep Charcoal & Readable Typography */
+  --color-ink: #181818;
+  --color-ink-secondary: #4A4A4A;
+  --color-ink-muted: #757570;
+  --color-ink-light: #E5E5DB;
+
+  /* 10% Accent: Deep Botanical Forest Green */
+  --color-primary: #0D3721;
+  --color-primary-hover: #1B4A30;
+  --color-primary-dark: #082415;
+  --color-primary-light: #2F5941;
+  --color-primary-50: #E2ECE5;
+
+  /* Functional Status Colors (Restrained, Natural) */
   --color-status-open: #64748B;
-  --color-status-open-bg: #F3F4F6;
-  --color-status-bidding: #D97706;
-  --color-status-bidding-bg: #FEF3C7;
-  --color-status-awarded: #0D9488;
-  --color-status-awarded-bg: #CCFBF1;
-  --color-status-paid-held: #D97706;
-  --color-status-paid-held-bg: #FEF3C7;
-  --color-status-handover: #2563EB;
-  --color-status-handover-bg: #DBEAFE;
-  --color-status-completed: #16A34A;
-  --color-status-completed-bg: #DCFCE7;
-  --color-status-disputed: #DC2626;
-  --color-status-disputed-bg: #FEE2E2;
-  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  --color-status-open-bg: #F1F3F5;
+  --color-status-bidding: #9A6014;
+  --color-status-bidding-bg: #FDF4E7;
+  --color-status-awarded: #1B6A47;
+  --color-status-awarded-bg: #E1EFE7;
+  --color-status-paid-held: #9A6014;
+  --color-status-paid-held-bg: #FDF4E7;
+  --color-status-handover: #215987;
+  --color-status-handover-bg: #E6EFF6;
+  --color-status-completed: #1E6B3C;
+  --color-status-completed-bg: #E2EFE7;
+  --color-status-disputed: #A82222;
+  --color-status-disputed-bg: #FAE8E8;
+
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
 }
 
 body {

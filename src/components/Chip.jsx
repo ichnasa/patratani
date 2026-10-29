@@ -26,7 +26,7 @@ export default function Chip({
   };
 
   const activeClasses = active
-    ? "bg-primary text-[#E6E4DA] border-primary shadow-sm hover:bg-primary-hover"
+    ? "bg-primary text-[#E5E5DB] border-primary shadow-sm hover:bg-primary-hover"
     : "bg-[#EFEEE7] text-ink-secondary hover:text-ink hover:bg-[#E5E3D8] border border-border";
 
   const renderIcon = () => {
@@ -77,7 +77,7 @@ export default function Chip({
           className={clsx(
             "text-[10px] font-bold px-1.5 py-0.2 rounded-full",
             active
-              ? "bg-[#E6E4DA] text-primary"
+              ? "bg-[#E5E5DB] text-primary"
               : "bg-border text-ink"
           )}
         >
@@ -93,7 +93,7 @@ export default function Chip({
           className={clsx(
             "rounded-full p-0.5 transition-colors focus:outline-none",
             active
-              ? "hover:bg-[#E6E4DA]/20 text-[#E6E4DA]"
+              ? "hover:bg-[#E5E5DB]/20 text-[#E5E5DB]"
               : "hover:bg-border text-ink-muted hover:text-ink"
           )}
         >

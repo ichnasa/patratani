@@ -145,7 +145,7 @@ export default function TenderDetailPage({
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border/70 space-y-1">
+                <div className="p-4 rounded-xl bg-[#E5E5DB] border border-border/70 space-y-1">
                   <span className="text-[11px] font-medium text-ink-muted flex items-center gap-1.5 uppercase tracking-wider">
                     <Clock className="w-3.5 h-3.5 text-primary" />
                     Batas Penawaran
@@ -156,7 +156,7 @@ export default function TenderDetailPage({
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border/70 space-y-1">
+                <div className="p-4 rounded-xl bg-[#E5E5DB] border border-border/70 space-y-1">
                   <span className="text-[11px] font-medium text-ink-muted flex items-center gap-1.5 uppercase tracking-wider">
                     <Coins className="w-3.5 h-3.5 text-primary" />
                     Anggaran Maksimal
@@ -169,7 +169,7 @@ export default function TenderDetailPage({
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border/70 space-y-1">
+                <div className="p-4 rounded-xl bg-[#E5E5DB] border border-border/70 space-y-1">
                   <span className="text-[11px] font-medium text-ink-muted flex items-center gap-1.5 uppercase tracking-wider">
                     <Truck className="w-3.5 h-3.5 text-primary" />
                     Cara Pengiriman
@@ -186,7 +186,7 @@ export default function TenderDetailPage({
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border/70 space-y-1">
+                <div className="p-4 rounded-xl bg-[#E5E5DB] border border-border/70 space-y-1">
                   <span className="text-[11px] font-medium text-ink-muted flex items-center gap-1.5 uppercase tracking-wider">
                     <MapPin className="w-3.5 h-3.5 text-primary" />
                     Lokasi Pemesan
@@ -375,7 +375,7 @@ export default function TenderDetailPage({
                     </div>
                   </form>
                 )) : (
-                  <div className="p-6 rounded-xl bg-[#E6E4DA]/30 border border-border text-center space-y-3">
+                  <div className="p-6 rounded-xl bg-[#E5E5DB]/30 border border-border text-center space-y-3">
                     <div className="w-10 h-10 rounded-full bg-surface-green text-primary flex items-center justify-center mx-auto">
                       <Store className="w-5 h-5" />
                     </div>
@@ -399,7 +399,7 @@ export default function TenderDetailPage({
                       Daftar Penawaran Petani yang Masuk
                     </h3>
                   </div>
-                  <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#E6E4DA] text-ink-secondary">
+                  <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#E5E5DB] text-ink-secondary">
                     {(tender.bids || []).length} Tawaran
                   </span>
                 </div>
@@ -439,7 +439,7 @@ export default function TenderDetailPage({
                     ))}
                   </div>
                 ) : (
-                  <div className="p-8 text-center bg-[#E6E4DA] rounded-xl border border-border text-xs text-ink-muted">
+                  <div className="p-8 text-center bg-[#E5E5DB] rounded-xl border border-border text-xs text-ink-muted">
                     Belum ada penawaran yang diajukan untuk tender ini. Jadilah penawar pertama!
                   </div>
                 )}
@@ -495,7 +495,7 @@ export default function TenderDetailPage({
                     </strong>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-[#E6E4DA] border border-border/80 flex items-center justify-between text-xs mt-2">
+                  <div className="p-3 rounded-xl bg-[#E5E5DB] border border-border/80 flex items-center justify-between text-xs mt-2">
                     <span className="text-ink-secondary">
                       Total Dana Dibayar Pembeli UMKM:
                     </span>

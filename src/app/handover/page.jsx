@@ -379,7 +379,7 @@ function HandoverPage({ onBack, onComplete }) {
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
               <div className="lg:col-span-7 space-y-6">
-                <section className="bg-[#1A1A1A] rounded-2xl border border-border/40 shadow-lg text-[#E6E4DA] relative overflow-hidden">
+                <section className="bg-[#181818] rounded-2xl border border-border/40 shadow-lg text-[#E5E5DB] relative overflow-hidden">
                   <canvas ref={canvasRef} className="hidden" />
 
                   <div className="p-3.5 bg-black/50 backdrop-blur-md flex items-center justify-between border-b border-white/10 z-10 relative">
@@ -484,7 +484,7 @@ function HandoverPage({ onBack, onComplete }) {
                         Cek Timbangan Barang
                       </h3>
                     </div>
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#E6E4DA] text-ink">
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#E5E5DB] text-ink">
                       Target: {targetQty} Kg
                     </span>
                   </div>

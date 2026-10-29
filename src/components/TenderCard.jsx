@@ -56,7 +56,7 @@ export default function TenderCard({ tender, onBid }) {
           <StatusBadge status={tender.status} size="sm" showIcon />
         </div>
 
-        <p className="text-xs text-ink-secondary leading-relaxed bg-[#E6E4DA] p-3 rounded-xl border border-border/80">
+        <p className="text-xs text-ink-secondary leading-relaxed bg-[#E5E5DB] p-3 rounded-xl border border-border/80">
           "{tender.specifications}"
         </p>
 

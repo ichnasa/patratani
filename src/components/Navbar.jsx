@@ -127,7 +127,7 @@ export default function Navbar() {
           {/* Logo & Role Identity Badge */}
           <div className="flex items-center gap-4 shrink-0">
             <Link href="/" className="flex items-center gap-2 select-none group">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-[#E6E4DA]">
+              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-[#E5E5DB]">
                 <Sprout className="w-5 h-5" />
               </div>
               <span className="text-xl font-bold tracking-tight text-primary">
@@ -273,7 +273,7 @@ export default function Navbar() {
               isFarmer ? (
                 <Link
                   href="/etalase/create"
-                  className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-[#E6E4DA] hover:bg-primary-hover transition-colors"
+                  className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-[#E5E5DB] hover:bg-primary-hover transition-colors"
                 >
                   <ShoppingBag className="w-3.5 h-3.5" />
                   <span>+ Pasang Panen</span>
@@ -281,7 +281,7 @@ export default function Navbar() {
               ) : (
                 <Link
                   href="/tender/create"
-                  className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-[#E6E4DA] hover:bg-primary-hover transition-colors"
+                  className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-primary text-[#E5E5DB] hover:bg-primary-hover transition-colors"
                 >
                   <FileText className="w-3.5 h-3.5" />
                   <span>+ Cari Pasokan</span>
@@ -305,7 +305,7 @@ export default function Navbar() {
 
               {showNotif && (
                 <div className="absolute right-0 mt-2 w-80 bg-surface rounded-xl border border-border shadow-xl z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-100">
-                  <div className="p-3 border-b border-border flex items-center justify-between bg-[#E6E4DA]/40">
+                  <div className="p-3 border-b border-border flex items-center justify-between bg-[#E5E5DB]/40">
                     <span className="text-xs font-bold text-ink">
                       Pemberitahuan ({isFarmer ? "Petani" : "Pembeli"})
                     </span>

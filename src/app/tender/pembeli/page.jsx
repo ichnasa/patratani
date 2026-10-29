@@ -261,12 +261,12 @@ function DetailTenderPembeliPage() {
                   <span>1. OPEN</span>
                 </div>
                 <span className="text-border font-bold">→</span>
-                <div className="flex items-center gap-2 text-xs font-bold text-[#E6E4DA] bg-primary px-3.5 py-2 rounded-xl shadow-xs">
+                <div className="flex items-center gap-2 text-xs font-bold text-[#E5E5DB] bg-primary px-3.5 py-2 rounded-xl shadow-xs">
                   <Sparkles className="w-4 h-4" />
                   <span>2. BIDDING ({bids.length})</span>
                 </div>
                 <span className="text-border font-bold">→</span>
-                <div className="flex items-center gap-2 text-xs font-bold text-ink-muted bg-[#E6E4DA]/40 px-3.5 py-2 rounded-xl border border-border">
+                <div className="flex items-center gap-2 text-xs font-bold text-ink-muted bg-[#E5E5DB]/40 px-3.5 py-2 rounded-xl border border-border">
                   <span>3. AWARDED</span>
                 </div>
               </div>
@@ -371,7 +371,7 @@ function DetailTenderPembeliPage() {
                           </span>
                         </div>
 
-                        <p className="text-xs text-ink-secondary italic bg-[#E6E4DA]/40 p-2.5 rounded-xl border border-border/60">
+                        <p className="text-xs text-ink-secondary italic bg-[#E5E5DB]/40 p-2.5 rounded-xl border border-border/60">
                           "{bid.notes}"
                         </p>
                       </div>

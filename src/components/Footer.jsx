@@ -19,13 +19,13 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="w-full bg-[#1A1A1A] text-[#E6E4DA] border-t border-border/20">
+    <footer className="w-full bg-[#181818] text-[#E5E5DB] border-t border-border/20">
       <div className="max-w-[1440px] mx-auto px-6 lg:px-16 py-8 md:py-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-8 border-b border-white/10">
           <div className="lg:col-span-4 flex flex-col justify-between space-y-4">
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-[#E6E4DA]">
+                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-[#E5E5DB]">
                   <Sprout className="w-5 h-5" />
                 </div>
                 <span className="text-xl font-bold tracking-tight text-white">
@@ -106,7 +106,7 @@ export default function Footer() {
                   </div>
                 </div>
 
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-primary/60 text-[#E6E4DA] border border-primary-light/20 shrink-0">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-primary/60 text-[#E5E5DB] border border-primary-light/20 shrink-0">
                   Sandbox Aktif
                 </span>
               </div>

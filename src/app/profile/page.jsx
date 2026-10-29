@@ -136,7 +136,7 @@ function ProfilePage({ onLogout }) {
                     <Camera className="w-5 h-5 sm:w-6 sm:h-6" />
                     <span className="text-[9px] font-bold mt-0.5">Ubah Foto</span>
                   </div>
-                  <span className="absolute bottom-1 right-1 p-1 rounded-full bg-primary text-[#E6E4DA] border-2 border-surface shadow-xs">
+                  <span className="absolute bottom-1 right-1 p-1 rounded-full bg-primary text-[#E5E5DB] border-2 border-surface shadow-xs">
                     <Camera className="w-3.5 h-3.5" />
                   </span>
                 </div>
@@ -204,7 +204,7 @@ function ProfilePage({ onLogout }) {
                 <div className="p-5 rounded-xl bg-surface-green/40 border border-primary/20 flex flex-col justify-between space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="p-2 rounded-xl bg-primary text-[#E6E4DA]">
+                      <div className="p-2 rounded-xl bg-primary text-[#E5E5DB]">
                         <Wallet className="w-5 h-5" />
                       </div>
                       <div>
@@ -241,7 +241,7 @@ function ProfilePage({ onLogout }) {
                 <div className="p-5 rounded-xl bg-[#FEF3C7]/40 border border-[#FDE68A] flex flex-col justify-between space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="p-2 rounded-xl bg-[#D97706] text-[#E6E4DA]">
+                      <div className="p-2 rounded-xl bg-[#D97706] text-[#E5E5DB]">
                         <ShieldCheck className="w-5 h-5" />
                       </div>
                       <div>
@@ -286,7 +286,7 @@ function ProfilePage({ onLogout }) {
                       onClick={() => setActiveMenu(item.id)}
                       className={`w-full p-3.5 rounded-xl text-xs font-bold transition-all flex items-center justify-between cursor-pointer ${
                         isActive
-                          ? "bg-primary text-[#E6E4DA] shadow-xs"
+                          ? "bg-primary text-[#E5E5DB] shadow-xs"
                           : "text-ink-secondary hover:text-ink hover:bg-surface-green/40"
                       }`}
                     >
@@ -313,7 +313,7 @@ function ProfilePage({ onLogout }) {
                 </button>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#E6E4DA] border border-border text-xs space-y-2">
+              <div className="p-4 rounded-2xl bg-[#E5E5DB] border border-border text-xs space-y-2">
                 <span className="font-bold text-ink block">Info Kontak Akun:</span>
                 <p className="text-ink-secondary flex items-center gap-2">
                   <Mail className="w-3.5 h-3.5 text-primary" />
@@ -383,7 +383,7 @@ function ProfilePage({ onLogout }) {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                      <div className="p-3.5 rounded-xl bg-[#E6E4DA]/50 border border-border space-y-1">
+                      <div className="p-3.5 rounded-xl bg-[#E5E5DB]/50 border border-border space-y-1">
                         <span className="text-[10px] font-bold text-ink-muted uppercase">Email Terdaftar</span>
                         <p className="font-semibold text-ink">{currentUser.email}</p>
                         <span className="inline-flex items-center gap-1 text-[10px] text-primary font-bold">
@@ -391,7 +391,7 @@ function ProfilePage({ onLogout }) {
                         </span>
                       </div>
 
-                      <div className="p-3.5 rounded-xl bg-[#E6E4DA]/50 border border-border space-y-1">
+                      <div className="p-3.5 rounded-xl bg-[#E5E5DB]/50 border border-border space-y-1">
                         <span className="text-[10px] font-bold text-ink-muted uppercase">Peran Akun</span>
                         <p className="font-semibold text-ink">{currentUser.role}</p>
                         <span className="inline-flex items-center gap-1 text-[10px] text-primary font-bold">
@@ -425,7 +425,7 @@ function ProfilePage({ onLogout }) {
                   </div>
 
                   <div className="space-y-4 text-xs">
-                    <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex items-center justify-between">
+                    <div className="p-4 rounded-xl bg-[#E5E5DB] border border-border flex items-center justify-between">
                       <div>
                         <span className="font-bold text-ink block">
                           Autentikasi Dua Langkah (2FA)
@@ -439,7 +439,7 @@ function ProfilePage({ onLogout }) {
                       </span>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex items-center justify-between">
+                    <div className="p-4 rounded-xl bg-[#E5E5DB] border border-border flex items-center justify-between">
                       <div>
                         <span className="font-bold text-ink block">
                           Kata Sandi Akun
@@ -457,7 +457,7 @@ function ProfilePage({ onLogout }) {
                       </Button>
                     </div>
 
-                    <div className="p-4 rounded-xl bg-[#E6E4DA] border border-border flex items-center justify-between">
+                    <div className="p-4 rounded-xl bg-[#E5E5DB] border border-border flex items-center justify-between">
                       <div>
                         <span className="font-bold text-ink block">
                           Rekening Bank Pencairan Utama
@@ -493,7 +493,7 @@ function ProfilePage({ onLogout }) {
                     {faqs.map((faq, idx) => (
                       <div
                         key={idx}
-                        className="p-4 rounded-xl bg-[#E6E4DA] border border-border space-y-1.5"
+                        className="p-4 rounded-xl bg-[#E5E5DB] border border-border space-y-1.5"
                       >
                         <h3 className="text-xs font-bold text-ink">
                           {faq.q}
@@ -535,7 +535,7 @@ function ProfilePage({ onLogout }) {
             </div>
 
             <div className="space-y-3 text-xs">
-              <div className="p-3.5 rounded-xl bg-[#E6E4DA] border border-border">
+              <div className="p-3.5 rounded-xl bg-[#E5E5DB] border border-border">
                 <span className="text-[10px] uppercase font-bold text-ink-muted block">
                   Rekening Tujuan Pencairan
                 </span>

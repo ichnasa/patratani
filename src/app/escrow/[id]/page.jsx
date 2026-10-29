@@ -167,7 +167,7 @@ function CheckoutEscrowPage({
                           ? "bg-primary text-white border-primary shadow-sm ring-2 ring-primary/30"
                           : st.isDone
                           ? "bg-[#DCFCE7] border-[#BBF7D0]"
-                          : "bg-[#E6E4DA]/50 border-border opacity-60"
+                          : "bg-[#E5E5DB]/50 border-border opacity-60"
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -355,7 +355,7 @@ function CheckoutEscrowPage({
 
                     <div className="space-y-1.5 flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#1A1A1A] text-[#E6E4DA]">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#181818] text-[#E5E5DB]">
                           {dealData.grade || "Grade Super"}
                         </span>
                         <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-surface-green text-primary border border-primary/20">
@@ -393,7 +393,7 @@ function CheckoutEscrowPage({
                         className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${
                           fulfillmentMethod === "PICKUP"
                             ? "border-primary bg-surface-green/60 ring-1 ring-primary/20 shadow-xs"
-                            : "border-border bg-[#EFEEE7]/60 hover:bg-[#E6E4DA]/40"
+                            : "border-border bg-[#EFEEE7]/60 hover:bg-[#E5E5DB]/40"
                         }`}
                       >
                         <div className="flex items-center gap-2.5">
@@ -417,7 +417,7 @@ function CheckoutEscrowPage({
                         className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${
                           fulfillmentMethod === "DELIVERY"
                             ? "border-primary bg-surface-green/60 ring-1 ring-primary/20 shadow-xs"
-                            : "border-border bg-[#EFEEE7]/60 hover:bg-[#E6E4DA]/40"
+                            : "border-border bg-[#EFEEE7]/60 hover:bg-[#E5E5DB]/40"
                         }`}
                       >
                         <div className="flex items-center gap-2.5">
@@ -523,7 +523,7 @@ function CheckoutEscrowPage({
                             <div
                               className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
                                 isSelected
-                                  ? "bg-primary text-[#E6E4DA]"
+                                  ? "bg-primary text-[#E5E5DB]"
                                   : "bg-surface text-ink-secondary border border-border"
                               }`}
                             >
@@ -554,7 +554,7 @@ function CheckoutEscrowPage({
                               }`}
                             >
                               {isSelected && (
-                                <div className="w-1.5 h-1.5 rounded-full bg-[#E6E4DA]" />
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#E5E5DB]" />
                               )}
                             </div>
                           </div>

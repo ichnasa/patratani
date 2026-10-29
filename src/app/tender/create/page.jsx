@@ -261,7 +261,7 @@ function CreateTenderPage() {
                       maxLength={80}
                       required
                       placeholder="Contoh: Cabai Rawit Merah Segar"
-                      className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
+                      className="w-full bg-[#E5E5DB]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                     />
                   </div>
 
@@ -274,7 +274,7 @@ function CreateTenderPage() {
                         name="category"
                         value={formData.category}
                         onChange={handleChange}
-                        className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
+                        className="w-full bg-[#E5E5DB]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                       >
                         {categories.map((cat) => (
                           <option key={cat} value={cat}>
@@ -297,7 +297,7 @@ function CreateTenderPage() {
                           onChange={handleQuantityChange}
                           placeholder="Contoh: 15"
                           required
-                          className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors pr-10"
+                          className="w-full bg-[#E5E5DB]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors pr-10"
                         />
                         <span className="absolute right-3.5 top-2.5 text-xs font-bold text-ink-muted">
                           kg
@@ -339,7 +339,7 @@ function CreateTenderPage() {
                           onChange={handleBudgetChange}
                           placeholder="0"
                           required
-                          className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
+                          className="w-full bg-[#E5E5DB]/40 border border-border rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                         />
                       </div>
                       <p className="text-[11px] text-ink-muted mt-1">
@@ -357,7 +357,7 @@ function CreateTenderPage() {
                         value={formData.requiredDate}
                         onChange={handleChange}
                         required
-                        className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
+                        className="w-full bg-[#E5E5DB]/40 border border-border rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                       />
                       <p className="text-[11px] text-ink-muted mt-1">
                         Batas akhir penawaran otomatis H-1
@@ -391,14 +391,14 @@ function CreateTenderPage() {
                         onChange={handleChange}
                         maxLength={150}
                         required
-                        className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
+                        className="w-full bg-[#E5E5DB]/40 border border-border rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                       />
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-[#E6E4DA]/30 border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="p-3.5 rounded-xl bg-[#E5E5DB]/30 border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-primary text-[#E6E4DA] flex items-center justify-center shrink-0">
+                      <div className="w-8 h-8 rounded-lg bg-primary text-[#E5E5DB] flex items-center justify-center shrink-0">
                         <MapPin className="w-4 h-4" />
                       </div>
                       <div>
@@ -423,7 +423,7 @@ function CreateTenderPage() {
                   </div>
 
                   <div className="pt-2">
-                    <label className="flex items-start gap-3 p-3.5 rounded-xl border border-border bg-[#E6E4DA]/20 hover:bg-[#E6E4DA]/40 cursor-pointer transition-colors">
+                    <label className="flex items-start gap-3 p-3.5 rounded-xl border border-border bg-[#E5E5DB]/20 hover:bg-[#E5E5DB]/40 cursor-pointer transition-colors">
                       <input
                         type="checkbox"
                         name="allowDelivery"
@@ -461,7 +461,7 @@ function CreateTenderPage() {
                     value={formData.qualitySpecs}
                     onChange={handleChange}
                     maxLength={500}
-                    className="w-full bg-[#E6E4DA]/40 border border-border rounded-xl p-3.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
+                    className="w-full bg-[#E5E5DB]/40 border border-border rounded-xl p-3.5 text-xs sm:text-sm text-ink focus:outline-none focus:border-primary focus:bg-surface transition-colors"
                   />
 
                   {ENABLE_QUALITY_DOCUMENT && (
@@ -475,7 +475,7 @@ function CreateTenderPage() {
                     />
                     <div
                       onClick={() => specFileInputRef.current && specFileInputRef.current.click()}
-                      className="p-3.5 rounded-xl border border-dashed border-border hover:border-primary/80 bg-[#E6E4DA]/20 flex items-center justify-between text-xs cursor-pointer transition-colors"
+                      className="p-3.5 rounded-xl border border-dashed border-border hover:border-primary/80 bg-[#E5E5DB]/20 flex items-center justify-between text-xs cursor-pointer transition-colors"
                     >
                       <div className="flex items-center gap-2.5">
                         <Upload className="w-4 h-4 text-primary shrink-0" />
