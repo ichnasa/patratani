@@ -62,30 +62,42 @@ function HandoverPage({ onBack, onComplete }) {
     isLive: false,
   });
 
-  useEffect(() => {
-    let activeStream = null;
-
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices
-        .getUserMedia({
+  const initCamera = async () => {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      setTimeout(() => setCameraStatus("UNAVAILABLE"), 0);
+      return;
+    }
+    try {
+      let stream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: { ideal: "environment" } },
           audio: false,
-        })
-        .then((stream) => {
-          activeStream = stream;
-          streamRef.current = stream;
-          if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-            videoRef.current.play().catch(() => {});
-          }
-          setCameraStatus("STREAMING");
-        })
-        .catch((error) => {
-          console.error("Kamera gagal diakses:", error);
-          setCameraStatus("DENIED");
         });
-    } else {
-      setTimeout(() => setCameraStatus("UNAVAILABLE"), 0);
+      } catch {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false,
+        });
+      }
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        videoRef.current.play().catch(() => {});
+      }
+      setCameraStatus("STREAMING");
+    } catch (error) {
+      console.error("Kamera gagal diakses:", error);
+      setCameraStatus("DENIED");
+    }
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => initCamera(), 0);
+
+    if (videoRef.current && streamRef.current && cameraStatus === "STREAMING") {
+      videoRef.current.srcObject = streamRef.current;
+      videoRef.current.play().catch(() => {});
     }
 
     if (navigator.geolocation && navigator.geolocation.getCurrentPosition) {
@@ -107,6 +119,7 @@ function HandoverPage({ onBack, onComplete }) {
     }
 
     return () => {
+      clearTimeout(timer);
       if (activeStream) {
         activeStream.getTracks().forEach((track) => track.stop());
       }
@@ -409,22 +422,30 @@ function HandoverPage({ onBack, onComplete }) {
                         alt="Hasil Jepretan Bukti Serah Terima"
                         className="w-full h-full object-cover brightness-95 contrast-105"
                       />
-                    ) : cameraStatus === "STREAMING" ? (
-                      <video
-                        autoPlay
-                        playsInline
-                        muted
-                        ref={videoRef}
-                        className="w-full h-full object-cover"
-                      />
                     ) : (
-                      <img
-                        src={handoverData.samplePhoto || handoverData.image || "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=800&auto=format&fit=crop&q=80"}
-                        alt="Pratinjau Serah Terima Kamera"
-                        className="w-full h-full object-cover brightness-75 blur-[0.5px]"
-                      />
+                      <>
+                        <video
+                          autoPlay
+                          playsInline
+                          muted
+                          ref={(el) => {
+                            videoRef.current = el;
+                            if (el && streamRef.current && el.srcObject !== streamRef.current) {
+                              el.srcObject = streamRef.current;
+                              el.play().catch(() => {});
+                            }
+                          }}
+                          className={`w-full h-full object-cover ${cameraStatus === "STREAMING" ? "block" : "hidden"}`}
+                        />
+                        {cameraStatus !== "STREAMING" && (
+                          <img
+                            src={handoverData.samplePhoto || handoverData.image || "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=800&auto=format&fit=crop&q=80"}
+                            alt="Pratinjau Serah Terima Kamera"
+                            className="w-full h-full object-cover brightness-75 blur-[0.5px]"
+                          />
+                        )}
+                      </>
                     )}
-
 
 
                     <div className="absolute bottom-3 left-3 right-3 bg-black/80 backdrop-blur-md rounded-xl p-3 border border-white/15 text-[11px] font-mono space-y-1 shadow-md">
