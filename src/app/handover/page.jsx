@@ -4,8 +4,6 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import React, { useState, useEffect, useRef } from "react";
 import { useApp } from "@/context/AppContext";
 import { mockDefaultHandover } from "@/data/mockData";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import Button from "@/components/Button";
 import StatusBadge from "@/components/StatusBadge";
 import {
@@ -207,8 +205,6 @@ function HandoverPage({ onBack, onComplete }) {
 
   return (
     <div className="min-h-screen bg-background text-ink flex flex-col selection:bg-primary-50 selection:text-primary">
-      <Navbar activeNav="transaksi" />
-
       <main className="w-full flex-1 flex-grow">
         <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-8 md:py-10 space-y-8 pb-28 md:pb-14">
           <div>
@@ -387,22 +383,17 @@ function HandoverPage({ onBack, onComplete }) {
                 <section className="bg-[#1A1A1A] rounded-2xl border border-border/40 shadow-lg text-[#E6E4DA] relative overflow-hidden">
                   <canvas ref={canvasRef} className="hidden" />
 
-                  <div className="p-4 bg-black/40 backdrop-blur-md flex flex-wrap items-center justify-between gap-2 border-b border-white/10 z-10 relative">
+                  <div className="p-3.5 bg-black/50 backdrop-blur-md flex items-center justify-between border-b border-white/10 z-10 relative">
                     <div className="flex items-center gap-2">
-                      <span className={`w-2.5 h-2.5 rounded-full ${cameraStatus === "STREAMING" ? "bg-[#22C55E] animate-pulse" : "bg-[#DC2626]"}`} />
-                      <span className="text-xs font-bold tracking-wider uppercase text-white">
-                        {cameraStatus === "STREAMING" ? "Live Camera Viewfinder" : "Kamera Pratinjau Viewfinder"}
+                      <span className={`w-2.5 h-2.5 rounded-full ${cameraStatus === "STREAMING" ? "bg-[#22C55E]" : "bg-[#DC2626]"}`} />
+                      <span className="text-xs font-semibold text-white">
+                        Kamera Bukti Serah Terima
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-[#D5D8CC]">
-                        {cameraStatus === "STREAMING" ? "LIVE STREAM" : "1080p • 60 FPS"}
-                      </span>
-                      <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold ${gpsData.isLive ? "bg-[#16A34A] text-white" : "bg-[#F59E0B] text-black"}`}>
-                        {gpsData.isLive ? "GPS REALTIME" : "GPS LOCKED"}
-                      </span>
-                    </div>
+                    <span className="text-xs text-[#D5D8CC]">
+                      {isPhotoCaptured ? "Foto Tersimpan" : cameraStatus === "STREAMING" ? "Kamera Aktif" : "Siap Ambil Foto"}
+                    </span>
                   </div>
 
                   {cameraStatus === "DENIED" && (
@@ -445,24 +436,20 @@ function HandoverPage({ onBack, onComplete }) {
                     )}
 
 
-                    <div className="absolute bottom-3 left-3 right-3 bg-black/80 backdrop-blur-md rounded-xl p-3 border border-white/15 text-[11px] font-mono space-y-1 shadow-md">
-                      <div className="flex items-center justify-between text-white/70 text-[10px]">
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-3 h-3 text-[#FBBF24]" />
+                    <div className="absolute bottom-3 left-3 right-3 bg-black/75 backdrop-blur-md rounded-xl p-3 border border-white/10 text-xs text-white space-y-1.5 shadow-md">
+                      <div className="flex items-center justify-between text-[11px] text-[#D5D8CC]">
+                        <span className="flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5 text-[#FBBF24]" />
                           {handoverData.timestamp}
                         </span>
-                        <span>HASH: {handoverData.hash}</span>
+                        <span>{handoverData.tenderId}</span>
                       </div>
 
-                      <div className="flex items-center gap-1.5 text-white">
+                      <div className="flex items-center gap-1.5 text-white text-xs font-medium truncate pt-1 border-t border-white/10">
                         <MapPin className="w-3.5 h-3.5 text-[#60A5FA] shrink-0" />
                         <span className="truncate">
-                          {gpsData.latitude}, {gpsData.longitude} ({gpsData.accuracy})
+                          {handoverData.geotag?.address || "Lokasi Serah Terima"}
                         </span>
-                      </div>
-
-                      <div className="text-[10px] text-white/60 truncate pt-0.5 border-t border-white/10">
-                        {handoverData.geotag?.address}
                       </div>
                     </div>
                   </div>
@@ -485,7 +472,7 @@ function HandoverPage({ onBack, onComplete }) {
                       icon={Camera}
                       onClick={handleCapturePhoto}
                     >
-                      {isPhotoCaptured ? "Ambil Ulang Foto" : "Bidikan Foto Geotag"}
+                      {isPhotoCaptured ? "Foto Ulang" : "Ambil Foto"}
                     </Button>
                   </div>
                 </section>
@@ -762,8 +749,7 @@ function HandoverPage({ onBack, onComplete }) {
         </div>
       )}
 
-      <Footer />
-    </div>
+      </div>
   );
 }
 

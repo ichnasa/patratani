@@ -3,8 +3,6 @@ import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import React, { useState, useRef } from "react";
 import { useApp } from "@/context/AppContext";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import Button from "@/components/Button";
 import { mockProfileFaqs } from "@/data/mockData";
 import {
@@ -113,8 +111,6 @@ function ProfilePage({ onLogout }) {
 
   return (
     <div className="min-h-screen bg-background text-ink flex flex-col selection:bg-primary-50 selection:text-primary">
-      <Navbar />
-
       <main className="w-full flex-1 flex-grow">
         <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-8 md:py-10 space-y-8 pb-28 md:pb-14">
           <section className="bg-surface rounded-2xl p-6 sm:p-8 border border-border shadow-xs">
@@ -254,7 +250,7 @@ function ProfilePage({ onLogout }) {
                           Dana Tertahan di Escrow
                         </span>
                         <span className="text-[10px] text-ink-muted">
-                          Aman di rekening penampung sandbox
+                          Aman di Rekening Bersama
                         </span>
                       </div>
                     </div>
@@ -561,7 +557,7 @@ function ProfilePage({ onLogout }) {
                   className="w-full rounded-xl px-4 py-2.5 text-base font-bold text-primary bg-[#EFEEE7] border border-border focus:border-primary focus:outline-none"
                 />
                 <span className="text-[10px] text-ink-muted mt-1 block">
-                  Bebas biaya transfer antar-bank sandbox
+                  Bebas biaya transfer
                 </span>
               </div>
             </div>
@@ -713,8 +709,7 @@ function ProfilePage({ onLogout }) {
         </div>
       )}
 
-      <Footer />
-    </div>
+      </div>
   );
 }
 

@@ -3,8 +3,6 @@ import { useRouter } from "next/navigation";
 import Navigate from "@/components/Navigate";
 import React, { useState } from "react";
 import { useApp } from "@/context/AppContext";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import Button from "@/components/Button";
 import StatusBadge from "@/components/StatusBadge";
 import Chip from "@/components/Chip";
@@ -74,15 +72,13 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background text-ink flex flex-col selection:bg-primary-50 selection:text-primary">
-      <Navbar />
-
       <main className="w-full flex-1 flex-grow">
         <div className="max-w-[1440px] mx-auto w-full">
           <section className="py-8 md:py-10 px-6 lg:px-16 flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-10">
             <div className="flex flex-col gap-4 max-w-xl text-center lg:text-left">
               <div className="inline-flex items-center justify-center lg:justify-start gap-2">
                 <span className="inline-flex items-center px-3 py-1 rounded-full bg-surface-green text-primary text-xs font-semibold border border-primary/20">
-                  Agritech Terdesentralisasi • Tanpa Gudang
+                  Hasil Panen Segar Langsung dari Petani
                 </span>
               </div>
 
@@ -147,7 +143,7 @@ export default function HomePage() {
                       <ShoppingBag className="w-5 h-5" />
                     </div>
                     <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-primary/10 text-primary">
-                      Direct Pre-Order
+                      Pesan Langsung
                     </span>
                   </div>
 
@@ -192,7 +188,7 @@ export default function HomePage() {
                       <FileText className="w-5 h-5" />
                     </div>
                     <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#FEF3C7] text-[#D97706]">
-                      Demand-Driven
+                      Tender Kebutuhan
                     </span>
                   </div>
 
@@ -255,7 +251,7 @@ export default function HomePage() {
                       <ShieldCheck className="w-4 h-4 text-[#0D9488]" />
                     </div>
                     <p className="text-2xl font-bold text-primary">Rp 1.585.000</p>
-                    <p className="text-[11px] text-[#0D9488] font-medium mt-1">Aman dalam sandbox</p>
+                    <p className="text-[11px] text-[#0D9488] font-medium mt-1">Tersimpan aman di Rekening Bersama</p>
                   </div>
   
                   <div className="bg-surface p-5 rounded-xl border border-border">
@@ -264,7 +260,7 @@ export default function HomePage() {
                       <Camera className="w-4 h-4 text-[#2563EB]" />
                     </div>
                     <p className="text-2xl font-bold text-ink">1 Pesanan</p>
-                    <p className="text-[11px] text-[#2563EB] font-medium mt-1">Verifikasi kamera geotag</p>
+                    <p className="text-[11px] text-[#2563EB] font-medium mt-1">Menunggu serah terima</p>
                   </div>
   
                   <div className="bg-surface p-5 rounded-xl border border-border">
@@ -463,7 +459,6 @@ export default function HomePage() {
         </div>
       </main>
 
-      <Footer />
-    </div>
+      </div>
   );
 }

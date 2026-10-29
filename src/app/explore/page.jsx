@@ -1,8 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React, { useState, useMemo } from "react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import Button from "@/components/Button";
 import Chip from "@/components/Chip";
 import EtalaseCard from "@/components/EtalaseCard";
@@ -293,8 +291,6 @@ export default function ExplorePage() {
 
   return (
     <div className="min-h-screen bg-background text-ink flex flex-col selection:bg-primary-50 selection:text-primary">
-      <Navbar activeNav="pasar" />
-
       <main className="w-full flex-1 flex-grow">
         <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-8 md:py-10 space-y-8 pb-28 md:pb-14">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -493,7 +489,6 @@ export default function ExplorePage() {
         </div>
       )}
 
-      <Footer />
-    </div>
+      </div>
   );
 }

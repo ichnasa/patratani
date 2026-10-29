@@ -4,8 +4,6 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import React, { useState } from "react";
 import { useApp } from "@/context/AppContext";
 import { mockDefaultCompletedTransaction } from "@/data/mockData";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import Button from "@/components/Button";
 import StatusBadge from "@/components/StatusBadge";
 import Chip from "@/components/Chip";
@@ -64,8 +62,6 @@ function CompletedPage({ onBack, onExploreMore }) {
 
   return (
     <div className="min-h-screen bg-background text-ink flex flex-col selection:bg-primary-50 selection:text-primary">
-      <Navbar activeNav="transaksi" />
-
       <main className="w-full flex-1 flex-grow">
         <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-8 md:py-10 space-y-8 pb-28 md:pb-14">
           <div>
@@ -117,7 +113,7 @@ function CompletedPage({ onBack, onExploreMore }) {
                     ID Rekening Escrow
                   </span>
                   <p className="font-mono font-bold text-ink">{transactionData.escrowId || "ESC-20261027-8891"}</p>
-                  <p className="text-[10px] text-ink-secondary">Enkripsi sandbox Patra Tani</p>
+                  <p className="text-[10px] text-ink-secondary">Rekening Bersama Patra Tani</p>
                 </div>
 
                 <div className="p-4 rounded-xl bg-[#EFEEE7] border border-border space-y-1">
@@ -432,7 +428,7 @@ function CompletedPage({ onBack, onExploreMore }) {
 
                 <div className="p-3.5 rounded-xl bg-[#DCFCE7]/60 border border-[#BBF7D0] text-[11px] text-[#166534] flex items-center gap-2">
                   <FileCheck className="w-4 h-4 shrink-0" />
-                  <span>Dokumen ini sah secara digital dan dilindungi enkripsi sandbox Patra Tani.</span>
+                  <span>Dokumen ini sah secara digital dan dilindungi sistem keamanan Patra Tani.</span>
                 </div>
               </section>
 
@@ -459,8 +455,7 @@ function CompletedPage({ onBack, onExploreMore }) {
         </div>
       </main>
 
-      <Footer />
-    </div>
+      </div>
   );
 }
 

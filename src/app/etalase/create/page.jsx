@@ -14,8 +14,6 @@ import {
 } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import { mockCommodities } from "@/data/mockData";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import Button from "@/components/Button";
 
 function CreateEtalasePage() {
@@ -211,8 +209,6 @@ function CreateEtalasePage() {
 
   return (
     <div className="min-h-screen bg-background text-ink flex flex-col selection:bg-primary-50 selection:text-primary">
-      <Navbar activeNav="pasar" />
-
       <main className="w-full flex-1 flex-grow">
         <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-8 md:py-10 space-y-8 pb-28 md:pb-14">
           <div className="space-y-3">
@@ -684,8 +680,7 @@ function CreateEtalasePage() {
         </div>
       </main>
 
-      <Footer />
-    </div>
+      </div>
   );
 }
 

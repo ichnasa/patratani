@@ -2,8 +2,6 @@
 import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useApp } from "@/context/AppContext";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import StatusBadge from "@/components/StatusBadge";
@@ -104,8 +102,6 @@ export default function TenderDetailPage({
 
   return (
     <div className="min-h-screen bg-background text-ink flex flex-col selection:bg-primary-50 selection:text-primary">
-      <Navbar activeNav="transaksi" />
-
       <main className="w-full flex-1 flex-grow">
         <div className="max-w-[1440px] mx-auto w-full px-6 lg:px-16 py-8 md:py-10 space-y-8 pb-28 md:pb-14">
           <div>
@@ -557,7 +553,6 @@ export default function TenderDetailPage({
         </div>
       </main>
 
-      <Footer />
-    </div>
+      </div>
   );
 }
