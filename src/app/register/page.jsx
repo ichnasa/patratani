@@ -88,9 +88,11 @@ export default function RegisterPage() {
             href="/"
             className="inline-flex items-center gap-2 select-none mb-1 group"
           >
-            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-[#E5E5DB] shadow-xs group-hover:bg-primary-hover transition-colors">
-              <Sprout className="w-6 h-6" />
-            </div>
+            <img
+              src="/logo.png"
+              alt="PatraTani"
+              className="w-11 h-11 object-contain group-hover:scale-105 transition-transform"
+            />
             <span className="text-2xl font-bold tracking-tight text-primary group-hover:text-primary-hover transition-colors">
               PatraTani
             </span>

@@ -126,10 +126,12 @@ export default function Navbar() {
 
           {/* Logo & Role Identity Badge */}
           <div className="flex items-center gap-4 shrink-0">
-            <Link href="/" className="flex items-center gap-2 select-none group">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-[#E5E5DB]">
-                <Sprout className="w-5 h-5" />
-              </div>
+            <Link href="/" className="flex items-center gap-2.5 select-none group">
+              <img
+                src="/logo.png"
+                alt="PatraTani"
+                className="w-8 h-8 object-contain group-hover:scale-105 transition-transform"
+              />
               <span className="text-xl font-bold tracking-tight text-primary">
                 PatraTani
               </span>

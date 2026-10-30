@@ -24,10 +24,12 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 pb-8 border-b border-white/10">
           <div className="lg:col-span-4 flex flex-col justify-between space-y-4">
             <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-[#E5E5DB]">
-                  <Sprout className="w-5 h-5" />
-                </div>
+              <div className="flex items-center gap-2.5">
+                <img
+                  src="/logo.png"
+                  alt="PatraTani"
+                  className="w-8 h-8 object-contain"
+                />
                 <span className="text-xl font-bold tracking-tight text-white">
                   Patra<span className="text-[#D5D8CC]">Tani</span>
                 </span>

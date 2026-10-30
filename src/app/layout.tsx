@@ -20,8 +20,12 @@ export const metadata: Metadata = {
   title: "PatraTani — Marketplace & Smart Escrow Pertanian",
   description:
     "Platform reverse marketplace dan pre-order hasil pertanian langsung dari kebun ke dapur usaha lokal.",
+  icons: {
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/logo.png",
+  },
 };
-
 export default function RootLayout({
   children,
 }: {
